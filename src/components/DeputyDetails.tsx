@@ -1,28 +1,11 @@
 import {Input, Select} from "antd";
-import {useState, useEffect} from "react";
-
-interface DeputyDetailsState {
-    name: string;
-    signature: string;
-    dRank: string;
-    rRank: string;
-}
-
-const DeputyDetails = () => {
-    const [details, setDetails] = useState<DeputyDetailsState>(() => {
-        const savedDetails = localStorage.getItem('deputyDetails');
-        return savedDetails ? JSON.parse(savedDetails) : {
-            name: '',
-            signature: '',
-            dRank: 'Deputy Sheriff II',
-            rRank: 'Trial Application Handler'
-        };
-    });
+import type {DeputyDetailsState} from "../types.ts";
 
 
-    useEffect(() => {
-        localStorage.setItem('deputyDetails', JSON.stringify(details));
-    }, [details]);
+const DeputyDetails = ({setDetails, details}: {
+    setDetails: React.Dispatch<React.SetStateAction<DeputyDetailsState>>,
+    details: DeputyDetailsState
+}) => {
     const deputyDetails = [
         {
             name: "name",
@@ -50,7 +33,8 @@ const DeputyDetails = () => {
                 {value: 'Assistant Sheriff', label: "Assistant Sheriff"},
                 {value: 'Undersheriff', label: "Undersheriff"},
                 {value: 'Sheriff', label: "Sheriff"},
-            ]
+            ],
+            defaultValue: details.dRank,
         },
         {
             name: "rRank",
@@ -71,13 +55,14 @@ const DeputyDetails = () => {
                 {
                     value: 'R.E.D. Commanding Officer', label: "R.E.D. Commanding Officer"
                 }
-            ]
+            ],
+            defaultValue: details.rRank,
         },
         {
             name: "signature",
             label: "Signature",
             placeHolder: "Signature link",
-            type: "text"
+            type: "text",
         },
 
     ]
@@ -115,7 +100,7 @@ const DeputyDetails = () => {
                                 showSearch={detail.name === 'dRank'}
                                 optionFilterProp="label"
                                 onChange={detail.name === 'rRank' ? redRankHandleChange : deputyRankHandleChange}
-                                defaultValue={detail.options ? detail.options[0].value : ""}
+                                defaultValue={!detail.defaultValue ? detail.options?.[0]?.value : detail.defaultValue}
                                 options={detail.options}/>}
                     </div>
                 })

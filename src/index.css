@@ -11,3 +11,11 @@ body {
     width: 90vw;
     margin: 50% auto;
 }
+
+.ant-menu-submenu {
+    background-color: #f7f6f2;
+}
+
+.ant-menu-root {
+    border-inline-end: 0px !important;
+}
