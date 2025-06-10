@@ -31,12 +31,6 @@ const DeputyDetails = () => {
             type: "text"
         },
 
-        {
-            name: "signature",
-            label: "Signature",
-            placeHolder: "Signature link",
-            type: "text"
-        },
 
         {
             name: "dRank",
@@ -79,6 +73,12 @@ const DeputyDetails = () => {
                 }
             ]
         },
+        {
+            name: "signature",
+            label: "Signature",
+            placeHolder: "Signature link",
+            type: "text"
+        },
 
     ]
 
@@ -98,7 +98,7 @@ const DeputyDetails = () => {
 
     return <section className="flex flex-col gap-5">
         <h2 className='font-semibold text-3xl text-white'>Deputy Details</h2>
-        <form id="inputs" className="flex gap-2">
+        <form id="inputs" className="flex gap-2 flex-wrap">
             {
                 deputyDetails.map((detail, index) => {
                     return <div key={index} className="flex flex-col gap-2">
