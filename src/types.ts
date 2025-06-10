@@ -4,3 +4,9 @@ export interface DeputyDetailsState {
     dRank: string;
     rRank: string;
 }
+
+export interface FormatData {
+    applicantName: string,
+    applicantGender: "male" | "female",
+    date: string
+}

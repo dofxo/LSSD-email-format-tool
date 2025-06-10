@@ -9,7 +9,7 @@ const DeputyDetails = ({setDetails, details}: {
     const deputyDetails = [
         {
             name: "name",
-            label: "Deputy Name",
+            label: "Deputy Full name",
             placeHolder: "e.g. Bobby Kirk",
             type: "text"
         },

@@ -15,26 +15,21 @@ const SelectFormats = ({setFormat}: { setFormat: React.Dispatch<React.SetStateAc
         key: 'sub1',
         label: 'Application Response Formats',
         children: [{key: '1', label: 'Application Pending Review'}, {
-            key: '2',
-            label: 'Application Shortlisted'
+            key: '2', label: 'Application Shortlisted'
         }, {key: '3', label: 'Application Denied - Criminal Record'}, {
-            key: '4',
-            label: 'Application Denied - Input Reason(s)'
+            key: '4', label: 'Application Denied - Input Reason(s)'
         }, {key: '5', label: 'Application Denied - No Spots'}, {key: '6', label: 'Application Pending Edit(s)'}, {
             type: 'divider',
         }, {key: '7', label: 'Accepted for Interview'}, {key: '8', label: 'Interview Scheduling Attempt'}, {
-            key: '9',
-            label: 'Interview Scheduled'
+            key: '9', label: 'Interview Scheduled'
         }, {key: '10', label: 'Accepted for Academy'}, {key: '11', label: 'Passed Academy'},],
     }, {
         key: 'sub2', label: 'Assessment Formats', children: [{key: '12', label: 'Interview Assessment'},],
     },];
-    return <section className="p-5 gap-5  flex flex-col">
+    return <section className="gap-5 flex flex-col">
         <h2 className="text-3xl font-[600] text-center">Formats</h2>
-
         <Menu
             onClick={onClick}
-            defaultSelectedKeys={['1']}
             mode="inline"
             items={items}
         />
