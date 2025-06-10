@@ -33,7 +33,7 @@ const FormatsInput = ({formatId, setFormatData}: {
     }
 
 
-    const handleGenderChange = (value: string) => {
+    const handleGenderChange = (value: 'male' | 'female') => {
         setFormatData(prev => ({...prev, applicantGender: value}));
     };
 
