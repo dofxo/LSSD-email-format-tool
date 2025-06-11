@@ -16,8 +16,13 @@ const App = () => {
         };
     });
 
-    const [formatData, setFormatData] = useState<FormatData>({applicantName: '', applicantGender: 'male', date: ''});
-
+    const [formatData, setFormatData] = useState<FormatData>({
+        applicantName: '',
+        applicantGender: 'male',
+        date: '',
+        interviewDate: [''],
+        reasons: []
+    });
     const [formatId, setFormat] = useState<string>('')
 
     useEffect(() => {
@@ -28,9 +33,10 @@ const App = () => {
     return <main className="container">
         <section
             className="grid grid-cols-1 grid-rows-2 md:grid-cols-2 md:grid-rows-1 gap-5 shadow-[0_0_10px_0_#00000038] shadow- rounded-xl">
-            <div className="bg-white rounded-[0.75rem_0_0_0.75rem] flex flex-col gap-5 p-5 justify-between">
+            <div
+                className="bg-white rounded-[0.75rem_0.75rem_0_0] md:rounded-[0.75rem_0_0_0.75rem] flex flex-col gap-10 p-5 justify-center">
                 <SelectFormats setFormat={setFormat}/>
-                <FormatsInput setFormatData={setFormatData} formatId={formatId}/>
+                <FormatsInput setFormatData={setFormatData} formatId={formatId} formatData={formatData}/>
                 <Button type="primary" className="mt-5" onClick={() => {
                     const generatedFormat = getFormat({formatData, deputyData: details, formatId})
                     navigator.clipboard.writeText(generatedFormat);

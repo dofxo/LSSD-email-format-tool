@@ -2,6 +2,7 @@ import {Menu} from "antd";
 
 const SelectFormats = ({setFormat}: { setFormat: React.Dispatch<React.SetStateAction<string>> }) => {
 
+    //@ts-ignore
     const onClick = (e) => {
         setFormat(e.key);
         document.querySelectorAll('ul.ant-menu-sub').forEach(el => {
@@ -13,7 +14,7 @@ const SelectFormats = ({setFormat}: { setFormat: React.Dispatch<React.SetStateAc
 
     const items = [{
         key: 'sub1',
-        label: 'Application Response Formats',
+        label: 'Formats',
         children: [{key: '1', label: 'Application Pending Review'}, {
             key: '2', label: 'Application Shortlisted'
         }, {key: '3', label: 'Application Denied - Criminal Record'}, {
@@ -23,11 +24,9 @@ const SelectFormats = ({setFormat}: { setFormat: React.Dispatch<React.SetStateAc
         }, {key: '7', label: 'Accepted for Interview'}, {key: '8', label: 'Interview Scheduling Attempt'}, {
             key: '9', label: 'Interview Scheduled'
         }, {key: '10', label: 'Accepted for Academy'}, {key: '11', label: 'Passed Academy'},],
-    }, {
-        key: 'sub2', label: 'Assessment Formats', children: [{key: '12', label: 'Interview Assessment'},],
-    },];
+    }];
     return <section className="gap-5 flex flex-col">
-        <h2 className="text-3xl font-[600] text-center">Formats</h2>
+        <h2 className="md:text-3xl text-2xl font-[600] text-center">Application Response Formats</h2>
         <Menu
             onClick={onClick}
             mode="inline"

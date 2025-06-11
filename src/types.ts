@@ -8,5 +8,7 @@ export interface DeputyDetailsState {
 export interface FormatData {
     applicantName: string,
     applicantGender: "male" | "female",
-    date: string
+    date: string,
+    interviewDate: string[],
+    reasons: string[]
 }
