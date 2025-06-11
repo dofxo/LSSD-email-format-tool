@@ -13,7 +13,7 @@ const FormatsInput = ({formatId, formatData, setFormatData}: {
         name: "applicantName",
         label: "Applicant's full/last name",
         type: "text",
-        formats: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
+        formats: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '12']
     }, {
         name: "applicantGender",
         label: "Applicant's gender",
@@ -24,7 +24,7 @@ const FormatsInput = ({formatId, formatData, setFormatData}: {
         name: "date",
         label: "Email Date",
         type: "date",
-        formats: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11']
+        formats: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
     }, {
         name: "interviewDate", label: "Interview date", type: "date", formats: ['9']
     }, {
@@ -83,8 +83,7 @@ const FormatsInput = ({formatId, formatData, setFormatData}: {
                                     <span className='text-[12px]'>{reason}</span>
                                     <Button danger onClick={() => {
                                         setFormatData(prev => ({
-                                            ...prev,
-                                            reasons: prev.reasons.filter((_, i) => i !== index)
+                                            ...prev, reasons: prev.reasons.filter((_, i) => i !== index)
                                         }));
                                     }} icon={<DeleteTwoTone style={{color: "red"}}/>}/>
                                 </div>

@@ -430,6 +430,49 @@ Commanding Officer, Recruitment and Employment Division
 [/list][/divbox]
 [img]https://i.imgur.com/a3aDjGi.png[/img]
         `,
+        '12': `
+        [img]https://i.imgur.com/zu4NcrL.png[/img]
+[img]https://i.imgur.com/a3aDjGi.png[/img][divbox=white]
+[img]https://i.imgur.com/FAyEyJd.png[/img][aligntable=right,0,0,0,0,0,0][right][font=Arial][b]
+[size=150]Los Santos County Sheriff's Department[/size][/b]
+[size=115]Letter Of Recommendation[/size]
+[size=95]"A TRADITION OF SERVICE"[/size][/font][/right][/aligntable]
+[hr]
+[list=none][right]${formatData.date}[/right]
+
+[b][i]Good Day[/i][/b],
+
+We are reaching out to you today in regard to one of your PREVIOUS/CURRENT employees that have applied for the [b]Los Santos County Sheriff's Department[/b]. We hereby request access to their file and, most importantly, their disciplinary history and activity within your department. We also wish to have a brief statement from their direct supervisor, if possible, along with the other requested information. 
+
+Here's a list of names
+[list][*]${formatData.applicantName}[/list]
+
+Please do not hesitate to share any additional information with us even if you think it is something minor; it might help us make a better judgment!
+
+We would like to receive these promptly in order to prevent delays in our program and that we will wait 48 hours for your response. Should we not receive a response from you, we will go ahead and continue with the application process.
+
+Please send your response to the Sheriff's Department Recruitment Division; [url=https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose&g=183]click here to send[/url].
+ [/list]
+
+
+[hr][/hr][list=none]
+
+From
+[img]${deputyData.signature}[/img]
+${deputyData.dRank} ${deputyData.name}
+${deputyData.rRank}
+Los Santos County Sheriff's Department
+
+On behalf of,
+
+[img]https://i.imgur.com/clLkCUE.png[/img]
+Captain Trent Williams
+Recruitment & Employment Division Commanding Officer
+Los Santos County Sheriff's Department
+
+[/divbox]
+[img]https://i.imgur.com/a3aDjGi.png[/img]
+        `
     }
 
     return formats[formatId as keyof typeof formats];
