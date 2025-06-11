@@ -23,7 +23,12 @@ const SelectFormats = ({setFormat}: { setFormat: React.Dispatch<React.SetStateAc
             type: 'divider',
         }, {key: '7', label: 'Accepted for Interview'}, {key: '8', label: 'Interview Scheduling Attempt'}, {
             key: '9', label: 'Interview Scheduled'
-        }, {key: '10', label: 'Accepted for Academy'}, {key: '11', label: 'Passed Academy'},],
+        }, {key: '10', label: 'Accepted for Academy'}, {key: '11', label: 'Passed Academy'},
+            {
+                type: 'divider',
+            },
+            {key: '12', label: 'Letter of Recommendation'},
+        ],
     }];
     return <section className="gap-5 flex flex-col">
         <h2 className="md:text-3xl text-2xl font-[600] text-center">Application Response Formats</h2>
