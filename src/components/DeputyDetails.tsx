@@ -45,7 +45,9 @@ const DeputyDetails = ({setDetails, details}: {
             }, {
                 value: 'R.E.D. Supervisor', label: "R.E.D. Supervisor"
             },
-
+                {
+                    value: 'R.E.D. Assistant Commanding Officer', label: "R.E.D. Assistant Commanding Officer"
+                },
                 {
                     value: 'R.E.D. Commanding Officer', label: "R.E.D. Commanding Officer"
                 }], defaultValue: details.rRank,
@@ -91,10 +93,11 @@ const DeputyDetails = ({setDetails, details}: {
             })}
         </form>
         <Button variant="solid" color='default' className='w-fit' onClick={() => {
-            navigator.clipboard.writeText(`[img]${details.signature}[/img]\n ${details.dRank} ${details.name}\n ${details.rRank}`);
+            navigator.clipboard.writeText(`[img]${details.signature}[/img]\n${details.dRank} ${details.name}\n${details.rRank}`);
             toast.success("Signature copied to clipboard")
 
-        }}>Copy RED Signature</Button>
+        }}>Copy RED Signature</Button> <span className="text-[12px] text-red-500"><span
+        className="text-red-700 font-bold">Note:</span> This button is only for grabbing the 3 lines of the signature for others uses. The formats contains it if you fill out these inputs.</span>
     </section>
 }
 
