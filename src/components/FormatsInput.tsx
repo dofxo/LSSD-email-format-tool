@@ -18,7 +18,7 @@ const FormatsInput = ({formatId, formatData, setFormatData}: {
         name: "applicantGender",
         label: "Applicant's gender",
         type: "select",
-        options: [{value: 'male', label: 'male'}, {value: 'female', label: 'female'}],
+        options: [{value: 'male', label: 'Male'}, {value: 'female', label: 'Female'}],
         formats: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
     }, {
         name: "date",
