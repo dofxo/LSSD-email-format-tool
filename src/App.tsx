@@ -17,11 +17,26 @@ const App = () => {
     });
 
     const [formatData, setFormatData] = useState<FormatData>({
-        applicantName: '',
-        applicantGender: 'male',
-        date: '',
-        interviewDate: [''],
-        reasons: []
+        applicantName: "",
+        applicantGender: "male",
+        date: "",
+        interviewDate: [],
+        reasons: [],
+        appLink: "",
+        firstImpression: "",
+        answeredTruthfully: "",
+        situationalQuestions: "",
+        greatestWeakness: "",
+        obstacleCourseProblems: "",
+        acceptedIntoAcademy: "",
+        oocQuestions: "",
+        usageOfMeAndDo: "",
+        characterDevelopment: "",
+        workingMicrophone: "",
+        playerAge: "",
+        speakingEnglish: "",
+        roleplayScreenShots: [],
+        generalFeeling: ""
     });
     const [formatId, setFormat] = useState<string>('')
 

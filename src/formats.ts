@@ -472,7 +472,76 @@ Los Santos County Sheriff's Department
 
 [/divbox]
 [img]https://i.imgur.com/a3aDjGi.png[/img]
-        `
+        `,
+        "13": `[img]https://i.imgur.com/a3aDjGi.png[/img][divbox=white]
+[img]https://i.imgur.com/a3aDjGi.png[/img][divbox=white]
+[aligntable=left,0,0,0,0,0,0][fimg=120,120]https://i.imgur.com/VUBguS0.png[/fimg][fimg=120,120]https://i.imgur.com/FAyEyJd.png[/fimg][/aligntable][aligntable=right,0,0,0,0,0,0][right][font=Arial][b]
+[size=150]Los Santos County Sheriff's Department[/size][/b]
+[size=115]Interview Evaluation[/size]
+[size=95]"A TRADITION OF SERVICE"[/size][/font][/right][/aligntable][list=none]
+[hr]
+
+
+[b][i]Date and Time of the Interview:[/i][/b] ${formatData.interviewDate[0]} ${formatData.interviewDate[1]}
+[b][i]Applicant's Name:[/i][/b] ${formatData.applicantName}
+[b][i]Application Link:[/i][/b] [url=${formatData.appLink}]Application[/url]
+
+[b][i]How was your first impression of the applicant, were they friendly with you, introduced themselves, etc?[/i][/b]:
+${formatData.firstImpression}
+
+[b][i]Did the applicant answer all questions truthfully, provide their full ID, and were they compliant during their search? Did they bring something to the interview they are not supposed to, a firearm for an example?[/i][/b]:
+${formatData.answeredTruthfully}
+
+[b][i]How did the applicant respond to the situational questions? Did they have common sense when it came to answering the questions? Do you think they will be a good fit for the department?[/i][/b]:
+${formatData.situationalQuestions}
+
+[b][i]What's the Applicant's greatest weakness ( Please be specific )[/i][/b]:
+${formatData.greatestWeakness}
+
+[b][i]Did the applicant have any problems with the physical obstacle course?[/i][/b]:
+${formatData.obstacleCourseProblems}
+
+[b][i]Do you believe this applicant should be accepted into the academy?[/i][/b]:
+${formatData.acceptedIntoAcademy}
+
+[b][i](( Did they answer all OOC questions correctly, were they familiar with the server rules? ))[/i][/b]
+(( ${formatData.oocQuestions} ))
+
+[b][i](( Do you think they have provided sufficient details and fair usage of /me's and /do's? ))[/i][/b]
+(( ${formatData.usageOfMeAndDo} ))
+
+[b][i](( Did they role-play any 'character development' during the role-play test? E.g. role-playing fatigue/exhaustion, pain etc. ))[/i][/b]
+(( ${formatData.characterDevelopment} ))
+
+[b][i](( Does the player have a working microphone? ))[/i][/b]
+(( ${formatData.workingMicrophone} ))
+
+[b][i](( Is the player 16 or older? ))[/i][/b]
+(( ${formatData.playerAge} ))
+
+[b][i](( Was the applicant proficient at speaking English? ))[/i][/b]
+(( ${formatData.speakingEnglish} ))
+
+[b][i](( Provide screenshots of ALL of their RP throughout the physical evaluation ))[/i][/b]
+(( ${formatData.roleplayScreenShots.map(imageLink => {
+            return `${imageLink}`
+        }).join('\n')} ))
+
+[b][i](( How was your general feeling towards them? Do they come across as willing to learn and invest time into this faction, or do they seem like they want to rush and can't dedicate themselves to something long-term? ))[/i][/b]
+(( ${formatData.generalFeeling} ))
+
+[/list]
+
+
+[hr][/hr][list=none]
+
+From
+[img]${deputyData.signature}[/img]
+${deputyData.dRank} ${deputyData.name}
+${deputyData.rRank}
+Los Santos County Sheriff's Department
+[/list][/divbox]
+[img]https://i.imgur.com/a3aDjGi.png[/img]`
     }
 
     return formats[formatId as keyof typeof formats];

@@ -15,19 +15,19 @@ const SelectFormats = ({setFormat}: { setFormat: React.Dispatch<React.SetStateAc
     const items = [{
         key: 'sub1',
         label: 'Formats',
-        children: [{key: '1', label: 'Application Pending Review'}, {
-            key: '2', label: 'Application Shortlisted'
-        }, {key: '3', label: 'Application Denied - Criminal Record'}, {
-            key: '4', label: 'Application Denied - Input Reason(s)'
-        }, {key: '5', label: 'Application Denied - No Spots'}, {key: '6', label: 'Application Pending Edit(s)'}, {
+        children: [{key: '12', label: 'Letter of Recommendation'}, {key: '13', label: 'Interview Assessment'}, {
             type: 'divider',
-        }, {key: '7', label: 'Accepted for Interview'}, {key: '8', label: 'Interview Scheduling Attempt'}, {
-            key: '9', label: 'Interview Scheduled'
-        }, {key: '10', label: 'Accepted for Academy'}, {key: '11', label: 'Passed Academy'},
+        },
+            {key: '1', label: 'Application Pending Review'},
             {
+                key: '2', label: 'Application Shortlisted'
+            }, {key: '3', label: 'Application Denied - Criminal Record'}, {
+                key: '4', label: 'Application Denied - Input Reason(s)'
+            }, {key: '5', label: 'Application Denied - No Spots'}, {key: '6', label: 'Application Pending Edit(s)'}, {
                 type: 'divider',
-            },
-            {key: '12', label: 'Letter of Recommendation'},
+            }, {key: '7', label: 'Accepted for Interview'}, {key: '8', label: 'Interview Scheduling Attempt'}, {
+                key: '9', label: 'Interview Scheduled'
+            }, {key: '10', label: 'Accepted for Academy'}, {key: '11', label: 'Passed Academy'},
         ],
     }];
     return <section className="gap-5 flex flex-col">
