@@ -473,7 +473,7 @@ Los Santos County Sheriff's Department
 [/divbox]
 [img]https://i.imgur.com/a3aDjGi.png[/img]
         `,
-        "13": `[img]https://i.imgur.com/a3aDjGi.png[/img][divbox=white]
+        "13": `
 [img]https://i.imgur.com/a3aDjGi.png[/img][divbox=white]
 [aligntable=left,0,0,0,0,0,0][fimg=120,120]https://i.imgur.com/VUBguS0.png[/fimg][fimg=120,120]https://i.imgur.com/FAyEyJd.png[/fimg][/aligntable][aligntable=right,0,0,0,0,0,0][right][font=Arial][b]
 [size=150]Los Santos County Sheriff's Department[/size][/b]
