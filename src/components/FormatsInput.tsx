@@ -109,7 +109,7 @@ const FormatsInput = ({formatId, formatData, setFormatData}: {
         {
             name: "roleplayScreenShots",
             label: "(( Provide screenshots of ALL of their RP throughout the physical evaluation ))",
-            hint: "Either add album link or the format that starts with imgur.com not the i.imgur one. Ex: https://imgur.com/a/OMjmFnG",
+            hint: "Either add album link or the format that starts with imgur.com not the i.imgur one. E.g. https://imgur.com/a/OMjmFnG",
             type: "screenshots",
             formats: ["13"]
         },
