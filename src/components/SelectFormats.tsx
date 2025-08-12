@@ -15,7 +15,10 @@ const SelectFormats = ({setFormat}: { setFormat: React.Dispatch<React.SetStateAc
     const items = [{
         key: 'sub1',
         label: 'Formats',
-        children: [{key: '12', label: 'Letter of Recommendation'}, {key: '13', label: 'Interview Assessment'}, {
+        children: [{key: '14', label: 'Personal Email'}, {key: '12', label: 'Letter of Recommendation'}, {
+            key: '13',
+            label: 'Interview Assessment'
+        }, {
             type: 'divider',
         },
             {key: '1', label: 'Application Pending Review'},
