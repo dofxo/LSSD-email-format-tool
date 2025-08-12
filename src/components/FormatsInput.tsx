@@ -163,6 +163,25 @@ const FormatsInput = ({formatId, formatData, setFormatData}: {
         inputSetter('');
     };
 
+    if (!formatId) {
+        return (
+            <div className="flex items-center justify-center h-32 text-gray-500">
+                No format selected
+            </div>
+        );
+    }
+
+    const filteredInputs = inputsByFormat.filter(input => input.formats.includes(formatId));
+
+    if (filteredInputs.length === 0) {
+        return (
+            <div className="flex flex-col items-center justify-center h-32 gap-2">
+                <p className="text-gray-600">This format doesn't require any additional input</p>
+                <p className="text-gray-500 text-sm">You can proceed by clicking the Create Format button</p>
+            </div>
+        );
+    }
+
     return (
         <div className="flex flex-wrap gap-x-2 gap-y-5">
             {inputsByFormat

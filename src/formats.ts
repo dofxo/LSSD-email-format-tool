@@ -541,7 +541,30 @@ ${deputyData.dRank} ${deputyData.name}
 ${deputyData.rRank}
 Los Santos County Sheriff's Department
 [/list][/divbox]
+[img]https://i.imgur.com/a3aDjGi.png[/img]`,
+
+        "14": `[img]https://i.imgur.com/a3aDjGi.png[/img][divbox=white]
+[fimg=130,130]https://i.imgur.com/VUBguS0.png[/fimg][aligntable=right,0,0,0,0,0,0][right][font=Arial][b]
+[size=150]Los Santos County Sheriff's Department[/size][/b]
+[size=115]Recruitment and Employment Division[/size]
+[size=95]"A TRADITION OF SERVICE"[/size][/font][/right][/aligntable]
+[hr]
+[list=none]
+
+Text
+[/list]
+
+
+[hr][/hr][list=none]
+
+Respectfully,
+[img]${deputyData.signature}[/img]
+${deputyData.dRank} ${deputyData.name}
+${deputyData.rRank}
+Los Santos County Sheriff's Department
+[/list][/divbox]
 [img]https://i.imgur.com/a3aDjGi.png[/img]`
+
     }
 
     return formats[formatId as keyof typeof formats];
