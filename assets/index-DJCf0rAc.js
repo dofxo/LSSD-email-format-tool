@@ -711,7 +711,7 @@ Los Santos County Sheriff's Department
 
 On behalf of
 [img]https://i.imgur.com/clLkCUE.png[/img]
-Captain Trent Williams
+Commander Trent Williams
 Commanding Officer, Recruitment and Employment Division
 
 [/list][/divbox]
@@ -752,7 +752,7 @@ Los Santos County Sheriff's Department
 On behalf of,
 
 [img]https://i.imgur.com/clLkCUE.png[/img]
-Captain Trent Williams
+Commander Trent Williams
 Recruitment & Employment Division Commanding Officer
 Los Santos County Sheriff's Department
 
