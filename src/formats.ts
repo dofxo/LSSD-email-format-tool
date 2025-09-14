@@ -423,9 +423,9 @@ ${deputyData.rRank}
 Los Santos County Sheriff's Department
 
 On behalf of
-[img]https://i.imgur.com/clLkCUE.png[/img]
-Commander Trent Williams
-Commanding Officer, Recruitment and Employment Division
+[img]https://i.imgur.com/WxRbg4x.png[/img]
+Lieutenant Clay Thompson
+Recruitment & Employment Division Commanding Officer
 
 [/list][/divbox]
 [img]https://i.imgur.com/a3aDjGi.png[/img]
@@ -465,8 +465,8 @@ Los Santos County Sheriff's Department
 
 On behalf of,
 
-[img]https://i.imgur.com/clLkCUE.png[/img]
-Commander Trent Williams
+[img]https://i.imgur.com/WxRbg4x.png[/img]
+Lieutenant Clay Thompson
 Recruitment & Employment Division Commanding Officer
 Los Santos County Sheriff's Department
 
