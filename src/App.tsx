@@ -12,7 +12,7 @@ import { Car, GraduationCap, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const App = () => {
-	const [division, setDivision] = useState<"RED" | "TSD" | "ATD">("ATD");
+	const [division, setDivision] = useState<"RED" | "TSD" | "ATD">("RED");
 
 	const [details, setDetails] = useState<DeputyDetailsState>(() => {
 		const saved = localStorage.getItem("deputyDetails");
