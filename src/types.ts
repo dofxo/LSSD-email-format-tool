@@ -1,4 +1,4 @@
-export interface DeputyDetailsState {
+export interface DeputyData {
 	name: string;
 	signature: string;
 	dRank: string;

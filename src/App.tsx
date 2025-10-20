@@ -1,20 +1,20 @@
 import { useEffect, useState } from "react";
 import { Button } from "antd";
 import { toast, ToastContainer } from "react-toastify";
-import { getFormat } from "./formats.ts";
 import DeputyDetails from "./components/deputyDetails/DeputyDetails.tsx";
 import SelectFormats from "./components/SelectFormats.tsx";
 import FormatsInput from "./components/FormatsInput.tsx";
-import type { DeputyDetailsState, FormatData } from "./types.ts";
+import type { DeputyData, FormatData } from "./types.ts";
 import { Separator } from "@/components/ui/separator";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { Car, GraduationCap, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { getFormat } from "./formats/index.ts";
 
 const App = () => {
 	const [division, setDivision] = useState<"RED" | "TSD" | "ATD">("RED");
 
-	const [details, setDetails] = useState<DeputyDetailsState>(() => {
+	const [details, setDetails] = useState<DeputyData>(() => {
 		const saved = localStorage.getItem("deputyDetails");
 		return saved
 			? JSON.parse(saved)
@@ -62,7 +62,7 @@ const App = () => {
 	const handleCopyFormat = () => {
 		const rRank = details.divisionRanks[division];
 		const deputyData = { ...details, rRank };
-		const generatedFormat = getFormat({ formatData, deputyData, formatId });
+		const generatedFormat = getFormat({ formatData, deputyData, formatId, division });
 		navigator.clipboard.writeText(generatedFormat);
 		toast.success("Format copied to clipboard");
 	};
