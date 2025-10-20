@@ -1,4 +1,4 @@
-import type { DeputyData, FormatData } from "@/types";
+import type { DeputyData, division, FormatData } from "@/types";
 
 export const ATDFormats = ({
 	formatData,
@@ -8,7 +8,7 @@ export const ATDFormats = ({
 }: {
 	formatData: FormatData;
 	deputyData: DeputyData;
-	division: "RED" | "TSD" | "ATD";
+	division: division;
 	formatId: string;
 }) => {
 	const formats: Record<string, string> = {};

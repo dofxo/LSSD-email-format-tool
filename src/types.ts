@@ -9,6 +9,8 @@ export interface DeputyData {
 	};
 }
 
+export type divisionsType = "RED" | "ATD" | "TSD";
+
 export interface FormatData {
 	applicantName: string;
 	applicantGender: "male" | "female";

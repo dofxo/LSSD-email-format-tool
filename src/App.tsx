@@ -4,15 +4,14 @@ import { toast, ToastContainer } from "react-toastify";
 import DeputyDetails from "./components/deputyDetails/DeputyDetails.tsx";
 import SelectFormats from "./components/SelectFormats.tsx";
 import FormatsInput from "./components/FormatsInput.tsx";
-import type { DeputyData, FormatData } from "./types.ts";
-import { Separator } from "@/components/ui/separator";
+import type { DeputyData, divisionsType, FormatData } from "./types.ts";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { Car, GraduationCap, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { getFormat } from "./formats/index.ts";
 
 const App = () => {
-	const [division, setDivision] = useState<"RED" | "TSD" | "ATD">("RED");
+	const [division, setDivision] = useState<divisionsType>("RED");
 
 	const [details, setDetails] = useState<DeputyData>(() => {
 		const saved = localStorage.getItem("deputyDetails");
@@ -115,12 +114,10 @@ const App = () => {
 				</Select>
 			</section>
 
-			<Separator className="my-6" />
-
 			{/* Main grid content */}
 			<section className="grid grid-cols-1 md:grid-cols-2 gap-5 shadow-[0_0_10px_0_#00000038] rounded-xl">
 				<div className="bg-white rounded-[0.75rem_0.75rem_0_0] md:rounded-[0.75rem_0_0_0.75rem] flex flex-col gap-10 p-5 justify-center">
-					<SelectFormats setFormat={setFormat} />
+					<SelectFormats setFormat={setFormat} division={division} />
 					<FormatsInput setFormatData={setFormatData} formatId={formatId} formatData={formatData} />
 					<Button type="primary" className="mt-5" onClick={handleCopyFormat}>
 						Create Format
