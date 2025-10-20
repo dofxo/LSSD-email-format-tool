@@ -1,0 +1,15 @@
+export const deputyRanks = [
+	{ value: "Deputy Sheriff II", label: "Deputy Sheriff II" },
+	{ value: "Deputy Sheriff III", label: "Deputy Sheriff III" },
+	{ value: "Master Deputy", label: "Master Deputy" },
+	{ value: "Investigator", label: "Investigator" },
+	{ value: "Corporal", label: "Corporal" },
+	{ value: "Sergeant", label: "Sergeant" },
+	{ value: "Staff Sergeant", label: "Staff Sergeant" },
+	{ value: "Lieutenant", label: "Lieutenant" },
+	{ value: "Captain", label: "Captain" },
+	{ value: "Commander", label: "Commander" },
+	{ value: "Assistant Sheriff", label: "Assistant Sheriff" },
+	{ value: "Undersheriff", label: "Undersheriff" },
+	{ value: "Sheriff", label: "Sheriff" },
+];
