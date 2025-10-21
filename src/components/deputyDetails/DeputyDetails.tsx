@@ -35,6 +35,7 @@ const DeputyDetails = ({
 			{ value: "Assistant Commanding Officer", label: "Assistant Commanding Officer" },
 			{ value: "Head Instructor", label: "Head Instructor" },
 			{ value: "Senior Instructor", label: "Senior Instructor" },
+			{ value: "Instructor", label: "Senior Instructor" },
 			{ value: "Trainee Instructor", label: "Trainee Instructor" },
 		],
 	};
