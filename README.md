@@ -1,5 +1,5 @@
-# RED Tool
+# Email format Tool
 
-RED tool for ease of using RED format responses in Eclipse Roleplay server.
+Email format tool for ease of using email format responses in Eclipse Roleplay server.
 
 https://eclipse-rp.net/
