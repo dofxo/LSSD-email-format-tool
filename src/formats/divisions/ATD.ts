@@ -495,7 +495,7 @@ Los Santos County Sheriff’s Department
 [img]https://i.imgur.com/h8PAEv3.png[/img][divbox=white]
 Dear [i]Instructor[/i],
 
-This employee has passed the examination. The employee is now HSIU certified. The employee is able to utilize Heavy Special Interceptor Unit vehicles during authorized situations or pursuits requiring it. The employee is expected to follow HSIU procedure.
+This employee has passed the examination. The employee is now HSIU certified. The employee is able to utilize high-speed interception unit vehicles during authorized situations or pursuits requiring it. The employee is expected to follow HSIU procedure.
 
 From
 [img]${deputyData.signature}[/img]
@@ -537,7 +537,7 @@ Los Santos County Sheriff’s Department
 			text: `[img]https://i.imgur.com/h8PAEv3.png[/img][divbox=white]
 Dear [i]Instructor[/i],
 
-This employee has [color=#800000][b]failed[/b][/color] the Heavy Special Interceptor Unit examination. The employee is allowed to re-apply when they feel that they are ready.
+This employee has [color=#800000][b]failed[/b][/color] the high-speed interception unit Unit examination. The employee is allowed to re-apply when they feel that they are ready.
 
 From
 [img]${deputyData.signature}[/img]
@@ -828,7 +828,7 @@ Los Santos County Sheriff’s Department
 			text: `[img]https://i.imgur.com/h8PAEv3.png[/img][divbox=white]
 Dear [i]Instructor[/i],
 
-This employee has passed the examination and is now HSMU certified. The employee may operate Heavy Special Mobility Unit vehicles during authorized situations or pursuits requiring them and must adhere to HSMU procedure.
+This employee has passed the examination and is now HSMU certified. The employee may operate high-speed motorcycle unit vehicles during authorized situations or pursuits requiring them and must adhere to HSMU procedure.
 
 From
 [img]${deputyData.signature}[/img]
@@ -849,7 +849,7 @@ Los Santos County Sheriff’s Department[/divbox]`,
 
 Dear [I] ${formatData.deputyRank} ${formatData.deputyName}[/i],
 
-We're pleased to inform you that you have successfully passed the [i]HSMU Certification[/i]. You are now authorized to operate Heavy Special Mobility Unit vehicles during assigned duties. Always follow HSMU procedures at all times.
+We're pleased to inform you that you have successfully passed the [i]HSMU Certification[/i]. You are now authorized to operate high-speed motorcycle unit vehicles during assigned duties. Always follow HSMU procedures at all times.
 
 [/list]
 
@@ -870,7 +870,7 @@ Los Santos County Sheriff’s Department
 			text: `[img]https://i.imgur.com/h8PAEv3.png[/img][divbox=white]
 Dear [i]Instructor[/i],
 
-This employee has [color=#800000][b]failed[/b][/color] the Heavy Special Mobility Unit examination. The employee is allowed to reapply when they feel ready.
+This employee has [color=#800000][b]failed[/b][/color] the high-speed motorcycle unit examination. The employee is allowed to reapply when they feel ready.
 
 From
 [img]${deputyData.signature}[/img]
