@@ -34,8 +34,10 @@ export interface FormatData {
 	roleplayScreenShots?: string[];
 	generalFeeling?: string;
 
-	// ATD fields
-
-	// TSD fields
+	// TSD and ATD fields
 	deputyName?: string;
+	deputyRank?: string;
+	certificationType?: string;
+	scoredPoint?: string;
+	leastPoint: string;
 }
