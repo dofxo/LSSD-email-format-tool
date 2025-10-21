@@ -1,4 +1,6 @@
-import type { DeputyData, division, FormatData } from "@/types";
+import type { DeputyData, divisionsType, FormatData } from "@/types";
+
+export const ATDLabels: Record<string, string> = {};
 
 export const ATDFormats = ({
 	formatData,
@@ -8,10 +10,14 @@ export const ATDFormats = ({
 }: {
 	formatData: FormatData;
 	deputyData: DeputyData;
-	division: division;
+	division: divisionsType;
 	formatId: string;
 }) => {
-	const formats: Record<string, string> = {};
+	const formats: Record<string, { text: string; label?: string }> = {};
 
-	return formats[formatId];
+	Object.keys(formats).forEach((key) => {
+		if (!formats[key].label) formats[key].label = ATDLabels[key];
+	});
+
+	return { format: formats[formatId].text, formats };
 };

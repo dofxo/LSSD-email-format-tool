@@ -12,7 +12,7 @@ body {
 .container {
     max-width: 1200px;
     width: 90vw;
-    margin: 8% auto;
+    margin: 50px auto;
 }
 
 .ant-menu-submenu {

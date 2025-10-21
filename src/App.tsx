@@ -3,7 +3,7 @@ import { Button } from "antd";
 import { toast, ToastContainer } from "react-toastify";
 import DeputyDetails from "./components/deputyDetails/DeputyDetails.tsx";
 import SelectFormats from "./components/SelectFormats.tsx";
-import FormatsInput from "./components/FormatsInput.tsx";
+import FormatsInput from "./components/formatsInput/FormatsInput.tsx";
 import type { DeputyData, divisionsType, FormatData } from "./types.ts";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { Car, GraduationCap, Users } from "lucide-react";
@@ -29,30 +29,14 @@ const App = () => {
 			  };
 	});
 
-	const [formatData, setFormatData] = useState<FormatData>({
-		applicantName: "",
-		applicantGender: "male",
-		date: "",
-		interviewDate: [],
-		reasons: [],
-		appLink: "",
-		firstImpression: "",
-		answeredTruthfully: "",
-		situationalQuestions: "",
-		greatestWeakness: "",
-		obstacleCourseProblems: "",
-		acceptedIntoAcademy: "",
-		oocQuestions: "",
-		usageOfMeAndDo: "",
-		characterDevelopment: "",
-		workingMicrophone: "",
-		playerAge: "",
-		speakingEnglish: "",
-		roleplayScreenShots: [],
-		generalFeeling: "",
-	});
-
+	const [formatData, setFormatData] = useState<FormatData>({});
 	const [formatId, setFormat] = useState<string>("");
+
+	useEffect(() => {
+		//reset everything on chaning divisions
+		setFormat("");
+		setFormatData({});
+	}, [division]);
 
 	useEffect(() => {
 		localStorage.setItem("deputyDetails", JSON.stringify(details));
@@ -62,7 +46,7 @@ const App = () => {
 		const rRank = details.divisionRanks[division];
 		const deputyData = { ...details, rRank };
 		const generatedFormat = getFormat({ formatData, deputyData, formatId, division });
-		navigator.clipboard.writeText(generatedFormat);
+		navigator.clipboard.writeText(generatedFormat.format);
 		toast.success("Format copied to clipboard");
 	};
 
@@ -85,8 +69,7 @@ const App = () => {
 	];
 
 	return (
-		<main className="container py-5">
-			{/* Header with division dropdown */}
+		<main className="container">
 			<section className="flex items-center justify-between mb-8">
 				<h1 className="text-xl font-semibold text-white tracking-tight">LSSD Email Format Tool</h1>
 
@@ -114,11 +97,15 @@ const App = () => {
 				</Select>
 			</section>
 
-			{/* Main grid content */}
 			<section className="grid grid-cols-1 md:grid-cols-2 gap-5 shadow-[0_0_10px_0_#00000038] rounded-xl">
 				<div className="bg-white rounded-[0.75rem_0.75rem_0_0] md:rounded-[0.75rem_0_0_0.75rem] flex flex-col gap-10 p-5 justify-center">
 					<SelectFormats setFormat={setFormat} division={division} />
-					<FormatsInput setFormatData={setFormatData} formatId={formatId} formatData={formatData} />
+					<FormatsInput
+						setFormatData={setFormatData}
+						formatId={formatId}
+						formatData={formatData}
+						division={division}
+					/>
 					<Button type="primary" className="mt-5" onClick={handleCopyFormat}>
 						Create Format
 					</Button>
@@ -129,6 +116,8 @@ const App = () => {
 					<DeputyDetails setDetails={setDetails} details={details} division={division} />
 				</div>
 			</section>
+
+			<footer className="mt-10 text-start text-sm text-gray-600 select-none">Developed by dofxo</footer>
 
 			<ToastContainer position="top-center" />
 		</main>
