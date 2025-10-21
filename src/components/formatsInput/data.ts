@@ -121,6 +121,19 @@ export const inputsByDivision = {
 			formats: ["13"],
 		},
 	],
-	TSD: [{ name: "deputyName", label: "Deputy Fname and Lname", type: "text", formats: ["1"] }],
+	TSD: [
+		{
+			name: "deputyName",
+			label: "Deputy Fname and Lname",
+			type: "text",
+			formats: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
+		},
+		{
+			name: "date",
+			label: "Email Date",
+			type: "date",
+			formats: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
+		},
+	],
 	ATD: [],
 };

@@ -37,5 +37,5 @@ export interface FormatData {
 	// ATD fields
 
 	// TSD fields
-	deputyDetais?: string;
+	deputyName?: string;
 }
