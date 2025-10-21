@@ -1,11 +1,36 @@
-import type {DeputyDetailsState, FormatData} from "./types.ts";
+import type { DeputyData, divisionsType, FormatData } from "@/types";
 
-export const getFormat = ({formatData, deputyData, formatId}: {
-    formatData: FormatData, deputyData: DeputyDetailsState, formatId: string
-}): string => {
+export const REDLabels: Record<string, string> = {
+	"14": "Personal Email",
+	"12": "Letter of Recommendation",
+	"13": "Interview Assessment",
+	"1": "Application Pending Review",
+	"2": "Application Shortlisted",
+	"3": "Application Denied - Criminal Record",
+	"4": "Application Denied - Input Reason(s)",
+	"5": "Application Denied - No Spots",
+	"6": "Application Pending Edit(s)",
+	"7": "Accepted for Interview",
+	"8": "Interview Scheduling Attempt",
+	"9": "Interview Scheduled",
+	"10": "Accepted for Academy",
+	"11": "Passed Academy",
+};
 
-    const formats = {
-        "1": `
+export const REDFormats = ({
+	formatData,
+	deputyData,
+	division,
+	formatId,
+}: {
+	formatData: FormatData;
+	deputyData: DeputyData;
+	division: divisionsType;
+	formatId: string;
+}) => {
+	const formats: Record<string, { text: string; label?: string }> = {
+		"1": {
+			text: `
     [img]https://i.imgur.com/a3aDjGi.png[/img][divbox=white]
 [aligntable=left,0,0,0,0,0,0][fimg=120,120]https://i.imgur.com/VUBguS0.png[/fimg][fimg=120,120]https://i.imgur.com/FAyEyJd.png[[/fimg][/aligntable][aligntable=right,0,0,0,0,0,0][right][font=Arial][b]
 [size=150]Los Santos County Sheriff's Department[/size][/b]
@@ -15,7 +40,11 @@ export const getFormat = ({formatData, deputyData, formatId}: {
 [list=none][right]${formatData.date}[/right]
 
 
-[i][b]${formatData.applicantGender === 'male' ? `Mr. ${formatData.applicantName}` : `Ms. ${formatData.applicantName}`}[/b][/i],
+[i][b]${
+				formatData.applicantGender === "male"
+					? `Mr. ${formatData.applicantName}`
+					: `Ms. ${formatData.applicantName}`
+			}[/b][/i],
 
 The Los Santos County Sheriff's Department has received and acknowledged your application for employment. Our application handlers will thoroughly review your application in the coming days. Please remain patient at this time, as reviewing your application could take up to several days due to particular circumstances.
 
@@ -32,12 +61,14 @@ There is no expected timeframe and no guarantee that you will be given the oppor
 From
 [img]${deputyData.signature}[/img]
 ${deputyData.dRank} ${deputyData.name}
-${deputyData.rRank}
+${deputyData.divisionRanks[division]}
 Los Santos County Sheriff's Department
 [/list][/divbox]
 [img]https://i.imgur.com/a3aDjGi.png[/img]
     `,
-        "2": `
+		},
+		"2": {
+			text: `
         [img]https://i.imgur.com/a3aDjGi.png[/img][divbox=white]
 [aligntable=left,0,0,0,0,0,0][fimg=120,120]https://i.imgur.com/VUBguS0.png[/fimg][fimg=120,120]https://i.imgur.com/FAyEyJd.png[[/fimg][/aligntable][aligntable=right,0,0,0,0,0,0][right][font=Arial][b]
 [size=150]Los Santos County Sheriff's Department[/size][/b]
@@ -47,7 +78,11 @@ Los Santos County Sheriff's Department
 [list=none][right]${formatData.date}[/right]
 
 
-[i][b]${formatData.applicantGender === 'male' ? `Mr. ${formatData.applicantName}` : `Ms. ${formatData.applicantName}`}[/b][/i],
+[i][b]${
+				formatData.applicantGender === "male"
+					? `Mr. ${formatData.applicantName}`
+					: `Ms. ${formatData.applicantName}`
+			}[/b][/i],
 
 The Los Santos County Sheriff's Department has received and acknowledged your application for employment. Because we have reached the maximum amount of applicants for this Recruitment Drive, we've put your application on hold and shortlisted you for potential employment. What this means is that if one of the current applicants fails one of the recruitment stages, you might potentially be pushed forward in the process. 
 
@@ -64,13 +99,15 @@ There is no expected timeframe and no guarantee that you will be given the oppor
 From
 [img]${deputyData.signature}[/img]
 ${deputyData.dRank} ${deputyData.name}
-${deputyData.rRank}
+${deputyData.divisionRanks[division]}
 Los Santos County Sheriff's Department
 [/list][/divbox]
 [img]https://i.imgur.com/a3aDjGi.png[/img]
         `,
+		},
 
-        "3": `
+		"3": {
+			text: `
     [img]https://i.imgur.com/a3aDjGi.png[/img][divbox=white]
 [aligntable=left,0,0,0,0,0,0][fimg=120,120]https://i.imgur.com/VUBguS0.png[/fimg][fimg=120,120]https://i.imgur.com/FAyEyJd.png[/fimg][/aligntable][aligntable=right,0,0,0,0,0,0][right][font=Arial][b]
 [size=150]Los Santos County Sheriff's Department[/size][/b]
@@ -80,7 +117,11 @@ Los Santos County Sheriff's Department
 [list=none][right]${formatData.date}[/right]
 
 
-[i][b]${formatData.applicantGender === 'male' ? `Mr. ${formatData.applicantName}` : `Ms. ${formatData.applicantName}`}[/b][/i],
+[i][b]${
+				formatData.applicantGender === "male"
+					? `Mr. ${formatData.applicantName}`
+					: `Ms. ${formatData.applicantName}`
+			}[/b][/i],
 
 
 The Los Santos County Sheriff's Department has received and acknowledged your application for employment. After completing our preliminary background checks, we have found you ineligible for employment with the Los Santos County Sheriff's Department because you have a criminal record. If you are unsure of our Selection Requirements & Recruitment Information, you can read about them [url=https://gov.eclipse-rp.net/viewtopic.php?f=958&t=20594]here.[/url]
@@ -96,13 +137,15 @@ The Los Santos County Sheriff's Department has received and acknowledged your ap
 From
 [img]${deputyData.signature}[/img]
 ${deputyData.dRank} ${deputyData.name}
-${deputyData.rRank}
+${deputyData.divisionRanks[division]}
 Los Santos County Sheriff's Department
 
 [/list][/divbox]
 [img]https://i.imgur.com/a3aDjGi.png[/img]
     `,
-        "4": `
+		},
+		"4": {
+			text: `
         [img]https://i.imgur.com/a3aDjGi.png[/img][divbox=white]
 [aligntable=left,0,0,0,0,0,0][fimg=120,120]https://i.imgur.com/VUBguS0.png[/fimg][fimg=120,120]https://i.imgur.com/FAyEyJd.png[/fimg][/aligntable][aligntable=right,0,0,0,0,0,0][right][font=Arial][b]
 [size=150]Los Santos County Sheriff's Department[/size][/b]
@@ -112,13 +155,17 @@ Los Santos County Sheriff's Department
 [list=none][right]${formatData.date}[/right]
 
 
-[i][b]${formatData.applicantGender === 'male' ? `Mr. ${formatData.applicantName}` : `Ms. ${formatData.applicantName}`}[/b][/i],
+[i][b]${
+				formatData.applicantGender === "male"
+					? `Mr. ${formatData.applicantName}`
+					: `Ms. ${formatData.applicantName}`
+			}[/b][/i],
 
 The Los Santos County Sheriff's Department has received and acknowledged your application for employment. We cannot proceed with your application at this time. See below for the reason(s). Please feel free to reapply in 30 days, or the next recruitment drive, whichever occurs first.
 
 The reason(s) for your denial are as following; 
 [list]
-${formatData.reasons.map((reason) => `[*]${reason}`).join("")}
+${formatData?.reasons?.map((reason) => `[*]${reason}`).join("")}
 [/list]
 
 If you are unsure of our Selection Requirements & Recruitment Information, you can read about them [url=https://gov.eclipse-rp.net/viewtopic.php?f=958&t=20594]here.[/url]
@@ -134,12 +181,14 @@ If you are unsure of our Selection Requirements & Recruitment Information, you c
 From
 [img]${deputyData.signature}[/img]
 ${deputyData.dRank} ${deputyData.name}
-${deputyData.rRank}
+${deputyData.divisionRanks[division]}
 Los Santos County Sheriff's Department
 [/list][/divbox]
 [img]https://i.imgur.com/a3aDjGi.png[/img]
         `,
-        "5": `
+		},
+		"5": {
+			text: `
       [img]https://i.imgur.com/a3aDjGi.png[/img][divbox=white]
 [aligntable=left,0,0,0,0,0,0][fimg=120,120]https://i.imgur.com/VUBguS0.png[/fimg][fimg=120,120]https://i.imgur.com/FAyEyJd.png[/fimg][/aligntable][aligntable=right,0,0,0,0,0,0][right][font=Arial][b]
 [size=150]Los Santos County Sheriff's Department[/size][/b]
@@ -149,7 +198,11 @@ Los Santos County Sheriff's Department
 [list=none][right]${formatData.date}[/right]
 
 
-[i][b]${formatData.applicantGender === 'male' ? `Mr. ${formatData.applicantName}` : `Ms. ${formatData.applicantName}`}[/b][/i],
+[i][b]${
+				formatData.applicantGender === "male"
+					? `Mr. ${formatData.applicantName}`
+					: `Ms. ${formatData.applicantName}`
+			}[/b][/i],
 
 The Los Santos County Sheriff's Department has received and acknowledged your application for employment. We cannot proceed with your application at this time because we do not have any more spots available in our recruitment drive. 
 
@@ -166,12 +219,14 @@ You may try again in 30 days, or our next recruitment drive, whichever occurs fi
 From
 [img]${deputyData.signature}[/img]
 ${deputyData.dRank} ${deputyData.name}
-${deputyData.rRank}
+${deputyData.divisionRanks[division]}
 Los Santos County Sheriff's Department
 [/list][/divbox]
 [img]https://i.imgur.com/a3aDjGi.png[/img]`,
+		},
 
-        "6": `
+		"6": {
+			text: `
         [img]https://i.imgur.com/a3aDjGi.png[/img][divbox=white]
 [aligntable=left,0,0,0,0,0,0][fimg=120,120]https://i.imgur.com/VUBguS0.png[/fimg][fimg=120,120]https://i.imgur.com/FAyEyJd.png[/fimg][/aligntable][aligntable=right,0,0,0,0,0,0][right][font=Arial][b]
 [size=150]Los Santos County Sheriff's Department[/size][/b]
@@ -181,12 +236,16 @@ Los Santos County Sheriff's Department
 [list=none][right]${formatData.date}[/right]
 
 
-[i][b]${formatData.applicantGender === 'male' ? `Mr. ${formatData.applicantName}` : `Ms. ${formatData.applicantName}`}[/b][/i],
+[i][b]${
+				formatData.applicantGender === "male"
+					? `Mr. ${formatData.applicantName}`
+					: `Ms. ${formatData.applicantName}`
+			}[/b][/i],
 
 The Los Santos County Sheriff's Department has received and acknowledged your application for employment. There are one or more errors on your application that needs to be corrected before we can proceed with deliberating it among the Recruitment Division. You will be given 48 hours to amend the error(s) after which your application will either be denied or moved for deliberations.
 
 [list]
-${formatData.reasons.map((reason) => `[*]${reason}`).join("")}
+${formatData.reasons?.map((reason) => `[*]${reason}`).join("")}
 [/list]
 
 [b]Stage Completed:[/b] N/A
@@ -200,12 +259,14 @@ ${formatData.reasons.map((reason) => `[*]${reason}`).join("")}
 From
 [img]${deputyData.signature}[/img]
 ${deputyData.dRank} ${deputyData.name}
-${deputyData.rRank}
+${deputyData.divisionRanks[division]}
 Los Santos County Sheriff's Department
 [/list][/divbox]
 [img]https://i.imgur.com/a3aDjGi.png[/img]
         `,
-        "7": `
+		},
+		"7": {
+			text: `
         [img]https://i.imgur.com/a3aDjGi.png[/img][divbox=white][aligntable=left,0,0,0,0,0,0][fimg=120,120]https://i.imgur.com/VUBguS0.png[/fimg][fimg=120,120]https://i.imgur.com/FAyEyJd.png[/fimg][/aligntable][aligntable=right,0,0,0,0,0,0][right][font=Arial][b]
 [size=150]Los Santos County Sheriff's Department[/size][/b]
 [size=115]RE: Application for Employment — PENDING INTERVIEW[/size]
@@ -214,7 +275,11 @@ Los Santos County Sheriff's Department
 [list=none][right]${formatData.date}[/right]
 
 
-[i][b]${formatData.applicantGender === 'male' ? `Mr. ${formatData.applicantName}` : `Ms. ${formatData.applicantName}`}[/b][/i],
+[i][b]${
+				formatData.applicantGender === "male"
+					? `Mr. ${formatData.applicantName}`
+					: `Ms. ${formatData.applicantName}`
+			}[/b][/i],
 
 The Los Santos County Sheriff's Department has completed its deliberations of your application for employment and after preliminary background checks, you have passed the initial application screening and are now pending to conduct a formal interview & a physical evaluation with a Recruitment & Employment Application Handler. We recommend that you read up on our [url=https://gov.eclipse-rp.net/viewtopic.php?f=958&t=20594][Selection Requirements & Recruitment Information][/url] so that you understand the stages of our recruitment process. 
 
@@ -311,15 +376,21 @@ E-Mail address: [url=LINKTOPM]firstname.lastname@lifeinvader.net[/url]
 From
 [img]${deputyData.signature}[/img]
 ${deputyData.dRank} ${deputyData.name}
-${deputyData.rRank}
+${deputyData.divisionRanks[division]}
 Los Santos County Sheriff's Department
 
 [/list][/divbox]
 [img]https://i.imgur.com/a3aDjGi.png[/img]`,
-        "8": `
+		},
+		"8": {
+			text: `
 [img]https://i.imgur.com/zonhmwe.png[/img]
 [divbox=white]
-Dear [i][b]${formatData.applicantGender === 'male' ? `Mr. ${formatData.applicantName}` : `Ms. ${formatData.applicantName}`}[/b][/i],
+Dear [i][b]${
+				formatData.applicantGender === "male"
+					? `Mr. ${formatData.applicantName}`
+					: `Ms. ${formatData.applicantName}`
+			}[/b][/i],
 
 You have been sent an email with possible interview times for the upcoming application period. Please respond to this email in a timely manner so that we may schedule your interview. If you need to request any changes to your availability time, please request such changes here. Otherwise, choose a potential time.
 
@@ -328,12 +399,14 @@ Thank you,
 [hr][/hr]
 [img]${deputyData.signature}[/img]
 ${deputyData.dRank} ${deputyData.name}
-${deputyData.rRank}
+${deputyData.divisionRanks[division]}
 Recruitment and Employment Division,
 Los Santos County Sheriff's Department
 [/divbox]
         `,
-        "9": `
+		},
+		"9": {
+			text: `
         [img]https://i.imgur.com/a3aDjGi.png[/img][divbox=white]
 [aligntable=left,0,0,0,0,0,0][fimg=120,120]https://i.imgur.com/VUBguS0.png[/fimg][fimg=120,120]https://i.imgur.com/FAyEyJd.png[/fimg][/aligntable][aligntable=right,0,0,0,0,0,0][right][font=Arial][b]
 [size=150]Los Santos County Sheriff's Department[/size][/b]
@@ -343,9 +416,15 @@ Los Santos County Sheriff's Department
 [list=none][right]${formatData.date}[/right]
 
 
-[i][b]${formatData.applicantGender === 'male' ? `Mr. ${formatData.applicantName}` : `Ms. ${formatData.applicantName}`}[/b][/i],
+[i][b]${
+				formatData.applicantGender === "male"
+					? `Mr. ${formatData.applicantName}`
+					: `Ms. ${formatData.applicantName}`
+			}[/b][/i],
 
-I will be conducting your interview at Paleto Station on ${formatData.interviewDate[0]} at ${formatData.interviewDate[1]} [color=blue](([/color] UTC [color=blue]))[/color]. I am looking forward to meeting you.  Please e-mail me if you cannot make it or if there has been a change to your schedule.
+I will be conducting your interview at Paleto Station on ${formatData.interviewDate?.[0]} at ${
+				formatData.interviewDate?.[1]
+			} [color=blue](([/color] UTC [color=blue]))[/color]. I am looking forward to meeting you.  Please e-mail me if you cannot make it or if there has been a change to your schedule.
 
 Please remember that it is crucial to finalize your interview within a maximum of two weeks after receiving confirmation. Neglecting to attend a scheduled interview without prior notification can lead to the denial of your application. Additionally, kindly note that wearing formal attire for the interview is mandatory, and it is recommended to bring sports clothing (with a towel) for the physical evaluation.
 
@@ -364,11 +443,13 @@ Ensure your name on TeamSpeak reflects your In-Character name and wait to be mov
 From
 [img]${deputyData.signature}[/img]
 ${deputyData.dRank} ${deputyData.name}
-${deputyData.rRank}
+${deputyData.divisionRanks[division]}
 Los Santos County Sheriff's Department
 [/list][/divbox]
 [img]https://i.imgur.com/a3aDjGi.png[/img]`,
-        "10": `
+		},
+		"10": {
+			text: `
         [img]https://i.imgur.com/a3aDjGi.png[/img][divbox=white]
 [aligntable=left,0,0,0,0,0,0][fimg=120,120]https://i.imgur.com/VUBguS0.png[/fimg][fimg=120,120]https://i.imgur.com/FAyEyJd.png[/fimg][/aligntable][aligntable=right,0,0,0,0,0,0][right][font=Arial][b]
 [size=150]Los Santos County Sheriff's Department[/size][/b]
@@ -378,7 +459,11 @@ Los Santos County Sheriff's Department
 [list=none][right]${formatData.date}[/right]
 
 
-[i][b]${formatData.applicantGender === 'male' ? `Mr. ${formatData.applicantName}` : `Ms. ${formatData.applicantName}`}[/b][/i],
+[i][b]${
+				formatData.applicantGender === "male"
+					? `Mr. ${formatData.applicantName}`
+					: `Ms. ${formatData.applicantName}`
+			}[/b][/i],
 
 The Los Santos County Sheriff's Department has completed its review of performance during the [i]Interview Stage[/i]. We are contacting you to inform you that we're moving you onto the final stage of the recruitment process, the Sheriff's Academy. In the next coming days, you will be scheduled for an academy that you will need to attend before you can potentially become a full employee of the Los Santos County Sheriff's Department. We recommend that you read up on our [url=https://gov.eclipse-rp.net/viewtopic.php?f=958&t=20594][Selection Requirements & Recruitment Information][/url] so that you understand the stages of our recruitment process. 
 
@@ -394,12 +479,14 @@ You will soon be given access to an area of our website that holds more informat
 From
 [img]${deputyData.signature}[/img]
 ${deputyData.dRank} ${deputyData.name}
-${deputyData.rRank}
+${deputyData.divisionRanks[division]}
 Los Santos County Sheriff's Department
 [/list][/divbox]
 [img]https://i.imgur.com/a3aDjGi.png[/img]
         `,
-        "11": `
+		},
+		"11": {
+			text: `
         [img]https://i.imgur.com/a3aDjGi.png[/img][divbox=white]
 [aligntable=left,0,0,0,0,0,0][fimg=120,120]https://i.imgur.com/VUBguS0.png[/fimg][fimg=120,120]https://i.imgur.com/FAyEyJd.png[/fimg][/aligntable][aligntable=right,0,0,0,0,0,0][right][font=Arial][b]
 [size=150]Los Santos County Sheriff's Department[/size][/b]
@@ -419,7 +506,7 @@ The applicant has passed the Sheriff's Academy and is now an employee of the Los
 From
 [img]${deputyData.signature}[/img]
 ${deputyData.dRank} ${deputyData.name}
-${deputyData.rRank}
+${deputyData.divisionRanks[division]}
 Los Santos County Sheriff's Department
 
 On behalf of
@@ -430,7 +517,9 @@ Recruitment & Employment Division Commanding Officer
 [/list][/divbox]
 [img]https://i.imgur.com/a3aDjGi.png[/img]
         `,
-        '12': `
+		},
+		"12": {
+			text: `
         [img]https://i.imgur.com/zu4NcrL.png[/img]
 [img]https://i.imgur.com/a3aDjGi.png[/img][divbox=white]
 [img]https://i.imgur.com/FAyEyJd.png[/img][aligntable=right,0,0,0,0,0,0][right][font=Arial][b]
@@ -460,7 +549,7 @@ Please send your response to the Sheriff's Department Recruitment Division; [url
 From
 [img]${deputyData.signature}[/img]
 ${deputyData.dRank} ${deputyData.name}
-${deputyData.rRank}
+${deputyData.divisionRanks[division]}
 Los Santos County Sheriff's Department
 
 On behalf of,
@@ -473,7 +562,9 @@ Los Santos County Sheriff's Department
 [/divbox]
 [img]https://i.imgur.com/a3aDjGi.png[/img]
         `,
-        "13": `
+		},
+		"13": {
+			text: `
 [img]https://i.imgur.com/a3aDjGi.png[/img][divbox=white]
 [aligntable=left,0,0,0,0,0,0][fimg=120,120]https://i.imgur.com/VUBguS0.png[/fimg][fimg=120,120]https://i.imgur.com/FAyEyJd.png[/fimg][/aligntable][aligntable=right,0,0,0,0,0,0][right][font=Arial][b]
 [size=150]Los Santos County Sheriff's Department[/size][/b]
@@ -482,7 +573,7 @@ Los Santos County Sheriff's Department
 [hr]
 
 
-[b][i]Date and Time of the Interview:[/i][/b] ${formatData.interviewDate[0]} ${formatData.interviewDate[1]}
+[b][i]Date and Time of the Interview:[/i][/b] ${formatData.interviewDate?.[0]} ${formatData.interviewDate?.[1]}
 [b][i]Applicant's Name:[/i][/b] ${formatData.applicantName}
 [b][i]Application Link:[/i][/b] [url=${formatData.appLink}]Application[/url]
 
@@ -523,9 +614,11 @@ ${formatData.acceptedIntoAcademy}
 (( ${formatData.speakingEnglish} ))
 
 [b][i](( Provide screenshots of ALL of their RP throughout the physical evaluation ))[/i][/b]
-(( ${formatData.roleplayScreenShots.map(imageLink => {
-            return `${imageLink}`
-        }).join('\n')} ))
+(( ${formatData.roleplayScreenShots
+				?.map((imageLink) => {
+					return `${imageLink}`;
+				})
+				.join("\n")} ))
 
 [b][i](( How was your general feeling towards them? Do they come across as willing to learn and invest time into this faction, or do they seem like they want to rush and can't dedicate themselves to something long-term? ))[/i][/b]
 (( ${formatData.generalFeeling} ))
@@ -538,12 +631,14 @@ ${formatData.acceptedIntoAcademy}
 From
 [img]${deputyData.signature}[/img]
 ${deputyData.dRank} ${deputyData.name}
-${deputyData.rRank}
+${deputyData.divisionRanks[division]}
 Los Santos County Sheriff's Department
 [/list][/divbox]
 [img]https://i.imgur.com/a3aDjGi.png[/img]`,
+		},
 
-        "14": `[img]https://i.imgur.com/a3aDjGi.png[/img][divbox=white]
+		"14": {
+			text: `[img]https://i.imgur.com/a3aDjGi.png[/img][divbox=white]
 [fimg=130,130]https://i.imgur.com/VUBguS0.png[/fimg][aligntable=right,0,0,0,0,0,0][right][font=Arial][b]
 [size=150]Los Santos County Sheriff's Department[/size][/b]
 [size=115]Recruitment and Employment Division[/size]
@@ -560,12 +655,16 @@ Text
 Respectfully,
 [img]${deputyData.signature}[/img]
 ${deputyData.dRank} ${deputyData.name}
-${deputyData.rRank}
+${deputyData.divisionRanks[division]}
 Los Santos County Sheriff's Department
 [/list][/divbox]
-[img]https://i.imgur.com/a3aDjGi.png[/img]`
+[img]https://i.imgur.com/a3aDjGi.png[/img]`,
+		},
+	};
 
-    }
+	Object.keys(formats).forEach((key) => {
+		if (!formats[key].label) formats[key].label = REDLabels[key];
+	});
 
-    return formats[formatId as keyof typeof formats];
-}
+	return { format: formats[formatId].text, formats };
+};
