@@ -116,7 +116,7 @@ const App = () => {
 
 				<div className="p-5 flex flex-col gap-5">
 					<img src="/LSSD-email-format-tool/images/logo.webp" alt="LSSD Logo" className="max-w-[160px]" />
-					<DeputyDetails setDetails={setDetails} details={details} division={division} />
+					<DeputyDetails setDetails={setDetails} details={details} division={division || "RED"} />
 				</div>
 			</section>
 
