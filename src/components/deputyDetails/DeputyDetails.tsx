@@ -56,7 +56,7 @@ const DeputyDetails = ({
 	};
 
 	const dRankDefault = details.dRank || deputyRanks[0].value;
-	const rRankDefault = details.divisionRanks[division] ?? (divisionRanks[division]?.[0]?.value || "");
+	const rRankDefault = details.divisionRanks[division] || divisionRanks[division]?.[0]?.value || "";
 
 	return (
 		<section className="flex flex-col gap-5">
