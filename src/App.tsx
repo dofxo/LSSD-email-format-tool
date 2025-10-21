@@ -73,7 +73,10 @@ const App = () => {
 			<section className="flex items-center justify-between mb-8">
 				<h1 className="text-xl font-semibold text-white tracking-tight">LSSD Email Format Tool</h1>
 
-				<Select value={division} onValueChange={(val) => setDivision(val as "RED" | "TSD" | "ATD")}>
+				<Select
+					value={division || "RED"}
+					onValueChange={(val) => setDivision((val || "RED") as "RED" | "TSD" | "ATD")}
+				>
 					<SelectTrigger className="w-[280px] bg-white text-nuetral-900 shadow-sm">
 						<SelectValue placeholder="Select Division" />
 					</SelectTrigger>
