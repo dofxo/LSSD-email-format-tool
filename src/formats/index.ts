@@ -1,13 +1,5 @@
-import type { DeputyData, FormatData } from "../types.ts";
-import { REDFormats } from "./divisions/RED.ts";
-import { TSDFormats } from "./divisions/TSD.ts";
-import { ATDFormats } from "./divisions/ATD.ts";
-
-export const registry = {
-	RED: REDFormats,
-	TSD: TSDFormats,
-	ATD: ATDFormats,
-};
+import type { DeputyData, FormatData } from "../types";
+import { registry } from "./registry";
 
 export const getFormat = ({
 	formatData,
@@ -20,7 +12,16 @@ export const getFormat = ({
 	formatId: string;
 	division: "RED" | "TSD" | "ATD";
 }) => {
-	const branch = registry[division];
-	const template = branch?.({ formatData, deputyData, division, formatId });
-	return { format: template.format ?? "[Invalid format ID or division]", formats: template.formats };
+	const branch = registry?.[division];
+	if (!branch)
+		return {
+			format: `[${division} division failed to load]`,
+			formats: {},
+		};
+
+	const template = branch({ formatData, deputyData, division, formatId });
+	return {
+		format: template.format ?? "[Invalid format ID or division]",
+		formats: template.formats,
+	};
 };

@@ -8,7 +8,7 @@ import type { DeputyData, divisionsType, FormatData } from "./types.ts";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { Car, GraduationCap, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { getFormat } from "./formats/index.ts";
+import { getFormat } from "./formats";
 import pkg from "../package.json";
 
 const App = () => {
