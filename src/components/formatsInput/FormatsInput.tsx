@@ -40,7 +40,6 @@ const FormatsInput = ({
 	const addItem = (type: "reasons" | "screenshots") => {
 		const inputValue = type === "reasons" ? reasonsInput : screenshotsInput;
 		if (!inputValue) return;
-
 		setFormatData((prev) => ({
 			...prev,
 			[type === "reasons" ? "reasons" : "roleplayScreenShots"]: [
@@ -48,11 +47,8 @@ const FormatsInput = ({
 				inputValue,
 			],
 		}));
-		if (type === "reasons") {
-			setReasonsInput("");
-		} else {
-			setScreenshotsInput("");
-		}
+		if (type === "reasons") setReasonsInput("");
+		else setScreenshotsInput("");
 	};
 
 	if (!formatId) return <div className="flex items-center justify-center h-32 text-gray-500">No format selected</div>;
@@ -83,7 +79,6 @@ const FormatsInput = ({
 						{input.label}
 					</label>
 					{input.hint && <span className="text-[12px] text-red-400">{input.hint}</span>}
-
 					{input.type === "date" ? (
 						<DatePicker onChange={handleDatePickerChange} name={input.name} />
 					) : input.type === "select" ? (
@@ -101,14 +96,26 @@ const FormatsInput = ({
 									onChange={handleInputChange}
 									name={input.name}
 									type="text"
-									value={formatData[input.name as keyof FormatData] || ""}
+									value={
+										input.name === "reasons"
+											? reasonsInput
+											: input.name === "roleplayScreenShots"
+											? screenshotsInput
+											: (formatData[input.name as keyof FormatData] as string) || ""
+									}
 								/>
 								{input.name === "reasons" && (
 									<Button onClick={() => addItem("reasons")} type="primary">
 										add
 									</Button>
 								)}
+								{input.name === "roleplayScreenShots" && (
+									<Button onClick={() => addItem("screenshots")} type="primary">
+										add
+									</Button>
+								)}
 							</div>
+
 							{input.name === "reasons" && (
 								<div className="flex md:flex-col gap-2">
 									{(formatData.reasons || []).map((item, idx) => (
@@ -120,6 +127,28 @@ const FormatsInput = ({
 													setFormatData((prev) => ({
 														...prev,
 														reasons: (prev.reasons || []).filter((_, i) => i !== idx),
+													}));
+												}}
+												icon={<DeleteTwoTone style={{ color: "red" }} />}
+											/>
+										</div>
+									))}
+								</div>
+							)}
+
+							{input.name === "roleplayScreenShots" && (
+								<div className="flex md:flex-col gap-2">
+									{(formatData.roleplayScreenShots || []).map((item, idx) => (
+										<div key={idx} className="flex gap-2 items-center">
+											<span className="text-[12px]">{item}</span>
+											<Button
+												danger
+												onClick={() => {
+													setFormatData((prev) => ({
+														...prev,
+														roleplayScreenShots: (prev.roleplayScreenShots || []).filter(
+															(_, i) => i !== idx
+														),
 													}));
 												}}
 												icon={<DeleteTwoTone style={{ color: "red" }} />}

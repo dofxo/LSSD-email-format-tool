@@ -204,7 +204,7 @@ export const inputsByDivision = {
 			name: "certificationType",
 			label: "Firearm Certification Type",
 			type: "text",
-			formats: ["41", "42", "43", "44", "45"],
+			formats: ["41", "42", "43", "44"],
 		},
 		{
 			name: "scoredPoint",
