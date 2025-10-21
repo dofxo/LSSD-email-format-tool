@@ -1,7 +1,7 @@
 import { Button, Input, Select } from "antd";
 import { toast } from "react-toastify";
 import { deputyRanks } from "./deputyRanks";
-import type { DeputyData } from "@/types";
+import type { DeputyData, divisionsType } from "@/types";
 
 const DeputyDetails = ({
 	setDetails,
@@ -10,7 +10,7 @@ const DeputyDetails = ({
 }: {
 	setDetails: React.Dispatch<React.SetStateAction<DeputyData>>;
 	details: DeputyData;
-	division: "RED" | "TSD" | "ATD";
+	division: divisionsType;
 }) => {
 	const divisionRanks = {
 		RED: [

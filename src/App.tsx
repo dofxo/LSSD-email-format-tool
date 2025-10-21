@@ -9,7 +9,7 @@ import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@
 import { Car, GraduationCap, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { getFormat } from "./formats/index.ts";
-import pkg from "../package.json"; // ← added import for version
+import pkg from "../package.json";
 
 const App = () => {
 	const [division, setDivision] = useState<divisionsType>("RED");
@@ -112,7 +112,7 @@ const App = () => {
 				</div>
 
 				<div className="p-5 flex flex-col gap-5">
-					<img src="/LSSD-RED-tool/images/logo.webp" alt="LSSD Logo" className="max-w-[160px]" />
+					<img src="/LSSD-email-format-tool/images/logo.webp" alt="LSSD Logo" className="max-w-[160px]" />
 					<DeputyDetails setDetails={setDetails} details={details} division={division} />
 				</div>
 			</section>
