@@ -9,6 +9,7 @@ import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@
 import { Car, GraduationCap, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { getFormat } from "./formats/index.ts";
+import pkg from "../package.json"; // ← added import for version
 
 const App = () => {
 	const [division, setDivision] = useState<divisionsType>("RED");
@@ -33,7 +34,6 @@ const App = () => {
 	const [formatId, setFormat] = useState<string>("");
 
 	useEffect(() => {
-		//reset everything on chaning divisions
 		setFormat("");
 		setFormatData({});
 	}, [division]);
@@ -117,7 +117,9 @@ const App = () => {
 				</div>
 			</section>
 
-			<footer className="mt-10 text-start text-sm text-gray-600 select-none">Developed by dofxo</footer>
+			<footer className="mt-10 text-start text-sm text-gray-600 select-none">
+				Developed by dofxo - App version v{pkg.version}
+			</footer>
 
 			<ToastContainer position="top-center" />
 		</main>

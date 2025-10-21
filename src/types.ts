@@ -39,5 +39,5 @@ export interface FormatData {
 	deputyRank?: string;
 	certificationType?: string;
 	scoredPoint?: string;
-	leastPoint: string;
+	leastPoint?: string;
 }
