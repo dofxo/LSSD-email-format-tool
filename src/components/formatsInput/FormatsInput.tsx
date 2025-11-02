@@ -85,7 +85,7 @@ const FormatsInput = ({
 							name={input.name}
 						/>
 					) : input.type === "select" ? (
-						<Select defaultValue="male" onChange={handleGenderChange} options={input.options} />
+						<Select onChange={handleGenderChange} options={input.options} />
 					) : input.type === "textarea" ? (
 						<TextArea
 							onChange={handleInputChange}
