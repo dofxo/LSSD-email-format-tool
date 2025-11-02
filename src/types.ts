@@ -16,7 +16,6 @@ export interface FormatData {
 	applicantName?: string;
 	applicantGender?: "male" | "female";
 	date?: string;
-	interviewDate?: string[];
 	reasons?: string[];
 	appLink?: string;
 	firstImpression?: string;
@@ -31,7 +30,7 @@ export interface FormatData {
 	workingMicrophone?: string;
 	playerAge?: string;
 	speakingEnglish?: string;
-	roleplayScreenShots?: string[];
+	rolePlayScreenShots?: string;
 	generalFeeling?: string;
 
 	// TSD and ATD fields
