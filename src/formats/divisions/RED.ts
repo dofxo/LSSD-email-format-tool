@@ -512,7 +512,7 @@ Los Santos County Sheriff's Department
 
 On behalf of
 [img]https://i.imgur.com/WxRbg4x.png[/img]
-Lieutenant Clay Thompson
+Captain Clay Thompson
 Recruitment & Employment Division Commanding Officer
 
 [/list][/divbox]
@@ -556,7 +556,7 @@ Los Santos County Sheriff's Department
 On behalf of,
 
 [img]https://i.imgur.com/WxRbg4x.png[/img]
-Lieutenant Clay Thompson
+Captain Clay Thompson
 Recruitment & Employment Division Commanding Officer
 Los Santos County Sheriff's Department
 
