@@ -1,8 +1,9 @@
 import { Button, DatePicker, Input, Select } from "antd";
-import type { FormatData } from "../../types.ts";
-import moment from "moment";
-import { useState } from "react";
 import { DeleteTwoTone } from "@ant-design/icons";
+import { useState } from "react";
+import moment from "moment";
+
+import type { FormatData } from "../../types.ts";
 import { inputsByDivision } from "./data.ts";
 
 const { TextArea } = Input;
@@ -19,17 +20,19 @@ const FormatsInput = ({
 	setFormatData: React.Dispatch<React.SetStateAction<FormatData>>;
 }) => {
 	const [reasonsInput, setReasonsInput] = useState("");
-	const [screenshotsInput, setScreenshotsInput] = useState("");
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
 		const { name, value } = e.target;
+
 		if (name === "reasons") setReasonsInput(value);
-		else if (name === "roleplayScreenShots") setScreenshotsInput(value);
 		else setFormatData((prev) => ({ ...prev, [name]: value }));
 	};
 
 	const handleDatePickerChange = (_: never, dateString: string | string[]) => {
-		const formattedDate = moment.utc(dateString as string).format("MMMM Do, YYYY");
+		const hasTime = dateString.includes(":");
+		const formattedDate = moment
+			.utc(dateString as string)
+			.format(!hasTime ? "MMMM Do, YYYY" : "MMMM Do, YYYY - HH:mm");
 		setFormatData((prev) => ({ ...prev, date: formattedDate }));
 	};
 
@@ -37,18 +40,14 @@ const FormatsInput = ({
 		setFormatData((prev) => ({ ...prev, applicantGender: value }));
 	};
 
-	const addItem = (type: "reasons" | "screenshots") => {
-		const inputValue = type === "reasons" ? reasonsInput : screenshotsInput;
+	const addItem = () => {
+		const inputValue = reasonsInput;
 		if (!inputValue) return;
 		setFormatData((prev) => ({
 			...prev,
-			[type === "reasons" ? "reasons" : "roleplayScreenShots"]: [
-				...(prev[type === "reasons" ? "reasons" : "roleplayScreenShots"] || []),
-				inputValue,
-			],
+			reasons: [...(prev.reasons || []), inputValue],
 		}));
-		if (type === "reasons") setReasonsInput("");
-		else setScreenshotsInput("");
+		setReasonsInput("");
 	};
 
 	if (!formatId) return <div className="flex items-center justify-center h-32 text-gray-500">No format selected</div>;
@@ -80,7 +79,11 @@ const FormatsInput = ({
 					</label>
 					{input.hint && <span className="text-[12px] text-red-400">{input.hint}</span>}
 					{input.type === "date" ? (
-						<DatePicker onChange={handleDatePickerChange} name={input.name} />
+						<DatePicker
+							showTime={input.name === "interviewDate"}
+							onChange={handleDatePickerChange}
+							name={input.name}
+						/>
 					) : input.type === "select" ? (
 						<Select defaultValue="male" onChange={handleGenderChange} options={input.options} />
 					) : input.type === "textarea" ? (
@@ -99,18 +102,11 @@ const FormatsInput = ({
 									value={
 										input.name === "reasons"
 											? reasonsInput
-											: input.name === "roleplayScreenShots"
-											? screenshotsInput
 											: (formatData[input.name as keyof FormatData] as string) || ""
 									}
 								/>
 								{input.name === "reasons" && (
-									<Button onClick={() => addItem("reasons")} type="primary">
-										add
-									</Button>
-								)}
-								{input.name === "roleplayScreenShots" && (
-									<Button onClick={() => addItem("screenshots")} type="primary">
+									<Button onClick={() => addItem()} type="primary">
 										add
 									</Button>
 								)}
@@ -127,28 +123,6 @@ const FormatsInput = ({
 													setFormatData((prev) => ({
 														...prev,
 														reasons: (prev.reasons || []).filter((_, i) => i !== idx),
-													}));
-												}}
-												icon={<DeleteTwoTone style={{ color: "red" }} />}
-											/>
-										</div>
-									))}
-								</div>
-							)}
-
-							{input.name === "roleplayScreenShots" && (
-								<div className="flex md:flex-col gap-2">
-									{(formatData.roleplayScreenShots || []).map((item, idx) => (
-										<div key={idx} className="flex gap-2 items-center">
-											<span className="text-[12px]">{item}</span>
-											<Button
-												danger
-												onClick={() => {
-													setFormatData((prev) => ({
-														...prev,
-														roleplayScreenShots: (prev.roleplayScreenShots || []).filter(
-															(_, i) => i !== idx
-														),
 													}));
 												}}
 												icon={<DeleteTwoTone style={{ color: "red" }} />}

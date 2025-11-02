@@ -34,8 +34,6 @@ const App = () => {
 	const [formatData, setFormatData] = useState<FormatData>({});
 	const [formatId, setFormat] = useState<string>("");
 
-	console.log(formatData);
-
 	useEffect(() => {
 		setFormat("");
 		setFormatData({});

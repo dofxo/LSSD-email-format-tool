@@ -28,6 +28,7 @@ export const REDFormats = ({
 	division: divisionsType;
 	formatId: string;
 }) => {
+	const interviewDateArray = formatData.date?.split(",");
 	const formats: Record<string, { text: string; label?: string }> = {
 		"1": {
 			text: `
@@ -422,8 +423,8 @@ Los Santos County Sheriff's Department
 					: `Ms. ${formatData.applicantName}`
 			}[/b][/i],
 
-I will be conducting your interview at Paleto Station on ${formatData.interviewDate?.[0]} at ${
-				formatData.interviewDate?.[1]
+I will be conducting your interview at Paleto Station on ${interviewDateArray?.[0]} at ${
+				interviewDateArray?.[1]
 			} [color=blue](([/color] UTC [color=blue]))[/color]. I am looking forward to meeting you.  Please e-mail me if you cannot make it or if there has been a change to your schedule.
 
 Please remember that it is crucial to finalize your interview within a maximum of two weeks after receiving confirmation. Neglecting to attend a scheduled interview without prior notification can lead to the denial of your application. Additionally, kindly note that wearing formal attire for the interview is mandatory, and it is recommended to bring sports clothing (with a towel) for the physical evaluation.
@@ -573,7 +574,7 @@ Los Santos County Sheriff's Department
 [hr]
 
 
-[b][i]Date and Time of the Interview:[/i][/b] ${formatData.interviewDate?.[0]} ${formatData.interviewDate?.[1]}
+[b][i]Date and Time of the Interview:[/i][/b] ${interviewDateArray?.[0]} ${interviewDateArray?.[1]} ((UTC))
 [b][i]Applicant's Name:[/i][/b] ${formatData.applicantName}
 [b][i]Application Link:[/i][/b] [url=${formatData.appLink}]Application[/url]
 
