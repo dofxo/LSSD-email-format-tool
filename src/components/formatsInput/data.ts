@@ -108,9 +108,9 @@ export const inputsByDivision = {
 			formats: ["13"],
 		},
 		{
-			name: "roleplayScreenShots",
+			name: "rolePlayScreenShots",
 			label: "(( Provide screenshots of ALL of their RP throughout the physical evaluation ))",
-			hint: "Either add album link or the format that starts with imgur.com not the i.imgur one. E.g. https://imgur.com/a/OMjmFnG",
+			hint: "Add link(s) with ; separator. you can also add one link without ; separator. (Also make sure to use the direct link, not the viewer link. https://ibb.co/2223C4VcBF - incorrect / https://i.ibb.co/322jZ6SHT/2025-11-01-22-53.png - correct )",
 			type: "screenshots",
 			formats: ["13"],
 		},

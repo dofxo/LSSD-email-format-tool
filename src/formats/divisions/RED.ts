@@ -614,9 +614,10 @@ ${formatData.acceptedIntoAcademy}
 (( ${formatData.speakingEnglish} ))
 
 [b][i](( Provide screenshots of ALL of their RP throughout the physical evaluation ))[/i][/b]
-(( ${formatData.roleplayScreenShots
-				?.map((imageLink) => {
-					return `${imageLink}`;
+(( ${formatData.rolePlayScreenShots
+				?.split(";")
+				.map((imageLink) => {
+					return `[img]${imageLink}[/img]`;
 				})
 				.join("\n")} ))
 

@@ -1,13 +1,14 @@
-import { useEffect, useState } from "react";
-import { Button } from "antd";
-import { toast, ToastContainer } from "react-toastify";
-import DeputyDetails from "./components/deputyDetails/DeputyDetails.tsx";
-import SelectFormats from "./components/SelectFormats.tsx";
-import FormatsInput from "./components/formatsInput/FormatsInput.tsx";
-import type { DeputyData, divisionsType, FormatData } from "./types.ts";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { Car, GraduationCap, Users } from "lucide-react";
+import { toast, ToastContainer } from "react-toastify";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
+import { Button } from "antd";
+
+import DeputyDetails from "./components/deputyDetails/DeputyDetails.tsx";
+import type { DeputyData, divisionsType, FormatData } from "./types.ts";
+import FormatsInput from "./components/formatsInput/FormatsInput.tsx";
+import SelectFormats from "./components/SelectFormats.tsx";
 import { getFormat } from "./formats";
 import pkg from "../package.json";
 
@@ -32,6 +33,8 @@ const App = () => {
 
 	const [formatData, setFormatData] = useState<FormatData>({});
 	const [formatId, setFormat] = useState<string>("");
+
+	console.log(formatData);
 
 	useEffect(() => {
 		setFormat("");

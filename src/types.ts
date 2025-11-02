@@ -31,7 +31,7 @@ export interface FormatData {
 	workingMicrophone?: string;
 	playerAge?: string;
 	speakingEnglish?: string;
-	roleplayScreenShots?: string[];
+	rolePlayScreenShots?: string;
 	generalFeeling?: string;
 
 	// TSD and ATD fields
