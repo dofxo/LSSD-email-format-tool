@@ -16,6 +16,7 @@ export interface FormatData {
 	applicantName?: string;
 	applicantGender?: "male" | "female";
 	date?: string;
+	dateFormat?: "full" | "short"; // "full" for "December 2nd, 2025", "short" for "02/DEC/2025"
 	reasons?: string[];
 	appLink?: string;
 	firstImpression?: string;
@@ -39,4 +40,6 @@ export interface FormatData {
 	certificationType?: string;
 	scoredPoint?: string;
 	leastPoint?: string;
+	issuedBy?: string;
+	certificationStatus?: "acquired" | "suspended";
 }

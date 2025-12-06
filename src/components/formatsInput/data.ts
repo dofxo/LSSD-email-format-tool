@@ -166,6 +166,7 @@ export const inputsByDivision = {
 				"43",
 				"44",
 				"45",
+				"46",
 			],
 		},
 		{
@@ -204,7 +205,7 @@ export const inputsByDivision = {
 			name: "certificationType",
 			label: "Firearm Certification Type",
 			type: "text",
-			formats: ["41", "42", "43", "44"],
+			formats: ["41", "42", "43", "44", "46", "47"],
 		},
 		{
 			name: "scoredPoint",
@@ -249,7 +250,25 @@ export const inputsByDivision = {
 				"36",
 				"38",
 				"40",
+				"46",
+				"47",
 			],
+		},
+		{
+			name: "issuedBy",
+			label: "Issued By",
+			type: "text",
+			formats: ["47"],
+		},
+		{
+			name: "certificationStatus",
+			label: "Certification Status",
+			type: "select",
+			options: [
+				{ value: "acquired", label: "Acquired" },
+				{ value: "suspended", label: "Suspended" },
+			],
+			formats: ["47"],
 		},
 	],
 };
