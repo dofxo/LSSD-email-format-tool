@@ -46,6 +46,8 @@ export const ATDLabels: Record<string, string> = {
 	"43": "Firearm Certification - Application Denied(Other) - Reply to application and Deputy",
 	"44": "Firearm Certification - Certificaion Passed - Reply to application and Deputy",
 	"45": "Firearm Certification - Certificaion Denied - Reply to application and Deputy",
+	"46": "Personnel File - New certification - Reply to post",
+	"47": "Personnel File - New certification - Edit main post",
 };
 
 export const ATDFormats = ({
@@ -1005,6 +1007,36 @@ Advanced Training Division
 Office of Administrative Services
 [/divbox]
 [img]https://i.imgur.com/q0fHG1F.png[/img]`,
+		},
+
+		"46": {
+			text: `[LSSDfooter][/LSSDfooter]
+[divbox=white]
+[center][img]https://i.imgur.com/PVVkVRC.png[/img]
+
+[size=150][font=Bradley Hand ITC]This certifies that[/font][/size]
+[size=130]${formatData.deputyName}[/size]
+
+[size=150][font=Bradley Hand ITC]has met all the requirements and completed the practical assessment to receive their certification in:[/font][/size]
+
+[size=125][${formatData.certificationType}][/size]
+
+[size=115]${formatData.date}[/size]
+
+
+[/center]
+[center] [img]https://i.imgur.com/BoT6bvh.png[/img][/center]
+[/divbox]
+[LSSDfooter][/LSSDfooter]`,
+		},
+
+		"47": {
+			text: `[b]#########################[/b]
+
+[b][color=#800000]${formatData.date}[/color][/b]
+[b][${formatData.certificationType}][/b]
+Certification ${formatData.certificationStatus === "suspended" ? "suspended" : "acquired"}.
+[i]Issued by ${formatData.issuedBy}[/i]`,
 		},
 	};
 

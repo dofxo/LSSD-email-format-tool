@@ -20,6 +20,7 @@ const FormatsInput = ({
 	setFormatData: React.Dispatch<React.SetStateAction<FormatData>>;
 }) => {
 	const [reasonsInput, setReasonsInput] = useState("");
+	const [rawDateValues, setRawDateValues] = useState<Record<string, string>>({});
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
 		const { name, value } = e.target;
@@ -28,16 +29,79 @@ const FormatsInput = ({
 		else setFormatData((prev) => ({ ...prev, [name]: value }));
 	};
 
-	const handleDatePickerChange = (_: never, dateString: string | string[]) => {
-		const hasTime = dateString.includes(":");
-		const formattedDate = moment
-			.utc(dateString as string)
-			.format(!hasTime ? "MMMM Do, YYYY" : "MMMM Do, YYYY - HH:mm");
-		setFormatData((prev) => ({ ...prev, date: formattedDate }));
+	const formatDate = (dateString: string, format: "full" | "short" = "full", hasTime: boolean = false) => {
+		const date = moment.utc(dateString);
+		if (format === "short") {
+			const day = date.format("DD");
+			const month = date.format("MMM").toUpperCase();
+			const year = date.format("YYYY");
+			const datePart = `${day}/${month}/${year}`;
+			if (hasTime) {
+				const time = date.format("HH:mm");
+				return `${datePart} - ${time}`;
+			}
+			return datePart;
+		} else {
+			return hasTime ? date.format("MMMM Do, YYYY - HH:mm") : date.format("MMMM Do, YYYY");
+		}
+	};
+
+	const handleDatePickerChange = (_momentObj: unknown, dateString: string | string[], inputName: string) => {
+		if (!dateString) {
+			setRawDateValues((prev) => {
+				const updated = { ...prev };
+				delete updated[inputName];
+				return updated;
+			});
+			setFormatData((prev) => ({ ...prev, [inputName]: undefined }));
+			return;
+		}
+
+		const dateStr = dateString as string;
+		setRawDateValues((prev) => ({ ...prev, [inputName]: dateStr }));
+
+		const hasTime = dateStr.includes(":");
+		const dateFormat = inputName === "date" ? formatData.dateFormat || "full" : "full";
+		const formattedDate = formatDate(dateStr, dateFormat, hasTime);
+		setFormatData((prev) => ({ ...prev, [inputName]: formattedDate }));
+	};
+
+	const handleDateFormatChange = (value: "full" | "short") => {
+		setFormatData((prev) => {
+			const updated = { ...prev, dateFormat: value };
+			// Re-format existing date if it exists
+			if (rawDateValues.date) {
+				const hasTime = rawDateValues.date.includes(":");
+				updated.date = formatDate(rawDateValues.date, value, hasTime);
+			} else if (prev.date) {
+				// Try to parse existing formatted date and re-format
+				try {
+					const parsedDate = moment.utc(
+						prev.date,
+						["MMMM Do, YYYY", "MMMM Do, YYYY - HH:mm", "DD/MMM/YYYY", "DD/MMM/YYYY - HH:mm"],
+						true
+					);
+					if (parsedDate.isValid()) {
+						const hasTime = prev.date.includes(":");
+						const dateStr =
+							parsedDate.format("YYYY-MM-DD") + (hasTime ? " " + prev.date.split(" - ")[1] : "");
+						setRawDateValues((prev) => ({ ...prev, date: dateStr }));
+						updated.date = formatDate(dateStr, value, hasTime);
+					}
+				} catch {
+					// If parsing fails, keep existing date
+				}
+			}
+			return updated;
+		});
 	};
 
 	const handleGenderChange = (value: "male" | "female") => {
 		setFormatData((prev) => ({ ...prev, applicantGender: value }));
+	};
+
+	const handleSelectChange = (value: string, inputName: string) => {
+		setFormatData((prev) => ({ ...prev, [inputName]: value }));
 	};
 
 	const addItem = () => {
@@ -79,13 +143,38 @@ const FormatsInput = ({
 					</label>
 					{input.hint && <span className="text-[12px] text-red-400">{input.hint}</span>}
 					{input.type === "date" ? (
-						<DatePicker
-							showTime={input.name === "interviewDate"}
-							onChange={handleDatePickerChange}
-							name={input.name}
-						/>
+						<div className="flex flex-col gap-2">
+							<div className="flex gap-2 items-center">
+								<DatePicker
+									showTime={input.name === "interviewDate"}
+									onChange={(momentObj, dateString) =>
+										handleDatePickerChange(momentObj, dateString, input.name)
+									}
+									name={input.name}
+								/>
+								{input.name === "date" && (
+									<Select
+										value={formatData.dateFormat || "full"}
+										onChange={handleDateFormatChange}
+										style={{ width: 180 }}
+										options={[
+											{ value: "full", label: "Month Day, Year" },
+											{ value: "short", label: "DD/MMM/YYYY" },
+										]}
+									/>
+								)}
+							</div>
+						</div>
 					) : input.type === "select" ? (
-						<Select onChange={handleGenderChange} options={input.options} />
+						<Select
+							onChange={(value) =>
+								input.name === "applicantGender"
+									? handleGenderChange(value as "male" | "female")
+									: handleSelectChange(value, input.name)
+							}
+							value={formatData[input.name as keyof FormatData] as string}
+							options={input.options}
+						/>
 					) : input.type === "textarea" ? (
 						<TextArea
 							onChange={handleInputChange}
