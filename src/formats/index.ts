@@ -23,7 +23,7 @@ export const getFormat = ({
 		case "ATD":
 			return ATDFormats({ formatData, deputyData, division, formatId });
 		case "General":
-			return GeneralFormats({ formatData, deputyData, division, formatId });
+			return GeneralFormats({ formatData, deputyData, formatId });
 		default:
 			return { format: "[Invalid division]", formats: {} };
 	}
