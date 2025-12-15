@@ -3,7 +3,7 @@ import { DeleteTwoTone } from "@ant-design/icons";
 import { useState } from "react";
 import moment from "moment";
 
-import type { FormatData } from "../../types.ts";
+import type { FormatData, divisionsType } from "../../types.ts";
 import { inputsByDivision } from "./data.ts";
 
 const { TextArea } = Input;
@@ -14,7 +14,7 @@ const FormatsInput = ({
 	formatData,
 	setFormatData,
 }: {
-	division: "TSD" | "ATD" | "RED";
+	division: divisionsType;
 	formatId: string;
 	formatData: FormatData;
 	setFormatData: React.Dispatch<React.SetStateAction<FormatData>>;

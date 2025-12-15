@@ -12,7 +12,7 @@ const DeputyDetails = ({
 	details: DeputyData;
 	division: divisionsType;
 }) => {
-	const divisionRanks = {
+	const divisionRanks: Record<divisionsType, { value: string; label: string }[]> = {
 		RED: [
 			{ value: "Trial Application Handler", label: "Trial Application Handler" },
 			{ value: "Application Handler", label: "Application Handler" },
@@ -38,6 +38,7 @@ const DeputyDetails = ({
 			{ value: "Instructor", label: "Instructor" },
 			{ value: "Trainee Instructor", label: "Trainee Instructor" },
 		],
+		General: [],
 	};
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -87,15 +88,17 @@ const DeputyDetails = ({
 					/>
 				</div>
 
-				<div className="flex flex-col gap-2">
-					<label>{division} rank</label>
-					<Select
-						optionFilterProp="label"
-						onChange={handleDivisionRankChange}
-						value={rRankDefault}
-						options={divisionRanks[division]}
-					/>
-				</div>
+				{division !== "General" && (
+					<div className="flex flex-col gap-2">
+						<label>{division} rank</label>
+						<Select
+							optionFilterProp="label"
+							onChange={handleDivisionRankChange}
+							value={rRankDefault}
+							options={divisionRanks[division]}
+						/>
+					</div>
+				)}
 
 				<div className="flex flex-col gap-2">
 					<label htmlFor="signature">Signature</label>

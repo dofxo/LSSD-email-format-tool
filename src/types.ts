@@ -6,10 +6,11 @@ export interface DeputyData {
 		RED: string;
 		TSD: string;
 		ATD: string;
+		General: string;
 	};
 }
 
-export type divisionsType = "RED" | "ATD" | "TSD";
+export type divisionsType = "RED" | "ATD" | "TSD" | "General";
 
 export interface FormatData {
 	// RED fields
@@ -42,4 +43,7 @@ export interface FormatData {
 	leastPoint?: string;
 	issuedBy?: string;
 	certificationStatus?: "acquired" | "suspended";
+
+	// General fields
+	recipientName?: string;
 }
