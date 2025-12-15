@@ -280,7 +280,7 @@ export const inputsByDivision = {
 		},
 		{
 			name: "recipientName",
-			label: "Recipient Rank andName",
+			label: "Recipient Rank and Name",
 			type: "text",
 			formats: ["1"],
 		},
