@@ -227,7 +227,7 @@ export const inputsByDivision = {
 		},
 		{
 			name: "date",
-			label: "Email Date",
+			label: "email date",
 			type: "date",
 			formats: [
 				"2",
@@ -269,6 +269,20 @@ export const inputsByDivision = {
 				{ value: "suspended", label: "Suspended" },
 			],
 			formats: ["47"],
+		},
+	],
+	General: [
+		{
+			name: "date",
+			label: "Email Date",
+			type: "date",
+			formats: ["1"],
+		},
+		{
+			name: "recipientName",
+			label: "Recipient Rank andName",
+			type: "text",
+			formats: ["1"],
 		},
 	],
 };

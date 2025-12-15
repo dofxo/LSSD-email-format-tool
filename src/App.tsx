@@ -1,5 +1,5 @@
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
-import { Car, GraduationCap, Users } from "lucide-react";
+import { Car, GraduationCap, Shield, Users } from "lucide-react";
 import { toast, ToastContainer } from "react-toastify";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
@@ -27,6 +27,7 @@ const App = () => {
 						RED: "",
 						TSD: "",
 						ATD: "",
+						General: "",
 					},
 			  };
 	});
@@ -67,6 +68,11 @@ const App = () => {
 			icon: <GraduationCap className="w-4 h-4 opacity-80" />,
 			color: "from-blue-500 to-blue-700",
 		},
+		{
+			id: "General" as const,
+			icon: <Shield className="w-4 h-4 opacity-80" />,
+			color: "from-gray-400 to-gray-600",
+		},
 	];
 
 	return (
@@ -74,10 +80,7 @@ const App = () => {
 			<section className="flex items-center justify-between mb-8">
 				<h1 className="text-xl font-semibold text-white tracking-tight">LSSD Email Format Tool</h1>
 
-				<Select
-					value={division || "RED"}
-					onValueChange={(val) => setDivision((val || "RED") as "RED" | "TSD" | "ATD")}
-				>
+				<Select value={division || "RED"} onValueChange={(val) => setDivision((val || "RED") as divisionsType)}>
 					<SelectTrigger className="w-[280px] bg-white text-nuetral-900 shadow-sm">
 						<SelectValue placeholder="Select Division" />
 					</SelectTrigger>

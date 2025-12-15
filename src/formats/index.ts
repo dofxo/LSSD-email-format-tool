@@ -1,6 +1,7 @@
 import { REDFormats } from "./divisions/RED";
 import { TSDFormats } from "./divisions/TSD";
 import { ATDFormats } from "./divisions/ATD";
+import { GeneralFormats } from "./divisions/General";
 import type { DeputyData, divisionsType, FormatData } from "@/types";
 
 export const getFormat = ({
@@ -21,6 +22,8 @@ export const getFormat = ({
 			return TSDFormats({ formatData, deputyData, division, formatId });
 		case "ATD":
 			return ATDFormats({ formatData, deputyData, division, formatId });
+		case "General":
+			return GeneralFormats({ formatData, deputyData, division, formatId });
 		default:
 			return { format: "[Invalid division]", formats: {} };
 	}

@@ -7,6 +7,7 @@ import { ChevronsUpDown } from "lucide-react";
 import { REDLabels } from "@/formats/divisions/RED";
 import { TSDLabels } from "@/formats/divisions/TSD";
 import { ATDLabels } from "@/formats/divisions/ATD";
+import { GeneralLabels } from "@/formats/divisions/General";
 
 const SelectFormats = ({
 	setFormat,
@@ -32,6 +33,10 @@ const SelectFormats = ({
 			label,
 		})),
 		ATD: Object.entries(ATDLabels).map(([key, label]) => ({
+			key,
+			label,
+		})),
+		General: Object.entries(GeneralLabels).map(([key, label]) => ({
 			key,
 			label,
 		})),
