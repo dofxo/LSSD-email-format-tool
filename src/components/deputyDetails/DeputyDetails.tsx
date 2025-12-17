@@ -39,6 +39,7 @@ const DeputyDetails = ({
 			{ value: "Trainee Instructor", label: "Trainee Instructor" },
 		],
 		General: [],
+		Supervisory: [],
 	};
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -88,7 +89,7 @@ const DeputyDetails = ({
 					/>
 				</div>
 
-				{division !== "General" && (
+				{division !== "General" && division !== "Supervisory" && (
 					<div className="flex flex-col gap-2">
 						<label>{division} rank</label>
 						<Select

@@ -8,6 +8,7 @@ import { REDLabels } from "@/formats/divisions/RED";
 import { TSDLabels } from "@/formats/divisions/TSD";
 import { ATDLabels } from "@/formats/divisions/ATD";
 import { GeneralLabels } from "@/formats/divisions/General";
+import { SupervisoryLabels } from "@/formats/divisions/Supervisory";
 
 const SelectFormats = ({
 	setFormat,
@@ -23,7 +24,7 @@ const SelectFormats = ({
 		setSelectedLabel("");
 	}, [division]);
 
-	const formatItemsByDivision = {
+	const formatItemsByDivision: Record<divisionsType, { key: string; label: string }[]> = {
 		RED: Object.entries(REDLabels).map(([key, label]) => ({
 			key,
 			label,
@@ -37,6 +38,10 @@ const SelectFormats = ({
 			label,
 		})),
 		General: Object.entries(GeneralLabels).map(([key, label]) => ({
+			key,
+			label,
+		})),
+		Supervisory: Object.entries(SupervisoryLabels).map(([key, label]) => ({
 			key,
 			label,
 		})),
