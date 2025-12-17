@@ -1,4 +1,5 @@
 export const deputyRanks = [
+	{ value: "Deputy Sheriff Trainee", label: "Deputy Sheriff Trainee" },
 	{ value: "Deputy Sheriff", label: "Deputy Sheriff" },
 	{ value: "Deputy Sheriff (Bonus I)", label: "Deputy Sheriff (Bonus I)" },
 	{ value: "Deputy Sheriff (Bonus II)", label: "Deputy Sheriff (Bonus II)" },

@@ -4,6 +4,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "antd";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 
 import DeputyDetails from "./components/deputyDetails/DeputyDetails.tsx";
 import type { DeputyData, divisionsType, FormatData } from "./types.ts";
@@ -12,8 +13,14 @@ import SelectFormats from "./components/SelectFormats.tsx";
 import { getFormat } from "./formats";
 import pkg from "../package.json";
 
+const SUPERVISORY_PASSWORD = "supersecretpwtounlock69";
+
 const App = () => {
 	const [division, setDivision] = useState<divisionsType>("RED");
+	const [pendingDivision, setPendingDivision] = useState<divisionsType | null>(null);
+	const [isSupervisoryUnlocked, setIsSupervisoryUnlocked] = useState(false);
+	const [showPasswordDialog, setShowPasswordDialog] = useState(false);
+	const [passwordInput, setPasswordInput] = useState("");
 
 	const [details, setDetails] = useState<DeputyData>(() => {
 		const saved = localStorage.getItem("deputyDetails");
@@ -28,12 +35,20 @@ const App = () => {
 						TSD: "",
 						ATD: "",
 						General: "",
+						Supervisory: "",
 					},
 			  };
 	});
 
 	const [formatData, setFormatData] = useState<FormatData>({});
 	const [formatId, setFormat] = useState<string>("");
+
+	useEffect(() => {
+		const stored = localStorage.getItem("supervisoryUnlocked");
+		if (stored === "true") {
+			setIsSupervisoryUnlocked(true);
+		}
+	}, []);
 
 	useEffect(() => {
 		setFormat("");
@@ -43,6 +58,33 @@ const App = () => {
 	useEffect(() => {
 		localStorage.setItem("deputyDetails", JSON.stringify(details));
 	}, [details]);
+
+	const handleDivisionChange = (val: divisionsType) => {
+		if (val === "Supervisory" && !isSupervisoryUnlocked) {
+			setPendingDivision(val);
+			setShowPasswordDialog(true);
+			return;
+		}
+		setDivision(val);
+	};
+
+	const handlePasswordSubmit = () => {
+		if (passwordInput === SUPERVISORY_PASSWORD) {
+			setIsSupervisoryUnlocked(true);
+			localStorage.setItem("supervisoryUnlocked", "true");
+			if (pendingDivision) {
+				setDivision(pendingDivision);
+				setPendingDivision(null);
+			} else {
+				setDivision("Supervisory");
+			}
+			setShowPasswordDialog(false);
+			setPasswordInput("");
+			toast.success("Supervisory formats unlocked");
+		} else {
+			toast.error("Incorrect password");
+		}
+	};
 
 	const handleCopyFormat = () => {
 		const rRank = details.divisionRanks[division];
@@ -73,6 +115,11 @@ const App = () => {
 			icon: <Shield className="w-4 h-4 opacity-80" />,
 			color: "from-gray-400 to-gray-600",
 		},
+		{
+			id: "Supervisory" as const,
+			icon: <Shield className="w-4 h-4 opacity-80" />,
+			color: "from-purple-400 to-purple-600",
+		},
 	];
 
 	return (
@@ -80,7 +127,10 @@ const App = () => {
 			<section className="flex items-center justify-between mb-8">
 				<h1 className="text-xl font-semibold text-white tracking-tight">LSSD Email Format Tool</h1>
 
-				<Select value={division || "RED"} onValueChange={(val) => setDivision((val || "RED") as divisionsType)}>
+				<Select
+					value={division || "RED"}
+					onValueChange={(val) => handleDivisionChange((val || "RED") as divisionsType)}
+				>
 					<SelectTrigger className="w-[280px] bg-white text-nuetral-900 shadow-sm">
 						<SelectValue placeholder="Select Division" />
 					</SelectTrigger>
@@ -129,6 +179,41 @@ const App = () => {
 			</footer>
 
 			<ToastContainer position="top-center" />
+
+			<Dialog open={showPasswordDialog} onOpenChange={setShowPasswordDialog}>
+				<DialogContent showCloseButton>
+					<DialogHeader>
+						<DialogTitle>Enter Supervisory Password</DialogTitle>
+						<DialogDescription>
+							Access to Supervisory formats is restricted. Enter the password to unlock this section.
+						</DialogDescription>
+					</DialogHeader>
+					<div className="flex flex-col gap-3 mt-2">
+						<label className="text-sm font-medium" htmlFor="supervisory-password">
+							Password
+						</label>
+						<input
+							id="supervisory-password"
+							type="password"
+							className="border border-neutral-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+							value={passwordInput}
+							onChange={(e) => setPasswordInput(e.target.value)}
+							onKeyDown={(e) => {
+								if (e.key === "Enter") {
+									e.preventDefault();
+									handlePasswordSubmit();
+								}
+							}}
+						/>
+						<div className="flex justify-end gap-2 mt-4">
+							<Button onClick={() => setShowPasswordDialog(false)}>Cancel</Button>
+							<Button type="primary" onClick={handlePasswordSubmit}>
+								Unlock
+							</Button>
+						</div>
+					</div>
+				</DialogContent>
+			</Dialog>
 		</main>
 	);
 };

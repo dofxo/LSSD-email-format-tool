@@ -7,10 +7,11 @@ export interface DeputyData {
 		TSD: string;
 		ATD: string;
 		General: string;
+		Supervisory: string;
 	};
 }
 
-export type divisionsType = "RED" | "ATD" | "TSD" | "General";
+export type divisionsType = "RED" | "ATD" | "TSD" | "General" | "Supervisory";
 
 export interface FormatData {
 	// RED fields
@@ -46,4 +47,18 @@ export interface FormatData {
 
 	// General fields
 	recipientName?: string;
+
+	// Supervisory / personnel fields
+	previousRank?: string;
+	newRank?: string;
+	authorizingDeputy?: string;
+	dischargeType?: "honourable" | "dishonourable";
+	suspensionStart?: string;
+	suspensionEnd?: string;
+	suspensionDuration?: string;
+	summary?: string;
+	reassignmentAssignment?: string;
+	salutation?: string;
+	response?: string;
+	civilianName?: string;
 }

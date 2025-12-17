@@ -2,6 +2,7 @@ import { REDFormats } from "./divisions/RED";
 import { TSDFormats } from "./divisions/TSD";
 import { ATDFormats } from "./divisions/ATD";
 import { GeneralFormats } from "./divisions/General";
+import { SupervisoryFormats } from "./divisions/Supervisory";
 import type { DeputyData, divisionsType, FormatData } from "@/types";
 
 export const getFormat = ({
@@ -24,6 +25,8 @@ export const getFormat = ({
 			return ATDFormats({ formatData, deputyData, division, formatId });
 		case "General":
 			return GeneralFormats({ formatData, deputyData, formatId });
+		case "Supervisory":
+			return SupervisoryFormats({ formatData, deputyData, formatId });
 		default:
 			return { format: "[Invalid division]", formats: {} };
 	}

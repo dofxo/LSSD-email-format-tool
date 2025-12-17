@@ -1,3 +1,5 @@
+import { deputyRanks } from "../deputyDetails/deputyRanks";
+
 export const inputsByDivision = {
 	RED: [
 		{
@@ -172,7 +174,8 @@ export const inputsByDivision = {
 		{
 			name: "deputyRank",
 			label: "Deputy Rank",
-			type: "text",
+			type: "select",
+			options: deputyRanks,
 			formats: [
 				"2",
 				"4",
@@ -283,6 +286,107 @@ export const inputsByDivision = {
 			label: "Recipient Rank and Name",
 			type: "text",
 			formats: ["1"],
+		},
+	],
+	Supervisory: [
+		// 1 Promotion Notice
+		{
+			name: "recipientName",
+			label: "Deputy full Rank and Name",
+			type: "text",
+			formats: ["1", "2", "3", "4", "5", "6", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18"],
+		},
+		{
+			name: "civilianName",
+			label: "Civilian Full Name",
+			type: "text",
+			formats: ["19"],
+		},
+		{
+			name: "previousRank",
+			label: "Previous rank",
+			type: "select",
+			options: deputyRanks,
+			formats: ["1", "3", "6", "7", "8"],
+		},
+		{
+			name: "newRank",
+			label: "New rank",
+			type: "select",
+			options: deputyRanks,
+			formats: ["1", "3", "6", "8"],
+		},
+		{
+			name: "reassignmentAssignment",
+			label: "New assignment",
+			type: "text",
+			formats: ["7"],
+		},
+		{
+			name: "date",
+			label: "Date (e.g. Month DD, YYYY)",
+			type: "date",
+			formats: ["1", "2", "3", "4", "5", "6", "7", "8"],
+		},
+		// 4 Discharge Notice
+		{
+			name: "authorizingDeputy",
+			label: "Authorizing Deputy (Rank Fname Lname)",
+			type: "text",
+			formats: ["4", "5"],
+		},
+		{
+			name: "dischargeType",
+			label: "Type of Discharge",
+			type: "select",
+			options: [
+				{ value: "honourable", label: "Honourable Discharge" },
+				{ value: "dishonourable", label: "Dishonourable Discharge" },
+			],
+			formats: ["4"],
+		},
+		{
+			name: "summary",
+			label: "Summary / Reason",
+			type: "textarea",
+			formats: ["4", "5", "17"],
+		},
+		{
+			name: "suspensionStart",
+			label: "Suspension start (Month DD, YYYY - 00:00 AM/PM )",
+			type: "text",
+			formats: ["5", "17"],
+		},
+		{
+			name: "suspensionEnd",
+			label: "Suspension end (Month DD, YYYY - 00:00 AM/PM )",
+			type: "text",
+			formats: ["5", "17"],
+		},
+		{
+			name: "suspensionDuration",
+			label: "Suspension duration (e.g. 3)",
+			type: "text",
+			formats: ["17"],
+		},
+		// 9–18 Emails to deputies
+		{
+			name: "salutation",
+			label: "Salutation (e.g. Mr., Ms.)",
+			type: "text",
+			formats: ["11"],
+		},
+		{
+			name: "reasons",
+			label: "Reason(s) (each item, click add)",
+			type: "text",
+			formats: ["12", "13"],
+		},
+		{
+			name: "response",
+			label: "Response text",
+			type: "textarea",
+			formats: ["18"],
 		},
 	],
 };
