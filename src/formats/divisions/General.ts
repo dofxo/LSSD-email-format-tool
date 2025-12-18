@@ -38,13 +38,9 @@ export const GeneralFormats = ({
 [hr][/hr][list=none]
 
 From
-[img]https://fontmeme.com/permalink/210510/bf7eebf6a32f2b2799f7ad6551c6a82c.png [/img]
-
+[img]${deputyData.signature}[/img]
 ${deputyData.dRank} ${deputyData.name}
 Los Santos County Sheriff's Department
-
-
-
 [/list][/divbox]
 [img]https://i.ibb.co/JFHCzWMt/a3a-Dj-Gi.png[/img]`,
 		},
