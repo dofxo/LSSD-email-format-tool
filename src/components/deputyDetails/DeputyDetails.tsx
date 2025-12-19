@@ -14,13 +14,16 @@ const DeputyDetails = ({
 }) => {
 	const divisionRanks: Record<divisionsType, { value: string; label: string }[]> = {
 		RED: [
-			{ value: "Trial Application Handler", label: "Trial Application Handler" },
+			{ value: "Unit Commander", label: "Unit Commander" },
+			{ value: "Operations Lieutenant", label: "Operations Lieutenant" },
+			{ value: "Program Coordinator", label: "Program Coordinator" },
 			{ value: "Application Handler", label: "Application Handler" },
-			{ value: "Senior Application Handler", label: "Senior Application Handler" },
-			{ value: "R.E.D. Supervisor", label: "R.E.D. Supervisor" },
-			{ value: "R.E.D. Assistant Commanding Officer", label: "R.E.D. Assistant Commanding Officer" },
-			{ value: "R.E.D. Commanding Officer", label: "R.E.D. Commanding Officer" },
+			{ value: "Trial Application Handler", label: "Trial Application Handler" },
+			{ value: "Head Instructor", label: "Head Instructor" },
+			{ value: "Instructor", label: "Instructor" },
+			{ value: "Trial Instructor", label: "Trial Instructor" },
 		],
+
 		TSD: [
 			{ value: "Commanding Officer", label: "Commanding Officer" },
 			{ value: "Assistant Commanding Officer", label: "Assistant Commanding Officer" },
