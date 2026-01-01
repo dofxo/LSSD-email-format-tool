@@ -1019,7 +1019,7 @@ Office of Administrative Services
 
 [size=150][font=Bradley Hand ITC]has met all the requirements and completed the practical assessment to receive their certification in:[/font][/size]
 
-[size=125][${formatData.certificationType}][/size]
+[size=125]${formatData.certificationType}[/size]
 
 [size=115]${formatData.date}[/size]
 
@@ -1034,7 +1034,7 @@ Office of Administrative Services
 			text: `[b]#########################[/b]
 
 [b][color=#800000]${formatData.date}[/color][/b]
-[b][${formatData.certificationType}][/b]
+[b]${formatData.certificationType}[/b]
 Certification ${formatData.certificationStatus === "suspended" ? "suspended" : "acquired"}.
 [i]Issued by ${formatData.issuedBy}[/i]`,
 		},
