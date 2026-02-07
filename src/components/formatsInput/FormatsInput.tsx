@@ -30,6 +30,7 @@ const FormatsInput = ({
 	};
 
 	const formatDate = (dateString: string, format: "full" | "short" = "full", hasTime: boolean = false) => {
+		console.log(dateString, format, hasTime);
 		const date = moment.utc(dateString);
 		if (format === "short") {
 			const day = date.format("DD");
@@ -42,7 +43,9 @@ const FormatsInput = ({
 			}
 			return datePart;
 		} else {
-			return hasTime ? date.format("MMMM Do, YYYY - HH:mm") : date.format("MMMM Do, YYYY");
+			const dateWithoutTime = date.format("MMMM Do, YYYY");
+			const dateWithTime = date.format("MMMM Do, YYYY - HH:mm");
+			return hasTime ? dateWithTime : dateWithoutTime;
 		}
 	};
 
@@ -63,6 +66,7 @@ const FormatsInput = ({
 		const hasTime = dateStr.includes(":");
 		const dateFormat = inputName === "date" ? formatData.dateFormat || "full" : "full";
 		const formattedDate = formatDate(dateStr, dateFormat, hasTime);
+		console.log(formattedDate, "formattedDate ", inputName);
 		setFormatData((prev) => ({ ...prev, [inputName]: formattedDate }));
 	};
 
