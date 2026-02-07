@@ -18,6 +18,7 @@ export interface FormatData {
 	applicantName?: string;
 	applicantGender?: "male" | "female";
 	date?: string;
+	interviewDate?: string;
 	dateFormat?: "full" | "short"; // "full" for "December 2nd, 2025", "short" for "02/DEC/2025"
 	reasons?: string[];
 	appLink?: string;

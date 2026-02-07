@@ -63,7 +63,7 @@ export const ATDFormats = ({
 }) => {
 	const formats: Record<string, { text: string; label?: string }> = {
 		"1": {
-			text: `[img]https://i.imgur.com/h8PAEv3.png[/img][divbox=white]
+			text: `[img]https://i.ibb.co/pvJC5kgn/h8PAEv3.png[/img][divbox=white]
 Dear [i]Instructor[/i],
 
 This employee has passed the written application. The employee will need to find an Advanced Training Division Instructor to conduct their Spike Strip training. After they’ve completed this training, they will be certified to deploy this equipment into the field.
