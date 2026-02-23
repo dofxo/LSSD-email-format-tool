@@ -124,26 +124,28 @@ const App = () => {
 
 	return (
 		<main className="container">
-			<section className="flex items-center justify-between mb-8">
-				<h1 className="text-xl font-semibold text-white tracking-tight">LSSD Email Format Tool</h1>
+			<section className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+				<h1 className="text-2xl font-bold text-white tracking-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.15)]">
+					LSSD Email Format Tool
+				</h1>
 
 				<Select
 					value={division || "RED"}
 					onValueChange={(val) => handleDivisionChange((val || "RED") as divisionsType)}
 				>
-					<SelectTrigger className="w-[280px] bg-white text-nuetral-900 shadow-sm">
+					<SelectTrigger className="clay-select w-[280px]">
 						<SelectValue placeholder="Select Division" />
 					</SelectTrigger>
-					<SelectContent className="bg-white border-neutral-300">
+					<SelectContent className="clay-dropdown">
 						{divisions.map((div) => (
 							<SelectItem
 								key={div.id}
 								value={div.id}
 								className={cn(
-									"flex items-center gap-3 py-2 px-3 text-sm hover:bg-neutral-800 rounded-md cursor-pointer"
+									"flex items-center gap-3 py-2.5 px-4 text-sm hover:bg-[#e8dfc8] rounded-xl cursor-pointer transition-colors clay-select-item"
 								)}
 							>
-								<div className={cn(`h-4 w-4 rounded-full bg-gradient-to-br ${div.color}`)} />
+								<div className={cn(`h-5 w-5 rounded-full bg-gradient-to-br shadow-sm ${div.color}`)} />
 								<div className="flex items-center gap-2">
 									{div.icon}
 									<span>{div.id}</span>
@@ -154,8 +156,8 @@ const App = () => {
 				</Select>
 			</section>
 
-			<section className="grid grid-cols-1 md:grid-cols-2 gap-5 shadow-[0_0_10px_0_#00000038] rounded-xl">
-				<div className="bg-white rounded-[0.75rem_0.75rem_0_0] md:rounded-[0.75rem_0_0_0.75rem] flex flex-col gap-10 p-5 justify-center">
+			<section className="grid grid-cols-1 md:grid-cols-2 gap-6 clay-main-card">
+				<div className="clay-panel-left flex flex-col gap-10 p-6 sm:p-8 justify-center">
 					<SelectFormats setFormat={setFormat} division={division} />
 					<FormatsInput
 						setFormatData={setFormatData}
@@ -163,25 +165,25 @@ const App = () => {
 						formatData={formatData}
 						division={division}
 					/>
-					<Button type="primary" className="mt-5" onClick={handleCopyFormat}>
+					<Button type="primary" className="clay-btn-primary mt-5" onClick={handleCopyFormat}>
 						Create Format
 					</Button>
 				</div>
 
-				<div className="p-5 flex flex-col gap-5">
-					<img src="/images/logo.webp" alt="LSSD Logo" className="max-w-[160px]" />
+				<div className="clay-panel-right p-6 sm:p-8 flex flex-col gap-6">
+					<img src="/images/logo.webp" alt="LSSD Logo" className="max-w-[160px] clay-logo" />
 					<DeputyDetails setDetails={setDetails} details={details} division={division || "RED"} />
 				</div>
 			</section>
 
-			<footer className="mt-10 text-start text-sm text-gray-600 select-none">
+			<footer className="mt-10 text-start text-sm text-[#7a6349] select-none drop-shadow-sm">
 				Developed by dofxo - App version v{pkg.version}
 			</footer>
 
 			<ToastContainer position="top-center" />
 
 			<Dialog open={showPasswordDialog} onOpenChange={setShowPasswordDialog}>
-				<DialogContent showCloseButton>
+				<DialogContent showCloseButton className="clay-dialog">
 					<DialogHeader>
 						<DialogTitle>Enter Supervisory Password</DialogTitle>
 						<DialogDescription>
@@ -189,13 +191,13 @@ const App = () => {
 						</DialogDescription>
 					</DialogHeader>
 					<div className="flex flex-col gap-3 mt-2">
-						<label className="text-sm font-medium" htmlFor="supervisory-password">
+						<label className="text-sm font-medium text-[#5a4a3a]" htmlFor="supervisory-password">
 							Password
 						</label>
 						<input
 							id="supervisory-password"
 							type="password"
-							className="border border-neutral-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+							className="clay-input px-4 py-3 text-sm rounded-xl w-full focus:outline-none focus:ring-2 focus:ring-[#B57B2F]/50"
 							value={passwordInput}
 							onChange={(e) => setPasswordInput(e.target.value)}
 							onKeyDown={(e) => {
@@ -205,9 +207,11 @@ const App = () => {
 								}
 							}}
 						/>
-						<div className="flex justify-end gap-2 mt-4">
-							<Button onClick={() => setShowPasswordDialog(false)}>Cancel</Button>
-							<Button type="primary" onClick={handlePasswordSubmit}>
+						<div className="flex justify-end gap-3 mt-4">
+							<Button onClick={() => setShowPasswordDialog(false)} className="clay-btn-secondary">
+								Cancel
+							</Button>
+							<Button type="primary" onClick={handlePasswordSubmit} className="clay-btn-primary">
 								Unlock
 							</Button>
 						</div>

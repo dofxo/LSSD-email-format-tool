@@ -10,6 +10,13 @@ createRoot(document.getElementById('root')!).render(
             theme={{
                 token: {
                     colorPrimary: '#B57B2F',
+                    borderRadius: 16,
+                    borderRadiusLG: 20,
+                    borderRadiusSM: 12,
+                },
+                components: {
+                    Input: { activeBorderColor: '#B57B2F', hoverBorderColor: '#c99b4d' },
+                    Select: { optionSelectedBg: '#e8dfc8' },
                 },
             }}
         >

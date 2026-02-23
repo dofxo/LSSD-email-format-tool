@@ -4,8 +4,23 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Claymorphism theme - toy-like & bubbly */
+:root {
+    --clay-bg: #d5b68c;
+    --clay-primary: #B57B2F;
+    --clay-card: #ebe0cc;
+    --clay-card-shadow: rgba(139, 110, 70, 0.25);
+    --clay-shadow-soft: 8px 8px 20px rgba(139, 110, 70, 0.2);
+    --clay-shadow-hard: 4px 4px 0 rgba(139, 110, 70, 0.15);
+    --clay-inset: inset 3px 3px 6px rgba(139, 110, 70, 0.12);
+    --clay-radius: 1.25rem;
+    --clay-radius-sm: 1rem;
+    --clay-radius-lg: 1.5rem;
+    --clay-radius-xl: 2rem;
+}
+
 body {
-    background-color: #d5b68c;
+    background-color: var(--clay-bg);
     font-family: "Poppins", sans-serif;
 }
 
@@ -15,12 +30,159 @@ body {
     margin: 50px auto;
 }
 
+/* Claymorphism utility classes */
+.clay-card {
+    background: var(--clay-card);
+    border-radius: var(--clay-radius-xl);
+    box-shadow: var(--clay-shadow-soft), var(--clay-shadow-hard);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+.clay-input {
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: var(--clay-radius-sm);
+    box-shadow: var(--clay-inset);
+    border: 1px solid rgba(139, 110, 70, 0.15);
+}
+
+.clay-button {
+    border-radius: var(--clay-radius);
+    box-shadow: var(--clay-shadow-soft), var(--clay-shadow-hard);
+}
+
+.clay-main-card {
+    background: var(--clay-card);
+    border-radius: var(--clay-radius-xl);
+    box-shadow: var(--clay-shadow-soft), var(--clay-shadow-hard), 0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    overflow: hidden;
+}
+
+.clay-panel-left {
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: var(--clay-radius-xl) var(--clay-radius-xl) 0 0;
+}
+
+@media (min-width: 768px) {
+    .clay-panel-left {
+        border-radius: var(--clay-radius-xl) 0 0 var(--clay-radius-xl);
+    }
+}
+
+.clay-panel-right {
+    background: rgba(235, 224, 204, 0.9);
+}
+
+@media (min-width: 768px) {
+    .clay-panel-right {
+        border-radius: 0 var(--clay-radius-xl) var(--clay-radius-xl) 0;
+    }
+}
+
+.clay-btn-primary {
+    border-radius: var(--clay-radius) !important;
+    box-shadow: 8px 8px 16px rgba(139, 110, 70, 0.25), 4px 4px 0 rgba(139, 110, 70, 0.12) !important;
+    font-weight: 600 !important;
+    padding: 10px 24px !important;
+    height: auto !important;
+}
+
+.clay-btn-secondary {
+    border-radius: var(--clay-radius) !important;
+    box-shadow: inset 2px 2px 4px rgba(139, 110, 70, 0.1), 3px 3px 0 rgba(139, 110, 70, 0.08) !important;
+}
+
+.clay-dialog {
+    background: var(--clay-card) !important;
+    border-radius: var(--clay-radius-xl) !important;
+    box-shadow: 12px 12px 32px rgba(139, 110, 70, 0.3), 6px 6px 0 rgba(139, 110, 70, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.6) !important;
+}
+
+.clay-select {
+    background: rgba(255, 255, 255, 0.8) !important;
+    border-radius: var(--clay-radius) !important;
+    border: 1px solid rgba(139, 110, 70, 0.15) !important;
+    box-shadow: inset 3px 3px 6px rgba(139, 110, 70, 0.08), 4px 4px 0 rgba(139, 110, 70, 0.08) !important;
+}
+
+.clay-dropdown {
+    background: var(--clay-card) !important;
+    border-radius: var(--clay-radius-lg) !important;
+    border: 1px solid rgba(255, 255, 255, 0.6) !important;
+    box-shadow: var(--clay-shadow-soft), var(--clay-shadow-hard) !important;
+}
+
+.clay-logo {
+    filter: drop-shadow(2px 2px 4px rgba(139, 110, 70, 0.2));
+}
+
+.clay-format-trigger {
+    min-height: 48px;
+}
+
+.clay-popover {
+    background: var(--clay-card) !important;
+    border-radius: var(--clay-radius-xl) !important;
+    box-shadow: var(--clay-shadow-soft), var(--clay-shadow-hard) !important;
+    border: 1px solid rgba(255, 255, 255, 0.6) !important;
+}
+
 .ant-menu-submenu {
     background-color: #f7f6f2;
 }
 
 .ant-menu-root {
     border-inline-end: 0px !important;
+}
+
+/* Ant Design claymorphism overrides */
+.ant-input,
+.ant-input-affix-wrapper,
+.ant-select-selector,
+.ant-picker {
+    border-radius: 1rem !important;
+    box-shadow: inset 3px 3px 6px rgba(139, 110, 70, 0.08) !important;
+    border: 1px solid rgba(139, 110, 70, 0.15) !important;
+}
+
+.ant-input:focus,
+.ant-input-affix-wrapper:focus,
+.ant-input-affix-wrapper-focused {
+    box-shadow: inset 2px 2px 4px rgba(139, 110, 70, 0.06), 0 0 0 2px rgba(181, 123, 47, 0.2) !important;
+}
+
+.ant-btn {
+    border-radius: 1.25rem !important;
+}
+
+.ant-btn-primary {
+    box-shadow: 6px 6px 12px rgba(139, 110, 70, 0.2), 3px 3px 0 rgba(139, 110, 70, 0.1) !important;
+}
+
+.ant-btn-default {
+    box-shadow: inset 2px 2px 4px rgba(139, 110, 70, 0.08), 3px 3px 0 rgba(139, 110, 70, 0.06) !important;
+}
+
+.ant-select-dropdown {
+    border-radius: 1.25rem !important;
+    box-shadow: 8px 8px 20px rgba(139, 110, 70, 0.2), 4px 4px 0 rgba(139, 110, 70, 0.15) !important;
+    min-width: max-content !important;
+}
+
+.ant-select-item-option-content {
+    white-space: nowrap !important;
+}
+
+.ant-picker-dropdown {
+    border-radius: 1.25rem !important;
+}
+
+/* React Toastify claymorphism */
+.Toastify__toast {
+    border-radius: 1.25rem !important;
+    box-shadow: 8px 8px 20px rgba(139, 110, 70, 0.2), 4px 4px 0 rgba(139, 110, 70, 0.12) !important;
+    border: 1px solid rgba(255, 255, 255, 0.6) !important;
 }
 
 @theme inline {
@@ -62,7 +224,7 @@ body {
 }
 
 :root {
-    --radius: 0.625rem;
+    --radius: 1.25rem;
     --background: oklch(1 0 0);
     --foreground: oklch(0.145 0 0);
     --card: oklch(1 0 0);
@@ -135,6 +297,7 @@ body {
     @apply border-border outline-ring/50;
     }
   body {
-    @apply bg-background text-foreground;
+    background-color: var(--clay-bg) !important;
+    @apply text-foreground;
     }
 }

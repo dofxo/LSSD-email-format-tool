@@ -66,11 +66,13 @@ const DeputyDetails = ({
 
 	return (
 		<section className="flex flex-col gap-5">
-			<h2 className="font-semibold text-3xl text-white">Deputy Details</h2>
+			<h2 className="font-bold text-3xl text-[#4a3d2a] drop-shadow-[0_1px_2px_rgba(255,255,255,0.5)]">
+				Deputy Details
+			</h2>
 
-			<form id="inputs" className="flex gap-2 flex-wrap">
+			<form id="inputs" className="flex gap-3 flex-wrap">
 				<div className="flex flex-col gap-2">
-					<label htmlFor="name">Deputy full name</label>
+					<label htmlFor="name" className="text-[#5a4a3a] font-medium text-sm">Deputy full name</label>
 					<Input
 						id="name"
 						type="text"
@@ -82,30 +84,34 @@ const DeputyDetails = ({
 				</div>
 
 				<div className="flex flex-col gap-2">
-					<label>Deputy rank</label>
+					<label className="text-[#5a4a3a] font-medium text-sm">Deputy rank</label>
 					<Select
 						showSearch
 						optionFilterProp="label"
 						onChange={handleDeputyRankChange}
 						value={dRankDefault}
 						options={deputyRanks}
+						popupMatchSelectWidth={false}
+						dropdownStyle={{ minWidth: "max-content" }}
 					/>
 				</div>
 
 				{division !== "General" && division !== "Supervisory" && (
 					<div className="flex flex-col gap-2">
-						<label>{division} rank</label>
+						<label className="text-[#5a4a3a] font-medium text-sm">{division} rank</label>
 						<Select
 							optionFilterProp="label"
 							onChange={handleDivisionRankChange}
 							value={rRankDefault}
 							options={divisionRanks[division]}
+							popupMatchSelectWidth={false}
+							dropdownStyle={{ minWidth: "max-content" }}
 						/>
 					</div>
 				)}
 
 				<div className="flex flex-col gap-2">
-					<label htmlFor="signature">Signature</label>
+					<label htmlFor="signature" className="text-[#5a4a3a] font-medium text-sm">Signature</label>
 					<Input
 						id="signature"
 						type="text"
@@ -120,7 +126,7 @@ const DeputyDetails = ({
 			<Button
 				variant="solid"
 				color="default"
-				className="w-fit"
+				className="w-fit clay-btn-secondary"
 				onClick={() => {
 					const rRank = rRankDefault;
 					navigator.clipboard.writeText(
@@ -132,8 +138,8 @@ const DeputyDetails = ({
 				Copy {division} signature
 			</Button>
 
-			<span className="text-[12px] text-red-500">
-				<span className="text-red-700 font-bold">Note:</span> This button is only for grabbing the 3 lines of
+			<span className="text-[12px] text-[#8b5a2b]">
+				<span className="text-[#6b4a1f] font-bold">Note:</span> This button is only for grabbing the 3 lines of
 				the signature for other uses. The formats contain it if you fill out these inputs.
 			</span>
 		</section>

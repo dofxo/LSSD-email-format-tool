@@ -118,7 +118,10 @@ const FormatsInput = ({
 		setReasonsInput("");
 	};
 
-	if (!formatId) return <div className="flex items-center justify-center h-32 text-gray-500">No format selected</div>;
+	if (!formatId)
+		return (
+			<div className="flex items-center justify-center h-32 text-[#7a6349] text-sm">No format selected</div>
+		);
 
 	const divisionInputs = inputsByDivision[division] || [];
 	const filteredInputs: {
@@ -133,8 +136,8 @@ const FormatsInput = ({
 	if (filteredInputs.length === 0)
 		return (
 			<div className="flex flex-col items-center justify-center h-32 gap-2">
-				<p className="text-gray-600">This format doesn&apos;t require any additional input</p>
-				<p className="text-gray-500 text-sm">You can proceed by clicking the Create Format button</p>
+				<p className="text-[#5a4a3a]">This format doesn&apos;t require any additional input</p>
+				<p className="text-[#7a6349] text-sm">You can proceed by clicking the Create Format button</p>
 			</div>
 		);
 
@@ -142,10 +145,10 @@ const FormatsInput = ({
 		<div className="flex flex-wrap gap-x-2 gap-y-5">
 			{filteredInputs.map((input) => (
 				<div key={input.name} className="flex flex-col gap-2">
-					<label className="text-[13px]" htmlFor={input.name}>
+					<label className="text-[13px] text-[#5a4a3a] font-medium" htmlFor={input.name}>
 						{input.label}
 					</label>
-					{input.hint && <span className="text-[12px] text-red-400">{input.hint}</span>}
+					{input.hint && <span className="text-[12px] text-[#8b5a2b]">{input.hint}</span>}
 					{input.type === "date" ? (
 						<div className="flex flex-col gap-2">
 							<div className="flex gap-2 items-center">
@@ -209,7 +212,7 @@ const FormatsInput = ({
 								<div className="flex md:flex-col gap-2">
 									{(formatData.reasons || []).map((item, idx) => (
 										<div key={idx} className="flex gap-2 items-center">
-											<span className="text-[12px]">{item}</span>
+											<span className="text-[12px] text-[#5a4a3a]">{item}</span>
 											<Button
 												danger
 												onClick={() => {
