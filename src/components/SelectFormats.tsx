@@ -51,7 +51,9 @@ const SelectFormats = ({
 
 	return (
 		<section className="gap-5 flex flex-col">
-			<h2 className="md:text-3xl text-2xl font-[600] text-center">Response Formats ({division})</h2>
+			<h2 className="md:text-3xl text-2xl font-bold text-center text-[#4a3d2a] drop-shadow-[0_1px_2px_rgba(255,255,255,0.5)]">
+				Response Formats ({division})
+			</h2>
 
 			<div className="w-full mx-auto">
 				<Popover open={open} onOpenChange={setOpen}>
@@ -60,13 +62,13 @@ const SelectFormats = ({
 							variant="outline"
 							role="combobox"
 							aria-expanded={open}
-							className="w-full justify-between"
+							className="w-full justify-between clay-format-trigger"
 						>
 							{selectedLabel ? selectedLabel : "Select a Response Format"}
 							<ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
 						</Button>
 					</PopoverTrigger>
-					<PopoverContent className="w-full p-0">
+					<PopoverContent className="w-full p-0 clay-popover min-w-max">
 						<Command>
 							<CommandInput placeholder="Search format..." />
 							<CommandList>
