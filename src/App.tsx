@@ -13,7 +13,7 @@ import SelectFormats from "./components/SelectFormats.tsx";
 import { getFormat } from "./formats";
 import pkg from "../package.json";
 
-const SUPERVISORY_PASSWORD = "supersecretpwtounlock69";
+const SUPERVISORY_PASSWORD = import.meta.env.VITE_SUPERVISORY_PASSWORD;
 
 const App = () => {
 	const [division, setDivision] = useState<divisionsType>("RED");
@@ -177,7 +177,7 @@ const App = () => {
 			</section>
 
 			<footer className="mt-10 text-start text-sm text-[#7a6349] select-none drop-shadow-sm">
-				Developed by dofxo - App version v{pkg.version}
+				Developed by <a href="https://github.com/dofxo" target="_blank" rel="noopener noreferrer" className="font-medium underline underline-offset-2 hover:text-[#8a7555]">dofxo</a> - App version v{pkg.version}
 			</footer>
 
 			<ToastContainer position="top-center" />
