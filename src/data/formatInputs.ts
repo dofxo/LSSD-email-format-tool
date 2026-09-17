@@ -1,6 +1,7 @@
-import { deputyRanks } from "../deputyDetails/deputyRanks";
+import { deputyRanks } from "@/data/deputyRanks";
+import type { FormatInputField, divisionsType } from "@/types";
 
-export const inputsByDivision = {
+export const inputsByDivision: Record<divisionsType, FormatInputField[]> = {
 	RED: [
 		{
 			name: "applicantName",
