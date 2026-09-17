@@ -13,6 +13,17 @@ export interface DeputyData {
 
 export type divisionsType = "RED" | "ATD" | "TSD" | "General" | "Supervisory";
 
+/** A single dynamic field rendered for a response format. */
+export interface FormatInputField {
+	name: string;
+	label: string;
+	type: "text" | "number" | "date" | "select" | "textarea";
+	/** Format ids (as strings) that require this field. */
+	formats: string[];
+	hint?: string;
+	options?: { value: string; label: string }[];
+}
+
 export interface FormatData {
 	// RED fields
 	applicantName?: string;

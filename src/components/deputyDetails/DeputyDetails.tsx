@@ -1,149 +1,230 @@
-import { Button, Input, Select } from "antd";
-import { toast } from "react-toastify";
-import { deputyRanks } from "./deputyRanks";
+import { useEffect, useState } from "react";
+import { AlertTriangle, Check, ChevronDown, ClipboardCopy, ImageOff, ShieldCheck, UserRound } from "lucide-react";
+
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Combobox } from "@/components/ui/combobox";
+import { Field, Input } from "@/components/ui/input";
+import { Panel, PanelBody, PanelFooter, PanelHeader, PanelHeading } from "@/components/ui/panel";
+import { deputyRanks } from "@/data/deputyRanks";
+import { useCopy } from "@/hooks/useCopy";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { divisionRankOptionsFor, listIssues, profileIssues, signatureBlockLines } from "@/lib/profile";
+import { cn } from "@/lib/utils";
 import type { DeputyData, divisionsType } from "@/types";
 
-const DeputyDetails = ({
-	setDetails,
-	details,
-	division,
-}: {
-	setDetails: React.Dispatch<React.SetStateAction<DeputyData>>;
+interface DeputyDetailsProps {
 	details: DeputyData;
+	setDetails: React.Dispatch<React.SetStateAction<DeputyData>>;
 	division: divisionsType;
-}) => {
-	const divisionRanks: Record<divisionsType, { value: string; label: string }[]> = {
-		RED: [
-			{ value: "Unit Commander", label: "Unit Commander" },
-			{ value: "Operations Lieutenant", label: "Operations Lieutenant" },
-			{ value: "Program Coordinator", label: "Program Coordinator" },
-			{ value: "Application Handler", label: "Application Handler" },
-			{ value: "Trial Application Handler", label: "Trial Application Handler" },
-			{ value: "Head Instructor", label: "Head Instructor" },
-			{ value: "Instructor", label: "Instructor" },
-			{ value: "Trial Instructor", label: "Trial Instructor" },
-		],
+}
 
-		TSD: [
-			{ value: "Commanding Officer", label: "Commanding Officer" },
-			{ value: "Assistant Commanding Officer", label: "Assistant Commanding Officer" },
-			{ value: "Traffic Inspector", label: "Traffic Inspector" },
-			{ value: "Traffic Deputy III", label: "Traffic Deputy III" },
-			{ value: "Traffic Deputy II", label: "Traffic Deputy II" },
-			{ value: "Traffic Deputy I", label: "Traffic Deputy I" },
-			{ value: "Probationary Traffic Deputy", label: "Probationary Traffic Deputy" },
-		],
-		ATD: [
-			{ value: "Commanding Officer", label: "Commanding Officer" },
-			{ value: "Assistant Commanding Officer", label: "Assistant Commanding Officer" },
-			{ value: "Head Instructor", label: "Head Instructor" },
-			{ value: "Senior Instructor", label: "Senior Instructor" },
-			{ value: "Instructor", label: "Instructor" },
-			{ value: "Trainee Instructor", label: "Trainee Instructor" },
-		],
-		General: [],
-		Supervisory: [],
-	};
+export function DeputyDetails({ details, setDetails, division }: DeputyDetailsProps) {
+	const { copy, isCopied } = useCopy();
+	const copied = isCopied("signature");
+	const isWide = useMediaQuery("(min-width: 1024px)");
+	const [imageState, setImageState] = useState<"empty" | "loading" | "ready" | "error">("empty");
+	// On narrow screens the profile folds away once it is already filled in, so the
+	// form stays close to the top of the page. A manual toggle always wins.
+	const [wasCompleteOnLoad] = useState(() => profileIssues(details, division).length === 0);
+	const [manualOpen, setManualOpen] = useState<boolean | null>(null);
+	const expanded = isWide || (manualOpen ?? !wasCompleteOnLoad);
 
-	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const { name, value } = e.target;
-		setDetails((prev) => ({ ...prev, [name]: value }));
-	};
+	const signature = details.signature.trim();
+	const divisionRankOptions = divisionRankOptionsFor(division);
+	const needsDivisionRank = divisionRankOptions.length > 0;
 
-	const handleDeputyRankChange = (value: string) => {
-		setDetails((prev) => ({ ...prev, dRank: value }));
-	};
+	useEffect(() => {
+		setImageState(signature ? "loading" : "empty");
+	}, [signature]);
 
-	const handleDivisionRankChange = (value: string) => {
-		setDetails((prev) => ({
-			...prev,
-			divisionRanks: { ...prev.divisionRanks, [division]: value },
-		}));
-	};
-
-	const dRankDefault = details.dRank || deputyRanks[0].value;
-	const rRankDefault = details.divisionRanks[division] || divisionRanks[division]?.[0]?.value || "";
+	const signatureLines = signatureBlockLines(details, division);
+	const missing = profileIssues(details, division);
+	const isComplete = missing.length === 0;
+	const summary = [details.dRank, details.name].filter(Boolean).join(" ");
 
 	return (
-		<section className="flex flex-col gap-5">
-			<h2 className="font-bold text-3xl text-[#4a3d2a] drop-shadow-[0_1px_2px_rgba(255,255,255,0.5)]">
-				Deputy Details
-			</h2>
+		<Panel style={{ animationDelay: "160ms" }}>
+			<PanelHeader>
+				<PanelHeading
+					icon={UserRound}
+					title="Your deputy profile"
+					description={
+						isWide
+							? "Saved on this device and reused in every format."
+							: (summary || "Add your name, rank and signature once.")
+					}
+				>
+					{isComplete ? (
+						<Badge tone="success">
+							<Check />
+							Complete
+						</Badge>
+					) : (
+						<Badge tone="warning">
+							<AlertTriangle />
+							{missing.length} missing
+						</Badge>
+					)}
 
-			<form id="inputs" className="flex gap-3 flex-wrap">
-				<div className="flex flex-col gap-2">
-					<label htmlFor="name" className="text-[#5a4a3a] font-medium text-sm">Deputy full name</label>
-					<Input
-						id="name"
-						type="text"
-						placeholder="e.g. Bobby Kirk"
-						name="name"
-						value={details.name}
-						onChange={handleInputChange}
-					/>
-				</div>
+					{!isWide ? (
+						<Button
+							variant="ghost"
+							size="icon-sm"
+							onClick={() => setManualOpen(!expanded)}
+							aria-expanded={expanded}
+							aria-label={expanded ? "Hide profile details" : "Show profile details"}
+						>
+							<ChevronDown
+								className={cn("transition-transform duration-200", expanded && "rotate-180")}
+							/>
+						</Button>
+					) : null}
+				</PanelHeading>
+			</PanelHeader>
 
-				<div className="flex flex-col gap-2">
-					<label className="text-[#5a4a3a] font-medium text-sm">Deputy rank</label>
-					<Select
-						showSearch
-						optionFilterProp="label"
-						onChange={handleDeputyRankChange}
-						value={dRankDefault}
-						options={deputyRanks}
-						popupMatchSelectWidth={false}
-						dropdownStyle={{ minWidth: "max-content" }}
-					/>
-				</div>
-
-				{division !== "General" && division !== "Supervisory" && (
-					<div className="flex flex-col gap-2">
-						<label className="text-[#5a4a3a] font-medium text-sm">{division} rank</label>
-						<Select
-							optionFilterProp="label"
-							onChange={handleDivisionRankChange}
-							value={rRankDefault}
-							options={divisionRanks[division]}
-							popupMatchSelectWidth={false}
-							dropdownStyle={{ minWidth: "max-content" }}
+			{expanded ? (
+			<PanelBody className="flex flex-col gap-5">
+				<div className="grid grid-cols-1 gap-x-5 gap-y-5 sm:grid-cols-2">
+					<Field label="Deputy full name" htmlFor="deputy-name">
+						<Input
+							id="deputy-name"
+							name="name"
+							value={details.name}
+							placeholder="e.g. Bobby Kirk"
+							autoComplete="name"
+							onChange={(event) => setDetails((prev) => ({ ...prev, name: event.target.value }))}
 						/>
-					</div>
-				)}
+					</Field>
 
-				<div className="flex flex-col gap-2">
-					<label htmlFor="signature" className="text-[#5a4a3a] font-medium text-sm">Signature</label>
-					<Input
-						id="signature"
-						type="text"
-						placeholder="Signature link"
-						name="signature"
-						value={details.signature}
-						onChange={handleInputChange}
-					/>
+					<Field label="Deputy rank" htmlFor="deputy-rank">
+						<Combobox
+							id="deputy-rank"
+							value={details.dRank}
+							onChange={(value) => setDetails((prev) => ({ ...prev, dRank: value }))}
+							options={deputyRanks}
+							placeholder="Select rank…"
+							searchPlaceholder="Search ranks…"
+							emptyMessage="No ranks match."
+							ariaLabel="Deputy rank"
+						/>
+					</Field>
+
+					{needsDivisionRank ? (
+						<Field label={`${division} rank`} htmlFor="deputy-division-rank" className="sm:col-span-2">
+							<Combobox
+								id="deputy-division-rank"
+								value={details.divisionRanks[division]}
+								onChange={(value) =>
+									setDetails((prev) => ({
+										...prev,
+										divisionRanks: { ...prev.divisionRanks, [division]: value },
+									}))
+								}
+								options={divisionRankOptions}
+								placeholder={`Select ${division} rank…`}
+								searchPlaceholder="Search ranks…"
+								emptyMessage="No ranks match."
+								ariaLabel={`${division} rank`}
+							/>
+						</Field>
+					) : null}
+
+					<Field
+						className="sm:col-span-2"
+						label="Signature image link"
+						htmlFor="deputy-signature"
+						hint="Direct image link, for example https://i.ibb.co/xxxx/name.png"
+					>
+						<Input
+							id="deputy-signature"
+							name="signature"
+							value={details.signature}
+							placeholder="https://…"
+							spellCheck={false}
+							onChange={(event) => setDetails((prev) => ({ ...prev, signature: event.target.value }))}
+						/>
+					</Field>
 				</div>
-			</form>
 
-			<Button
-				variant="solid"
-				color="default"
-				className="w-fit clay-btn-secondary"
-				onClick={() => {
-					const rRank = rRankDefault;
-					navigator.clipboard.writeText(
-						`[img]${details.signature}[/img]\n${dRankDefault} ${details.name}\n${rRank}`
-					);
-					toast.success("Signature copied to clipboard");
-				}}
-			>
-				Copy {division} signature
-			</Button>
+				<div className="overflow-hidden rounded-2xl border border-subtle bg-surface-2 p-3">
+					<p className="mb-2 text-[11px] font-semibold tracking-[0.08em] text-ink-faint uppercase">
+						Signature preview
+					</p>
 
-			<span className="text-[12px] text-[#8b5a2b]">
-				<span className="text-[#6b4a1f] font-bold">Note:</span> This button is only for grabbing the 3 lines of
-				the signature for other uses. The formats contain it if you fill out these inputs.
-			</span>
-		</section>
+					{imageState === "empty" ? (
+						<p className="py-7 text-center text-[12.5px] text-ink-faint">
+							Paste a direct image link above to preview your signature.
+						</p>
+					) : imageState === "error" ? (
+						<div className="flex items-start gap-2.5 rounded-xl border border-warning/25 bg-warning-soft px-3 py-2.5 text-[12.5px] text-warning">
+							<ImageOff className="mt-px size-4 shrink-0" />
+							<span>
+								This link could not be loaded. Use the direct image address (ending in .png or .jpg),
+								not the image viewer page.
+							</span>
+						</div>
+					) : (
+						<div className="flex min-h-[76px] items-center justify-center">
+							{imageState === "loading" ? (
+								<span className="skeleton h-16 w-44 rounded-lg" />
+							) : null}
+							<img
+								src={details.signature}
+								alt="Deputy signature"
+								onLoad={() => setImageState("ready")}
+								onError={() => setImageState("error")}
+								className={cn("max-h-24 w-auto", imageState === "ready" ? "block" : "hidden")}
+							/>
+						</div>
+					)}
+				</div>
+
+				<div className="flex flex-col gap-2.5">
+					<p className="text-[11px] font-semibold tracking-[0.08em] text-ink-faint uppercase">
+						Signature block
+					</p>
+					<pre
+						tabIndex={0}
+						aria-label="Signature block, ready to copy"
+						className="thin-scroll overflow-x-auto rounded-2xl border border-subtle bg-surface-2 p-3.5 font-mono text-[11.5px] leading-[1.7] whitespace-pre-wrap break-all text-ink-muted"
+					>
+						{signatureLines.length > 0 ? signatureLines.join("\n") : "[img][/img]"}
+					</pre>
+					<Button
+						variant="secondary"
+						size="sm"
+						className="self-start"
+						disabled={!signature}
+						onClick={() => copy(signatureLines.join("\n"), "signature")}
+					>
+						{copied ? <Check className="text-success" /> : <ClipboardCopy />}
+						{copied ? "Signature copied" : "Copy signature block"}
+					</Button>
+				</div>
+			</PanelBody>
+			) : null}
+
+			{expanded ? (
+			<PanelFooter>
+				{isComplete ? (
+					<p className="flex items-center gap-2 text-[12.5px] font-medium text-success">
+						<ShieldCheck className="size-4" />
+						Profile complete. Your details are added to every format.
+					</p>
+				) : (
+					<p className="flex items-start gap-2 text-[12.5px] text-warning">
+						<AlertTriangle className="mt-px size-4 shrink-0" />
+						<span>
+							Still missing <span className="font-medium">{listIssues(missing)}</span>. Formats will show
+							blanks until these are filled in.
+						</span>
+					</p>
+				)}
+			</PanelFooter>
+			) : null}
+		</Panel>
 	);
-};
+}
 
 export default DeputyDetails;

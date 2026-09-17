@@ -1,224 +1,373 @@
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
-import { Car, GraduationCap, Shield, Users } from "lucide-react";
-import { toast, ToastContainer } from "react-toastify";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { AlertTriangle, Check, Copy, FileText, RotateCcw, ShieldCheck } from "lucide-react";
+import { ToastContainer, toast } from "react-toastify";
+
+import { AppHeader } from "@/components/AppHeader";
+import { DivisionSwitcher } from "@/components/DivisionSwitcher";
+import { FormatFields } from "@/components/FormatFields";
+import { FormatPicker } from "@/components/FormatPicker";
+import { FormatPreview } from "@/components/FormatPreview";
+import { UnlockDialog } from "@/components/UnlockDialog";
+import { DeputyDetails } from "@/components/deputyDetails/DeputyDetails";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Panel, PanelBody, PanelFooter, PanelHeader, PanelHeading } from "@/components/ui/panel";
+import { Progress } from "@/components/ui/progress";
+import { useCopy } from "@/hooks/useCopy";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { useTheme } from "@/hooks/useTheme";
+import { getDivision } from "@/lib/divisions";
+import { formatFieldsFor, formatsForDivision, formatLabelFor, isFilled } from "@/lib/formats";
+import { listIssues, profileIssues } from "@/lib/profile";
 import { cn } from "@/lib/utils";
-import { Button } from "antd";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { getFormat } from "@/formats";
+import type { DeputyData, FormatData, divisionsType } from "@/types";
 
-import DeputyDetails from "./components/deputyDetails/DeputyDetails.tsx";
-import type { DeputyData, divisionsType, FormatData } from "./types.ts";
-import FormatsInput from "./components/formatsInput/FormatsInput.tsx";
-import SelectFormats from "./components/SelectFormats.tsx";
-import { getFormat } from "./formats";
-import pkg from "../package.json";
+const SUPERVISORY_PASSWORD = import.meta.env.VITE_SUPERVISORY_PASSWORD as string | undefined;
 
-const SUPERVISORY_PASSWORD = import.meta.env.VITE_SUPERVISORY_PASSWORD;
+const emptyDetails: DeputyData = {
+	name: "",
+	signature: "",
+	dRank: "",
+	divisionRanks: { RED: "", TSD: "", ATD: "", General: "", Supervisory: "" },
+};
+
+/** Restores the saved profile, tolerating older shapes stored in localStorage. */
+const loadDetails = (): DeputyData => {
+	try {
+		const saved = localStorage.getItem("deputyDetails");
+		if (!saved) return emptyDetails;
+		const parsed = JSON.parse(saved) as Partial<DeputyData>;
+		return {
+			...emptyDetails,
+			...parsed,
+			divisionRanks: { ...emptyDetails.divisionRanks, ...(parsed.divisionRanks ?? {}) },
+		};
+	} catch {
+		return emptyDetails;
+	}
+};
+
+const loadUnlocked = () => {
+	try {
+		return localStorage.getItem("supervisoryUnlocked") === "true";
+	} catch {
+		return false;
+	}
+};
 
 const App = () => {
+	const { theme, toggleTheme } = useTheme();
+	const isMobile = useMediaQuery("(max-width: 639px)");
+	const { copy, isCopied } = useCopy();
+	const formatCopied = isCopied("format");
+
 	const [division, setDivision] = useState<divisionsType>("RED");
-	const [pendingDivision, setPendingDivision] = useState<divisionsType | null>(null);
-	const [isSupervisoryUnlocked, setIsSupervisoryUnlocked] = useState(false);
-	const [showPasswordDialog, setShowPasswordDialog] = useState(false);
-	const [passwordInput, setPasswordInput] = useState("");
-
-	const [details, setDetails] = useState<DeputyData>(() => {
-		const saved = localStorage.getItem("deputyDetails");
-		return saved
-			? JSON.parse(saved)
-			: {
-					name: "",
-					signature: "",
-					dRank: "",
-					divisionRanks: {
-						RED: "",
-						TSD: "",
-						ATD: "",
-						General: "",
-						Supervisory: "",
-					},
-			  };
-	});
-
+	const [formatId, setFormatId] = useState("");
 	const [formatData, setFormatData] = useState<FormatData>({});
-	const [formatId, setFormat] = useState<string>("");
+	const [resetKey, setResetKey] = useState(0);
+	const [details, setDetails] = useState<DeputyData>(loadDetails);
+
+	const [pickerOpen, setPickerOpen] = useState(false);
+	const [unlocked, setUnlocked] = useState(loadUnlocked);
+	const [pendingDivision, setPendingDivision] = useState<divisionsType | null>(null);
+	const [unlockOpen, setUnlockOpen] = useState(false);
+
+	const divisionMeta = getDivision(division);
+	const formatOptions = useMemo(() => formatsForDivision(division), [division]);
+	const fields = useMemo(() => formatFieldsFor(division, formatId), [division, formatId]);
+	const generatedText = useMemo(
+		() => (formatId ? getFormat({ formatData, deputyData: details, formatId, division }).format : ""),
+		[formatData, details, formatId, division]
+	);
+
+	const filledCount = useMemo(
+		() => fields.filter((field) => isFilled(formatData[field.name as keyof FormatData])).length,
+		[fields, formatData]
+	);
+	const completion = fields.length === 0 ? 100 : Math.round((filledCount / fields.length) * 100);
+	const profileGaps = profileIssues(details, division);
 
 	useEffect(() => {
-		const stored = localStorage.getItem("supervisoryUnlocked");
-		if (stored === "true") {
-			setIsSupervisoryUnlocked(true);
+		try {
+			localStorage.setItem("deputyDetails", JSON.stringify(details));
+		} catch {
+			/* storage may be full or unavailable, so the app keeps working in memory */
 		}
-	}, []);
-
-	useEffect(() => {
-		setFormat("");
-		setFormatData({});
-	}, [division]);
-
-	useEffect(() => {
-		localStorage.setItem("deputyDetails", JSON.stringify(details));
 	}, [details]);
 
-	const handleDivisionChange = (val: divisionsType) => {
-		if (val === "Supervisory" && !isSupervisoryUnlocked) {
-			setPendingDivision(val);
-			setShowPasswordDialog(true);
+	const handleDivisionChange = (next: divisionsType) => {
+		if (getDivision(next).restricted && !unlocked) {
+			setPendingDivision(next);
+			setUnlockOpen(true);
 			return;
 		}
-		setDivision(val);
+		if (next === division) return;
+		setDivision(next);
+		setFormatId("");
+		setFormatData({});
 	};
 
-	const handlePasswordSubmit = () => {
-		if (passwordInput === SUPERVISORY_PASSWORD) {
-			setIsSupervisoryUnlocked(true);
+	const handleSelectFormat = (next: string) => {
+		setFormatId(next);
+	};
+
+	const handleUnlock = (password: string) => {
+		if (!SUPERVISORY_PASSWORD || password !== SUPERVISORY_PASSWORD) return false;
+
+		setUnlocked(true);
+		try {
 			localStorage.setItem("supervisoryUnlocked", "true");
-			if (pendingDivision) {
-				setDivision(pendingDivision);
-				setPendingDivision(null);
-			} else {
-				setDivision("Supervisory");
-			}
-			setShowPasswordDialog(false);
-			setPasswordInput("");
-			toast.success("Supervisory formats unlocked");
-		} else {
-			toast.error("Incorrect password");
+		} catch {
+			/* not fatal: the session stays unlocked */
 		}
+
+		if (pendingDivision) {
+			setDivision(pendingDivision);
+			setPendingDivision(null);
+			setFormatId("");
+			setFormatData({});
+		}
+
+		toast.success("Supervisory formats unlocked");
+		return true;
 	};
 
-	const handleCopyFormat = () => {
-		const rRank = details.divisionRanks[division];
-		const deputyData = { ...details, rRank };
-		const generatedFormat = getFormat({ formatData, deputyData, formatId, division });
-		navigator.clipboard.writeText(generatedFormat.format);
-		toast.success("Format copied to clipboard");
+	const handleLock = () => {
+		setUnlocked(false);
+		try {
+			localStorage.removeItem("supervisoryUnlocked");
+		} catch {
+			/* ignore */
+		}
+		if (division === "Supervisory") {
+			setDivision("RED");
+			setFormatId("");
+			setFormatData({});
+		}
+		toast.info("Supervisory formats locked");
 	};
 
-	const divisions = [
-		{
-			id: "RED" as const,
-			icon: <Users className="w-4 h-4 opacity-80" />,
-			color: "from-red-500 to-red-700",
-		},
-		{
-			id: "TSD" as const,
-			icon: <Car className="w-4 h-4 opacity-80" />,
-			color: "from-yellow-400 to-yellow-600",
-		},
-		{
-			id: "ATD" as const,
-			icon: <GraduationCap className="w-4 h-4 opacity-80" />,
-			color: "from-blue-500 to-blue-700",
-		},
-		{
-			id: "General" as const,
-			icon: <Shield className="w-4 h-4 opacity-80" />,
-			color: "from-gray-400 to-gray-600",
-		},
-		{
-			id: "Supervisory" as const,
-			icon: <Shield className="w-4 h-4 opacity-80" />,
-			color: "from-purple-400 to-purple-600",
-		},
-	];
+	const handleCopyFormat = useCallback(async () => {
+		if (!formatId) return;
+		const copied = await copy(generatedText, "format");
+		if (copied) toast.success(`${formatLabelFor(division, formatId)} copied to clipboard`);
+		else toast.error("Clipboard unavailable. Copy the body from the preview panel instead.");
+	}, [copy, division, formatId, generatedText]);
+
+	useEffect(() => {
+		const onKeyDown = (event: KeyboardEvent) => {
+			const modifier = event.metaKey || event.ctrlKey;
+			if (!modifier) return;
+
+			if (event.key.toLowerCase() === "k") {
+				event.preventDefault();
+				setPickerOpen((open) => !open);
+			}
+
+			if (event.key === "Enter" && formatId) {
+				event.preventDefault();
+				void handleCopyFormat();
+			}
+		};
+
+		window.addEventListener("keydown", onKeyDown);
+		return () => window.removeEventListener("keydown", onKeyDown);
+	}, [formatId, handleCopyFormat]);
 
 	return (
-		<main className="container">
-			<section className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
-				<h1 className="text-2xl font-bold text-white tracking-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.15)]">
-					LSSD Email Format Tool
-				</h1>
+		<div className={cn("flex min-h-dvh flex-col", divisionMeta.accent)}>
+			<AppHeader
+				theme={theme}
+				onToggleTheme={toggleTheme}
+				unlocked={unlocked}
+				onLock={handleLock}
+			/>
 
-				<Select
-					value={division || "RED"}
-					onValueChange={(val) => handleDivisionChange((val || "RED") as divisionsType)}
-				>
-					<SelectTrigger className="clay-select w-[280px]">
-						<SelectValue placeholder="Select Division" />
-					</SelectTrigger>
-					<SelectContent className="clay-dropdown">
-						{divisions.map((div) => (
-							<SelectItem
-								key={div.id}
-								value={div.id}
-								className={cn(
-									"flex items-center gap-3 py-2.5 px-4 text-sm hover:bg-[#e8dfc8] rounded-xl cursor-pointer transition-colors clay-select-item"
-								)}
-							>
-								<div className={cn(`h-5 w-5 rounded-full bg-gradient-to-br shadow-sm ${div.color}`)} />
-								<div className="flex items-center gap-2">
-									{div.icon}
-									<span>{div.id}</span>
+			<main className="mx-auto flex w-full max-w-[1240px] flex-1 flex-col gap-6 px-4 pt-6 pb-14 sm:px-6 lg:px-8">
+				<div className="flex flex-col gap-3">
+					<DivisionSwitcher value={division} onChange={handleDivisionChange} locked={!unlocked} />
+					<p className="text-[12.5px] text-ink-muted">
+						<span className="font-medium text-ink">{divisionMeta.name}</span>
+						<span className="mx-1.5 text-ink-faint/40">·</span>
+						{divisionMeta.blurb}
+					</p>
+				</div>
+
+				<div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[minmax(0,1.55fr)_minmax(320px,1fr)]">
+					<div className="flex min-w-0 flex-col gap-6">
+						<Panel>
+							<PanelHeader>
+								<PanelHeading
+									step={1}
+									title="Choose a response format"
+									description="Search the formats available to your division."
+								>
+									<Badge tone="neutral">
+										{formatOptions.length} {formatOptions.length === 1 ? "format" : "formats"}
+									</Badge>
+									{division === "Supervisory" && unlocked ? (
+										<Badge tone="success">
+											<ShieldCheck />
+											Unlocked
+										</Badge>
+									) : null}
+								</PanelHeading>
+							</PanelHeader>
+
+							<PanelBody>
+								<FormatPicker
+									division={division}
+									formatId={formatId}
+									onSelect={handleSelectFormat}
+									open={pickerOpen}
+									onOpenChange={setPickerOpen}
+									options={formatOptions}
+									fieldCount={fields.length}
+								/>
+							</PanelBody>
+						</Panel>
+
+						<Panel style={{ animationDelay: "60ms" }}>
+							<PanelHeader>
+								<PanelHeading
+									step={2}
+									title="Fill in the details"
+									description={
+										formatId
+											? formatLabelFor(division, formatId)
+											: "Fields appear here once a format is selected."
+									}
+								/>
+							</PanelHeader>
+
+							<PanelBody>
+								<FormatFields
+									formatId={formatId}
+									fields={fields}
+									formatData={formatData}
+									setFormatData={setFormatData}
+									resetKey={resetKey}
+								/>
+							</PanelBody>
+
+							<PanelFooter className="sticky bottom-0 z-10 flex-col items-stretch gap-3 rounded-b-panel bg-surface/92 backdrop-blur-md sm:flex-row sm:items-center">
+								<div className="min-w-0 flex-1">
+									{formatId ? (
+										<>
+											<div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[12.5px]">
+												<span className="font-medium text-ink">
+													{fields.length === 0
+														? "Ready to copy"
+														: `${filledCount} of ${fields.length} filled`}
+												</span>
+												{profileGaps.length > 0 ? (
+													<span
+														className="flex items-center gap-1.5 text-warning"
+														title={`Missing ${listIssues(profileGaps)}`}
+													>
+														<AlertTriangle className="size-3.5" />
+														Profile incomplete
+													</span>
+												) : (
+													<span className="flex items-center gap-1.5 text-success">
+														<Check className="size-3.5" />
+														Profile ready
+													</span>
+												)}
+											</div>
+											<Progress
+												value={completion}
+												tone={completion === 100 ? "success" : "accent"}
+												className="mt-2 max-w-[260px]"
+											/>
+										</>
+									) : (
+										<p className="flex items-center gap-2 text-[12.5px] text-ink-muted">
+											<FileText className="size-4 shrink-0 text-ink-faint" />
+											Select a format to unlock the copy button.
+										</p>
+									)}
 								</div>
-							</SelectItem>
-						))}
-					</SelectContent>
-				</Select>
-			</section>
 
-			<section className="grid grid-cols-1 md:grid-cols-2 gap-6 clay-main-card">
-				<div className="clay-panel-left flex flex-col gap-10 p-6 sm:p-8 justify-center">
-					<SelectFormats setFormat={setFormat} division={division} />
-					<FormatsInput
-						setFormatData={setFormatData}
-						formatId={formatId}
-						formatData={formatData}
-						division={division}
-					/>
-					<Button type="primary" className="clay-btn-primary mt-5" onClick={handleCopyFormat}>
-						Create Format
-					</Button>
-				</div>
+								<div className="flex items-center gap-2">
+									{formatId ? (
+										<Button
+											key="reset"
+											variant="secondary"
+											size="icon"
+											onClick={() => {
+												setFormatData({});
+												setResetKey((value) => value + 1);
+											}}
+											title="Clear the fields for this format"
+											aria-label="Clear the fields for this format"
+										>
+											<RotateCcw />
+										</Button>
+									) : null}
 
-				<div className="clay-panel-right p-6 sm:p-8 flex flex-col gap-6">
-					<img src="/images/logo.webp" alt="LSSD Logo" className="max-w-[160px] clay-logo" />
-					<DeputyDetails setDetails={setDetails} details={details} division={division || "RED"} />
-				</div>
-			</section>
-
-			<footer className="mt-10 text-start text-sm text-[#7a6349] select-none drop-shadow-sm">
-				Developed by <a href="https://github.com/dofxo" target="_blank" rel="noopener noreferrer" className="font-medium underline underline-offset-2 hover:text-[#8a7555]">dofxo</a> - App version v{pkg.version}
-			</footer>
-
-			<ToastContainer position="top-center" />
-
-			<Dialog open={showPasswordDialog} onOpenChange={setShowPasswordDialog}>
-				<DialogContent showCloseButton className="clay-dialog">
-					<DialogHeader>
-						<DialogTitle>Enter Supervisory Password</DialogTitle>
-						<DialogDescription>
-							Access to Supervisory formats is restricted. Enter the password to unlock this section.
-						</DialogDescription>
-					</DialogHeader>
-					<div className="flex flex-col gap-3 mt-2">
-						<label className="text-sm font-medium text-[#5a4a3a]" htmlFor="supervisory-password">
-							Password
-						</label>
-						<input
-							id="supervisory-password"
-							type="password"
-							className="clay-input px-4 py-3 text-sm rounded-xl w-full focus:outline-none focus:ring-2 focus:ring-[#B57B2F]/50"
-							value={passwordInput}
-							onChange={(e) => setPasswordInput(e.target.value)}
-							onKeyDown={(e) => {
-								if (e.key === "Enter") {
-									e.preventDefault();
-									handlePasswordSubmit();
-								}
-							}}
-						/>
-						<div className="flex justify-end gap-3 mt-4">
-							<Button onClick={() => setShowPasswordDialog(false)} className="clay-btn-secondary">
-								Cancel
-							</Button>
-							<Button type="primary" onClick={handlePasswordSubmit} className="clay-btn-primary">
-								Unlock
-							</Button>
-						</div>
+									{formatId ? (
+										<Button
+											key="copy"
+											variant="primary"
+											size="lg"
+											onClick={() => void handleCopyFormat()}
+											className="flex-1 sm:min-w-[170px] sm:flex-none"
+										>
+											{formatCopied ? <Check /> : <Copy />}
+											{formatCopied ? "Copied" : "Copy format"}
+										</Button>
+									) : null}
+								</div>
+							</PanelFooter>
+						</Panel>
 					</div>
-				</DialogContent>
-			</Dialog>
-		</main>
+
+					<aside className="flex min-w-0 flex-col gap-6">
+						<FormatPreview
+							text={generatedText}
+							formatLabel={formatId ? formatLabelFor(division, formatId) : ""}
+						/>
+						<DeputyDetails details={details} setDetails={setDetails} division={division} />
+					</aside>
+				</div>
+
+				<footer className="mt-auto border-t border-subtle pt-5 text-[12px] text-ink-muted">
+					<p>
+						Developed by{" "}
+						<a
+							href="https://github.com/dofxo"
+							target="_blank"
+							rel="noopener noreferrer"
+							className="font-medium text-ink-muted underline decoration-subtle underline-offset-2 transition-colors duration-150 hover:text-accent"
+						>
+							dofxo
+						</a>
+					</p>
+				</footer>
+			</main>
+
+			<ToastContainer
+				position={isMobile ? "top-center" : "bottom-right"}
+				autoClose={2600}
+				newestOnTop
+				closeOnClick
+				draggable
+				pauseOnHover
+				hideProgressBar={false}
+			/>
+
+			<UnlockDialog
+				open={unlockOpen}
+				configured={Boolean(SUPERVISORY_PASSWORD)}
+				onUnlock={handleUnlock}
+				onOpenChange={(open) => {
+					setUnlockOpen(open);
+					if (!open) setPendingDivision(null);
+				}}
+			/>
+		</div>
 	);
 };
 
