@@ -126,6 +126,9 @@
 .accent-violet {
 	--accent: #6d3fc0;
 }
+.accent-sky {
+	--accent: #1d70c8;
+}
 .dark .accent-red {
 	--accent: #ff7080;
 }
@@ -140,6 +143,9 @@
 }
 .dark .accent-violet {
 	--accent: #b18bff;
+}
+.dark .accent-sky {
+	--accent: #5ea6f0;
 }
 
 @theme inline {

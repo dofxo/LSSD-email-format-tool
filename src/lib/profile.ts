@@ -31,13 +31,17 @@ export const divisionRanks: Record<divisionsType, { value: string; label: string
 	],
 	General: [],
 	Supervisory: [],
+	FTB: [],
 };
 
 export const divisionRankOptionsFor = (division: divisionsType) => divisionRanks[division] ?? [];
 
 /** Human-readable list of profile details that are still missing. */
-export const profileIssues = (details: DeputyData, division: divisionsType): string[] =>
-	[
+export const profileIssues = (details: DeputyData, division: divisionsType): string[] => {
+	// FTB session reports never embed deputy details, so nothing is required.
+	if (division === "FTB") return [];
+
+	return [
 		!details.name.trim() ? "full name" : null,
 		!details.dRank ? "rank" : null,
 		divisionRankOptionsFor(division).length > 0 && !details.divisionRanks[division]
@@ -45,6 +49,7 @@ export const profileIssues = (details: DeputyData, division: divisionsType): str
 			: null,
 		!details.signature.trim() ? "signature" : null,
 	].filter((issue): issue is string => Boolean(issue));
+};
 
 /** The three lines people paste into forum signatures. */
 export const signatureBlockLines = (details: DeputyData, division: divisionsType): string[] =>

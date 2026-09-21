@@ -3,6 +3,7 @@ import { TSDFormats } from "./divisions/TSD";
 import { ATDFormats } from "./divisions/ATD";
 import { GeneralFormats } from "./divisions/General";
 import { SupervisoryFormats } from "./divisions/Supervisory";
+import { FTBFormats } from "./divisions/FTB";
 
 export const registry = {
 	RED: REDFormats,
@@ -10,4 +11,5 @@ export const registry = {
 	ATD: ATDFormats,
 	General: GeneralFormats,
 	Supervisory: SupervisoryFormats,
+	FTB: FTBFormats,
 };

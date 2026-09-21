@@ -1,5 +1,7 @@
+import { FTBInputs } from "@/data/ftbInputs";
 import { deputyRanks } from "@/data/deputyRanks";
 import type { FormatInputField, divisionsType } from "@/types";
+
 
 export const inputsByDivision: Record<divisionsType, FormatInputField[]> = {
 	RED: [
@@ -390,4 +392,6 @@ export const inputsByDivision: Record<divisionsType, FormatInputField[]> = {
 			formats: ["18"],
 		},
 	],
+
+	FTB: FTBInputs,
 };

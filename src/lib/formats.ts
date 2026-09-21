@@ -4,6 +4,7 @@ import { REDLabels } from "@/formats/divisions/RED";
 import { SupervisoryLabels } from "@/formats/divisions/Supervisory";
 import { ATDLabels } from "@/formats/divisions/ATD";
 import { TSDLabels } from "@/formats/divisions/TSD";
+import { FTBLabels } from "@/formats/divisions/FTB";
 import { inputsByDivision } from "@/data/formatInputs";
 import type { FormatInputField } from "@/types";
 
@@ -13,6 +14,7 @@ export const labelsByDivision: Record<divisionsType, Record<string, string>> = {
 	ATD: ATDLabels,
 	General: GeneralLabels,
 	Supervisory: SupervisoryLabels,
+	FTB: FTBLabels,
 };
 
 export interface FormatOption {
