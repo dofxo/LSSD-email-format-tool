@@ -30,7 +30,7 @@ const emptyDetails: DeputyData = {
 	name: "",
 	signature: "",
 	dRank: "",
-	divisionRanks: { RED: "", TSD: "", ATD: "", General: "", Supervisory: "", FTB: "" },
+	divisionRanks: { RED: "", TSD: "", ATD: "", General: "", Supervisory: "", FTB: "", SEB: "" },
 };
 
 /** Restores the saved profile, tolerating older shapes stored in localStorage. */

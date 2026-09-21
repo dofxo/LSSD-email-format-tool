@@ -4,6 +4,7 @@ import { ATDFormats } from "./divisions/ATD";
 import { GeneralFormats } from "./divisions/General";
 import { SupervisoryFormats } from "./divisions/Supervisory";
 import { FTBFormats } from "./divisions/FTB";
+import { SEBFormats } from "./divisions/SEB";
 import type { DeputyData, divisionsType, FormatData } from "@/types";
 
 export const registry = {
@@ -13,6 +14,7 @@ export const registry = {
 	General: GeneralFormats,
 	Supervisory: SupervisoryFormats,
 	FTB: FTBFormats,
+	SEB: SEBFormats,
 } as const;
 
 export const getFormat = ({

@@ -9,22 +9,25 @@ export interface DeputyData {
 		General: string;
 		Supervisory: string;
 		FTB: string;
+		SEB: string;
 	};
 }
 
-export type divisionsType = "RED" | "ATD" | "TSD" | "General" | "Supervisory" | "FTB";
+export type divisionsType = "RED" | "ATD" | "TSD" | "General" | "Supervisory" | "FTB" | "SEB";
 
 /** A single dynamic field rendered for a response format. */
 export interface FormatInputField {
 	name: string;
 	label: string;
-	type: "text" | "number" | "date" | "time" | "select" | "textarea" | "check";
+	type: "text" | "number" | "date" | "time" | "select" | "textarea" | "check" | "list";
 	/** Format ids (as strings) that require this field. */
 	formats: string[];
 	hint?: string;
 	options?: { value: string; label: string }[];
 	/** Output style for date fields; defaults to the app-wide email date style. */
 	dateStyle?: "full" | "short" | "shortYear";
+	/** Placeholder for "list" fields' add-input. */
+	itemPlaceholder?: string;
 	/** Toggleable items for "check" fields; stored as "<fieldName>:<index>" keys. */
 	items?: string[];
 }
@@ -232,6 +235,22 @@ export interface FormatData {
 	rtsMistakes?: string;
 	rtsReadyProgress?: string;
 	rtsAdditionalNotes?: string;
+
+	// SEB fields
+	body?: string;
+	bureauPosition?: string;
+	certifications?: string;
+	operators?: string[];
+	callsign?: string;
+	operatorLastName?: string;
+	applicationDate?: string;
+	senderPosition?: string;
+	logDate?: string;
+	deploymentStart?: string;
+	deploymentEnd?: string;
+	confiscatedItems?: string[];
+	suspects?: string[];
+	eventDescription?: string;
 
 	// Reinstatement Evaluation
 	rteDate?: string;
