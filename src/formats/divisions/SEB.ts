@@ -7,16 +7,16 @@ export const SEBLabels: Record<string, string> = {
 	"1": "Confidential Email",
 	"2": "Deployment Log",
 	"3": "Patrol Log",
-	"4": "Dive Team Certification - Passed",
-	"5": "Dive Team Certification - Failed",
-	"6": "Advanced Aerial Unit Certification - Passed",
-	"7": "Advanced Aerial Unit Certification - Failed",
-	"8": "Long Range Rifle Certification - Passed",
-	"9": "Long Range Rifle Certification - Failed",
-	"10": "EOD Technician Certification - Passed",
-	"11": "EOD Technician Certification - Failed",
-	"12": "Crisis Negotiator Certification - Passed",
-	"13": "Crisis Negotiator Certification - Failed",
+	"4": "Dive Team Certification - Passed (Written Exam)",
+	"5": "Dive Team Certification - Failed (Written Exam)",
+	"6": "Advanced Aerial Unit Certification - Passed (Written Exam)",
+	"7": "Advanced Aerial Unit Certification - Failed (Written Exam)",
+	"8": "Long Range Rifle Certification - Passed (Written Exam)",
+	"9": "Long Range Rifle Certification - Failed (Written Exam)",
+	"10": "EOD Technician Certification - Passed (Written Exam)",
+	"11": "EOD Technician Certification - Failed (Written Exam)",
+	"12": "Crisis Negotiator Certification - Passed (Written Exam)",
+	"13": "Crisis Negotiator Certification - Failed (Written Exam)",
 };
 
 export const SEBFormats = ({
@@ -111,7 +111,7 @@ ${formatData.eventDescription ?? ""}
 [/divbox]`,
 		},
 
-		// 4. Dive Team Certification - Passed
+		// 4. Dive Team Certification - Passed (Written Exam)
 		"4": {
 			text: `[lssdfooter][/lssdfooter]
 [divbox=white]
@@ -143,7 +143,7 @@ Special Enforcement Bureau
 [lssdfooter][/lssdfooter]`,
 		},
 
-		// 5. Dive Team Certification - Failed
+		// 5. Dive Team Certification - Failed (Written Exam)
 		"5": {
 			text: `[lssdfooter][/lssdfooter]
 [divbox=white]
@@ -179,7 +179,7 @@ Special Enforcement Bureau
 [lssdfooter][/lssdfooter]`,
 		},
 
-		// 6. Advanced Aerial Unit Certification - Passed
+		// 6. Advanced Aerial Unit Certification - Passed (Written Exam)
 		"6": {
 			text: `[lssdfooter][/lssdfooter]
 [divbox=white]
@@ -210,7 +210,7 @@ Special Enforcement Bureau
 [lssdfooter][/lssdfooter]`,
 		},
 
-		// 7. Advanced Aerial Unit Certification - Failed
+		// 7. Advanced Aerial Unit Certification - Failed (Written Exam)
 		"7": {
 			text: `[lssdfooter][/lssdfooter]
 [divbox=white]
@@ -247,7 +247,7 @@ Special Enforcement Bureau
 [lssdfooter][/lssdfooter]`,
 		},
 
-		// 8. Long Range Rifle Certification - Passed
+		// 8. Long Range Rifle Certification - Passed (Written Exam)
 		"8": {
 			text: `[lssdfooter][/lssdfooter]
 [divbox=white]
@@ -278,7 +278,7 @@ Special Enforcement Bureau
 [lssdfooter][/lssdfooter]`,
 		},
 
-		// 9. Long Range Rifle Certification - Failed
+		// 9. Long Range Rifle Certification - Failed (Written Exam)
 		"9": {
 			text: `[lssdfooter][/lssdfooter]
 [divbox=white]
@@ -315,7 +315,7 @@ Special Enforcement Bureau
 [lssdfooter][/lssdfooter]`,
 		},
 
-		// 10. EOD Technician Certification - Passed
+		// 10. EOD Technician Certification - Passed (Written Exam)
 		"10": {
 			text: `[lssdfooter][/lssdfooter]
 [divbox=white]
@@ -346,7 +346,7 @@ Special Enforcement Bureau
 [lssdfooter][/lssdfooter]`,
 		},
 
-		// 11. EOD Technician Certification - Failed
+		// 11. EOD Technician Certification - Failed (Written Exam)
 		"11": {
 			text: `[lssdfooter][/lssdfooter]
 [divbox=white]
@@ -383,7 +383,7 @@ Special Enforcement Bureau
 [lssdfooter][/lssdfooter]`,
 		},
 
-		// 12. Crisis Negotiator Certification - Passed
+		// 12. Crisis Negotiator Certification - Passed (Written Exam)
 		"12": {
 			text: `[lssdfooter][/lssdfooter]
 [divbox=white]
@@ -414,7 +414,7 @@ Special Enforcement Bureau
 [lssdfooter][/lssdfooter]`,
 		},
 
-		// 13. Crisis Negotiator Certification - Failed
+		// 13. Crisis Negotiator Certification - Failed (Written Exam)
 		"13": {
 			text: `[lssdfooter][/lssdfooter]
 [divbox=white]
