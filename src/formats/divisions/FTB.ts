@@ -817,7 +817,7 @@ ${RTE_CHECKLIST.map((item, index) => {
 
 [lssdsubtitle]TRAINEE PERFORMANCE | GRADING[/lssdsubtitle]
 [divbox=white]
-[size=85][i]Below is a grading system to determine the Trainee's performance during the Field Training Division Session-5, the system grades the Trainee's ability to perform certain tasks with adherence to our handbook. The system ranks each criterion on a scale of 1-5, with 1 being below satisfactory performance and 5 being extraordinary, below each grade is a section to explain your reasoning behind the grade chosen. Please be impartial in your grading at all times and there is a description of each rank at the bottom of this document. [/i][/size]
+[size=85][i]Below is a grading system to determine the Trainee's performance during the Field Training Division Session-5, the system grades the Trainee's ability to perform certain tasks with adherence to our handbook. The system ranks each criterion on the ■ scale shown below, with ■ being below satisfactory performance and ■■■■■ being extraordinary, below each grade is a section to explain your reasoning behind the grade chosen. Please be impartial in your grading at all times and there is a description of each rank at the bottom of this document. [/i][/size]
 
 ${GRADE_SYSTEM}
 
@@ -833,7 +833,7 @@ ${GRADE_SYSTEM}
 [/list]
 [/list]
 
-[list][b]Handbook knowledget [${f.rteGradeHandbook ?? ""}][/b]
+[list][b]Handbook knowledge [${f.rteGradeHandbook ?? ""}][/b]
 [list]
 [*]${f.rteNoteHandbook ?? ""}
 [/list]

@@ -221,7 +221,7 @@ ${dischargeTypeLine("dishonourable")}
 [size=105]
 [b]Full Name:[/b] ${formatData.recipientName}
 
-[b]Previous Rank & Position:[[/b] ${formatData.previousRank}
+[b]Previous Rank & Position:[/b] ${formatData.previousRank}
 
 [b]New Rank & Position:[/b] ${formatData.newRank}
 [/size]

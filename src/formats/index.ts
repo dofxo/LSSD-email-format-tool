@@ -6,6 +6,15 @@ import { SupervisoryFormats } from "./divisions/Supervisory";
 import { FTBFormats } from "./divisions/FTB";
 import type { DeputyData, divisionsType, FormatData } from "@/types";
 
+export const registry = {
+	RED: REDFormats,
+	TSD: TSDFormats,
+	ATD: ATDFormats,
+	General: GeneralFormats,
+	Supervisory: SupervisoryFormats,
+	FTB: FTBFormats,
+} as const;
+
 export const getFormat = ({
 	formatData,
 	deputyData,
@@ -17,20 +26,7 @@ export const getFormat = ({
 	formatId: string;
 	division: divisionsType;
 }) => {
-	switch (division) {
-		case "RED":
-			return REDFormats({ formatData, deputyData, division, formatId });
-		case "TSD":
-			return TSDFormats({ formatData, deputyData, division, formatId });
-		case "ATD":
-			return ATDFormats({ formatData, deputyData, division, formatId });
-		case "General":
-			return GeneralFormats({ formatData, deputyData, formatId });
-		case "Supervisory":
-			return SupervisoryFormats({ formatData, deputyData, formatId });
-		case "FTB":
-			return FTBFormats({ formatData, deputyData, formatId });
-		default:
-			return { format: "[Invalid division]", formats: {} };
-	}
+	const build = registry[division];
+	if (!build) return { format: "[Invalid division]", formats: {} };
+	return build({ formatData, deputyData, division, formatId });
 };

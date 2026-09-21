@@ -303,7 +303,7 @@ export const FTBInputs: FormatInputField[] = [
 	{ name: "rteTimeline", label: "Detailed timeline of the session (min. 200 words)", type: "textarea", formats: ["8"] },
 	...graded("rteGradeAttitude", "rteNoteAttitude", "General Attitude and Demeanor (CPR)", ["8"], gradeOptionsSquares),
 	...graded("rteGradeFieldAwareness", "rteNoteFieldAwareness", "Field Awareness", ["8"], gradeOptionsSquares),
-	...graded("rteGradeHandbook", "rteNoteHandbook", "Handbook knowledget", ["8"], gradeOptionsSquares),
+	...graded("rteGradeHandbook", "rteNoteHandbook", "Handbook knowledge", ["8"], gradeOptionsSquares),
 	...graded("rteGradeCommunication", "rteNoteCommunication", "Communication", ["8"], gradeOptionsSquares),
 	...graded("rteGradeDriving", "rteNoteDriving", "Driving Ability", ["8"], gradeOptionsSquares),
 	...graded("rteGradeStress", "rteNoteStress", "Demeanor Under Stress / Duress", ["8"], gradeOptionsSquares),
