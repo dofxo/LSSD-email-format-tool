@@ -63,7 +63,10 @@ export function Combobox({
 						className
 					)}
 				>
-					<span className={cn("truncate", !selected && "text-ink-faint")}>
+					<span
+						title={selected ? selected.label : placeholder}
+						className={cn("truncate", !selected && "text-ink-faint")}
+					>
 						{selected ? selected.label : placeholder}
 					</span>
 					<ChevronsUpDown
@@ -104,7 +107,9 @@ export function Combobox({
 											isSelected && "font-medium text-ink"
 										)}
 									>
-										<span className="truncate">{option.label}</span>
+										<span title={option.label} className="truncate">
+											{option.label}
+										</span>
 										{option.hint ? (
 											<span className="shrink-0 text-[11px] text-ink-faint">{option.hint}</span>
 										) : null}

@@ -61,6 +61,7 @@ export function FormatPicker({
 								Response format
 							</span>
 							<span
+								title={isEmpty ? undefined : selected?.label}
 								className={cn(
 									"block truncate text-[14px] font-medium",
 									selected ? "text-ink" : "text-ink-muted"
@@ -110,7 +111,9 @@ export function FormatPicker({
 											}}
 											className="w-full min-w-0 justify-between gap-3 py-2.5"
 										>
-											<span className={cn("truncate", isSelected && "font-medium")}>{option.label}</span>
+											<span title={option.label} className={cn("truncate", isSelected && "font-medium")}>
+												{option.label}
+											</span>
 											<Check
 												className={cn(
 													"size-4 shrink-0 text-accent transition-opacity",

@@ -60,7 +60,7 @@ export const SEBInputs: FormatInputField[] = [
 	// Email date used by formats 6-13 (renders in the letter's top-right corner).
 	{ name: "date", label: "Email Date", type: "date", formats: ["6", "7", "8", "9", "10", "11", "12", "13"] },
 
-	// 5 - Dive Team Certification - Failed (reuses operatorLastName / applicationDate /
+	// 5 - Dive Team Certification - Failed (Written Exam) (reuses operatorLastName / applicationDate /
 	// senderPosition from format 4, plus a denial reason list)
 	{
 		name: "reasons",
