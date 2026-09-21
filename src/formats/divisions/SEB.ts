@@ -1,4 +1,7 @@
+import moment from "moment";
 import type { DeputyData, FormatData } from "@/types";
+import { OTP_SESSIONS } from "@/data/sebInputs";
+import type { OtpSessionSpec } from "@/data/sebInputs";
 
 /**
  * The six graded areas of the Crisis Negotiator practical review, in the order
@@ -21,6 +24,31 @@ const cnGradeBlock = (label: string, grade?: string, reason?: string) =>
 /** The closing decision line, coloured per the letter's own PASS/FAIL styling. */
 const CN_PASS = "[color=#008000][b]PASS[/b][/color]";
 const CN_FAIL = "[color=#FF0000][b]FAIL[/b][/color]";
+
+const OTP_PROFILE_HEADER = "[img]https://i.imgur.com/Ry6I6OT.png[/img]";
+
+/** The exam notice that closes the OTP progress section of the profile. */
+const OTP_EXAM_NOTICE = `[img]https://i.ibb.co/pkZkz59/TD-Exam.png[/img]
+[divbox=white]
+[center][color=Orange][size=150][b]Awaiting Response[/b][/size][/color][/center]
+[list=none]
+The exam has been successfully sent to the Trainee Operator. SEB Command is now awaiting their response in order to proceed with grading.
+[/list]
+[hr]
+[list=none]
+Sincerely,
+
+Special Enforcement Bureau Command
+[/list]
+[/divbox]
+[lssdfooter][/lssdfooter]`;
+
+/** A 24h time spelled the way the OTP worksheets write it: "hh:mm AM/PM". */
+const otpTime = (time?: string) => {
+	if (!time) return "HH:MM AM/PM";
+	const parsed = moment(time, "HH:mm");
+	return parsed.isValid() ? parsed.format("hh:mm A") : time;
+};
 
 // Labels for Special Enforcement Bureau formats.
 // Each key is the format id; the ids are referenced by the field definitions
@@ -49,6 +77,19 @@ export const SEBLabels: Record<string, string> = {
 	"21": "EOD Technician Certification - Failed (Practical Exam)",
 	"22": "Crisis Negotiator Certification - Passed (Practical Exam)",
 	"23": "Crisis Negotiator Certification - Failed (Practical Exam)",
+	"24": "Operator Exam - Passed",
+	"25": "Operator Exam - Failed",
+	"26": "Promotion Email",
+	"27": "Training Session Scheduling",
+	"28": "Inactivity Notice",
+	"29": "Email",
+	"30": "Probationary Operator Profile",
+	"31": "OTP Session 1",
+	"32": "OTP Session 2",
+	"33": "OTP Session 3",
+	"34": "Exam Sent to Trainee",
+	"35": "TD Instructor Acceptance",
+	"36": "TD Instructor Denial",
 };
 
 export const SEBFormats = ({
@@ -60,6 +101,79 @@ export const SEBFormats = ({
 	formatData: FormatData;
 	deputyData: DeputyData;
 }) => {
+	/**
+	 * The letter head shared by the SEB emails: logo, department name, the red
+	 * tag for the letter type and the motto, ending on the dated greeting list.
+	 * The Training Division letters swap the logo and sit a blank line lower.
+	 */
+	const sebLetterHead = (
+		tag: string,
+		date?: string,
+		options: { logo?: string; gapBeforeGreeting?: boolean } = {},
+	) => {
+		const logo = options.logo ?? "https://i.imgur.com/uXQ1hoT.png";
+		const gap = options.gapBeforeGreeting ? "\n" : "";
+		return `[lssdfooter][/lssdfooter]
+[divbox=white]
+[float=left][/float]
+[aligntable=left,0,0,0,0,0,0][fimg=100,100]${logo}[/fimg][/aligntable]
+[aligntable=right,0,0,0,0,0,0][right][font=Arial][b][size=125]Los Santos County Sheriff's Department[/size][/b]
+[size=110]Special Enforcement Bureau - [color=#FF0000]${tag}[/color][/size]
+[size=100]"Priority One Is Saving Lives"[/size][/font][/right][/aligntable]
+
+[hr][/hr]${gap}
+[list=none][right]${date || "DAY MONTH, YEAR"}[/right]`;
+	};
+
+	/**
+	 * The closing block shared by the SEB emails: rank and name from the deputy
+	 * profile, then the sender's bureau position and any certifications.
+	 */
+	const sebLetterSignature = (
+		bureauPosition?: string,
+		certifications?: string,
+		fallback = "BureauPosition, [Insert Certifications if Desired]",
+	) => `[list=none]
+
+${[deputyData.dRank, deputyData.name].filter(Boolean).join(" ") || "Rank Fname Lname"}
+${[bureauPosition, certifications].filter(Boolean).join(", ") || fallback}
+Special Enforcement Bureau
+[/divbox]
+[lssdfooter][/lssdfooter]`;
+
+	/** One OTP checklist: a single [list] with a tick box at the end of each line. */
+	const otpChecklist = (items: string[], field: string) => {
+		const ticked = (formatData[field as keyof FormatData] as string[] | undefined) ?? [];
+		return `[list]\n${items
+			.map((item, index) => `[*] ${item} ${ticked.includes(`${field}:${index}`) ? "[b][X][/b]" : "[ ]"}`)
+			.join("\n")}\n[/list]`;
+	};
+
+	/** The Session Details block that opens every OTP session. */
+	const otpSessionDetails = (prefix: string) => {
+		const at = (key: string) => formatData[`${prefix}${key}` as keyof FormatData] as string | undefined;
+		return `[lssdsubtitle]Session Details[/lssdsubtitle]\n[divbox=white]\n[b]Date & Start Time:[/b] ${at("Date") || "DD/MMM/YYYY"} ${otpTime(at("Time"))} ((UTC))\n[b]Instructor Rank & Name:[/b] ${at("Instructor") || [deputyData.dRank, deputyData.name].filter(Boolean).join(" ") || "SEBRank FNAME LNAME"}\n[/divbox]`;
+	};
+
+	/** A titled checklist section of an OTP session. */
+	const otpChecklistSection = (heading: string, field: string, items: string[]) =>
+		`[lssdsubtitle]${heading}[/lssdsubtitle]\n[divbox=white]\n[b][center]Mark with the following with (X)[/center][/b]${otpChecklist(items, field)}\n[/divbox]`;
+
+	/**
+	 * An OTP session: the worksheet the instructor fills in, followed by the
+	 * [code] copy of it that the source profile carries under "OTP #n" headings.
+	 */
+	const otpSession = (session: OtpSessionSpec) => {
+		const details = otpSessionDetails(session.prefix);
+		const worksheet = session.sections
+			.map((section) => otpChecklistSection(section.heading, section.field, section.items))
+			.join("\n\n");
+		const copy = session.sections
+			.map((section) => otpChecklistSection(section.copyHeading, section.field, section.items))
+			.join("\n\n");
+		return `[img]${session.image}[/img]\n${details}\n${worksheet}\n[code]\n[img]${session.image}[/img]\n${details}\n${copy}\n[/code]`;
+	};
+
 	/**
 	 * The Crisis Negotiator practical review. The passed and failed letters are
 	 * the same document apart from the closing decision, so the body is built
@@ -806,6 +920,272 @@ Special Enforcement Bureau
 		// 22/23. Crisis Negotiator Certification - Passed / Failed (Practical Exam)
 		"22": { text: crisisNegotiatorReview(CN_PASS) },
 		"23": { text: crisisNegotiatorReview(CN_FAIL) },
+
+		// 24. Operator Exam - Passed
+		"24": {
+			text: `${sebLetterHead("Exam Results", formatData.date)}
+
+After reviewing your Special Enforcement Bureau Operator Exam, the command has determined that you have [color=#00FF00]passed[/color] the exam.
+
+Your promotion will take place once you have reached a minimum of 21 days in your current rank of Trainee Operator
+
+If you have any questions, feel free to reach out.
+
+
+[/list]
+[hr][/hr]
+${sebLetterSignature(formatData.bureauPosition, formatData.certifications)}`,
+		},
+
+		// 25. Operator Exam - Failed
+		"25": {
+			text: `${sebLetterHead("Exam Results", formatData.date)}
+
+After reviewing your Special Enforcement Bureau Operator Exam, the command has determined that you have [color=#FF0000]not passed[/color] the exam at this time.
+
+The following reason(s) were noticed during our review:
+${(formatData.reasons ?? []).map((reason) => `- ${reason}`).join("\n") || "- Reason\n- Reason"}
+
+You will have the opportunity to retake the exam once you meet the 21 days in rank as a Trainee Operator. Please use this time to further review SEB procedures.
+
+
+[/list]
+[hr][/hr]
+${sebLetterSignature(formatData.bureauPosition, formatData.certifications)}`,
+		},
+
+		// 26. Promotion Email
+		"26": {
+			text: `${sebLetterHead("Promotion Email", formatData.date)}
+
+The Special Enforcement Bureau Command is pleased to inform you that you have been promoted from Trainee Operator to Operator.
+
+As a Full Operator, you are now authorized to utilize a wider range of SEB firearms and equipment in accordance with bureau guidelines. As well, if you wish to apply for certifications, you must have a minimum of 14 days in rank as a Full Operator before doing so.
+
+SEB Command would like to congratulate you on this achievement, and we are looking forward to your continued performance within the bureau.
+
+If you have any questions, feel free to reach out.
+
+[/list]
+[hr][/hr]
+[list=none]
+On behalf of the SEB command,
+${[deputyData.dRank, deputyData.name].filter(Boolean).join(" ") || "Rank Fname Lname"}
+${[formatData.bureauPosition, formatData.certifications].filter(Boolean).join(", ") || "BureauPosition, [Insert Certifications if Desired]"}
+Special Enforcement Bureau
+[/divbox]
+[lssdfooter][/lssdfooter]`,
+		},
+
+		// 27. Training Session Scheduling
+		"27": {
+			text: `[img]https://i.imgur.com/a3aDjGi.png[/img]
+[divbox=white]
+[aligntable=left,0,0,0,0,0,0][fimg=100,100]https://imgur.com/kua7JpL.png[/fimg][fimg=100,100]https://i.imgur.com/FAyEyJd.png[/fimg][/aligntable][aligntable=right,0,0,0,0,0,0][right][font=Arial][b]
+[size=130]Los Santos County Sheriff's Department[/size][/b]
+[size=115]Special Enforcement Bureau[/size]
+[size=95]"A TRADITION OF SERVICE"[/size][/font][/right][/aligntable]
+[hr]
+
+[list=none]
+[b][i]Dear SEB Operators,[/i][/b]
+
+A training session has been scheduled with the following details:
+
+[b]Training[/b]: ${formatData.trainingName || "[Insert Training Name]"}
+[b]Date & Time (UTC)[/b]: ${formatData.sessionDate || "DD/MON/YYYY"} - ${formatData.sessionTime || "HH:MM"} UTC
+[b]Location[/b]: ${formatData.location || "[Insert Location]"}
+[b]Instructor[/b]: ${formatData.instructor || [deputyData.dRank, deputyData.name].filter(Boolean).join(" ") || "[Rank Name]"}
+
+Please ensure you arrive 15 minutes prior to the training starting.
+
+[/list]
+
+[hr][/hr]
+
+On behalf of,
+The Special Enforcement Bureau Instructor Team
+
+[/divbox]
+[img]https://i.imgur.com/a3aDjGi.png[/img]`,
+		},
+
+		// 28. Inactivity Notice
+		"28": {
+			text: `${sebLetterHead("Inactivity Notice", formatData.date)}
+
+[b]Subject: Inactivity Notice[/b]
+
+Operator ${formatData.operatorLastName || "[Last Name]"},
+
+This notice is to inform you that you have been marked inactive for not attending any scheduled trainings within the past month. Please make sure to fill in your training attendance [url=https://docs.google.com/forms/d/e/1FAIpQLScEKZtp6MdZ-dEB3Q2gMto3zUn111zO-MHjotHHQEa4Vp8aMA/viewform][color=#0000BF]HERE[/color][/url], as all operators are required to attend at least one training session per month to remain active.
+
+This email serves as an internal written warning regarding failure to meet training participation requirements.
+
+If you have any questions or need to communicate your availability, please reach out to SEB Command.
+
+[/list]
+[hr][/hr]
+${sebLetterSignature(formatData.bureauPosition, undefined, "BureauPosition")}`,
+		},
+
+		// 29. Email
+		"29": {
+			text: `${sebLetterHead("Email", formatData.date)}
+${formatData.body || "[Insert text]"}
+
+[/list]
+[hr][/hr]
+${sebLetterSignature(formatData.bureauPosition, formatData.certifications)}`,
+		},
+
+		// 30. Probationary Operator Profile
+		"30": {
+			text: `${OTP_PROFILE_HEADER}
+[lssdsubtitle]Trainee Operator Details[/lssdsubtitle]
+[divbox=white]
+[b]Trainee Operator Name:[/b] ${formatData.traineeName || "Lname, Fname"}
+[b]Trainee Operator Department Rank:[/b] ${formatData.traineeRank || "Rank"}
+[b]Trainee Operator Bureau Join Date:[/b] ${formatData.traineeJoinDate || "DD/MMM/YYYY"}
+[b]Trainee Operator Badge Number:[/b] ${formatData.traineeBadge || "#12345"}
+[/divbox]
+[lssdsubtitle]Trainee Operator Program Progress[/lssdsubtitle]
+[divbox=white]
+
+[spoiler=OTP Session 1]
+${otpSession(OTP_SESSIONS[0])}
+[/spoiler]
+
+
+[hr][/hr]
+
+
+[spoiler=OTP Session 2]
+${otpSession(OTP_SESSIONS[1])}
+[/spoiler]
+
+
+[hr][/hr]
+
+
+[spoiler=OTP Session 3]
+${otpSession(OTP_SESSIONS[2])}
+[/spoiler]
+
+[hr][/hr]
+
+[spoiler=Exam Sent to Trainee]
+${OTP_EXAM_NOTICE}
+
+[code]
+${OTP_EXAM_NOTICE}
+[/code]
+[/spoiler]
+[hr][/hr]
+
+
+[/divbox]
+[lssdfooter][/lssdfooter]`,
+		},
+
+		// 31/32/33. Each OTP session on its own, extracted from the profile above
+		"31": { text: otpSession(OTP_SESSIONS[0]) },
+		"32": { text: otpSession(OTP_SESSIONS[1]) },
+		"33": { text: otpSession(OTP_SESSIONS[2]) },
+
+		// 34. Exam Sent to Trainee
+		"34": {
+			text: `${OTP_EXAM_NOTICE}
+
+[code]
+${OTP_EXAM_NOTICE}
+[/code]`,
+		},
+
+		// 35. TD Instructor Acceptance
+		"35": {
+			text: `${sebLetterHead("Training Division", formatData.date, {
+				logo: "https://i.ibb.co/dsZSqrs2/u-XQ1ho-T.png",
+				gapBeforeGreeting: true,
+			})}
+
+Dear ${formatData.recipientName || "[Fname Lname]"},
+
+On behalf of the Special Enforcement Bureau's Training Division, we are pleased to inform you that you have been [color=#00FF00][b]accepted[/b][/color] as a [color=#fc7b03][b]TD Instructor[/b][/color].
+
+As a TD Instructor, you will be expected to actively contribute to the development and training of department personnel. This includes, but is not limited to:
+
+[list]
+[*]Conducting OTP and certification training.
+[*]Reviewing, accepting, or denying certification applications.
+[*]Conducting practical certification sessions.
+[*]Hosting and assisting with general training sessions.
+[*]Providing constructive feedback and guidance to trainees.
+[*]Maintaining the standards and professionalism expected of the Training Division.
+[/list]
+
+To help you get started, please familiarize yourself with the following resources:
+
+[list]
+[*] [url=https://gov.eclipse-rp.net/viewforum.php?f=4082]TD - Staff Area[/url]
+[*] [url=https://gov.eclipse-rp.net/viewforum.php?f=4085]TD - Internal Database[/url]
+[*][url=https://gov.eclipse-rp.net/viewforum.php?f=4090]TD - External Database[/url]
+[*][url=https://docs.google.com/forms/d/e/1FAIpQLSdvMfhud5onI4FVfiN1vNIyhne_ulCOvvkXyFF7A7rTDwgzfw/viewform]SEB Training Division Response Sheet[/url]
+[*][url=https://docs.google.com/spreadsheets/d/17W5Oz-_mAk7xFJ9ggnouqUl-jLCXkkVcaP8K8kMbSv4/edit?gid=606853931#gid=606853931]SEB Training Division - Activity Tracker[/url]
+[/list]
+
+We are pleased to welcome you to the Training Division and look forward to seeing the contribution you will make as an instructor. Please do not hesitate to reach out to TD Command should you have any questions or require assistance getting started.
+
+Welcome to the team, and congratulations on your acceptance.
+
+[/list]
+
+[hr][/hr]
+
+[list=none]
+${[deputyData.dRank, deputyData.name].filter(Boolean).join(" ") || "Rank Fname Lname"}
+${[formatData.bureauPosition, formatData.certifications].filter(Boolean).join(", ") || "Bureau Position, [Insert Certifications if Desired]"}				Training Division
+Special Enforcement Bureau
+[/divbox]
+[lssdfooter][/lssdfooter]`,
+		},
+
+		// 36. TD Instructor Denial
+		"36": {
+			text: `${sebLetterHead("Training Division", formatData.date, {
+				logo: "https://i.ibb.co/dsZSqrs2/u-XQ1ho-T.png",
+				gapBeforeGreeting: true,
+			})}
+
+Dear ${formatData.recipientName || "[Fname Lname]"},
+
+On behalf of the Special Enforcement Bureau's Training Division, we regret to inform you that your application for the position of [color=#fc7b03][b]TD Instructor[/b][/color] has been [color=#FF0000][b]denied[/b][/color].
+
+After reviewing your application and considering the information provided, TD Command has determined that your application does not currently meet the requirements or expectations for appointment as a Training Division Instructor.
+
+[b]Reason for Denial:[/b]
+[list]
+${(formatData.reasons ?? []).map((reason) => `[*]${reason}`).join("\n") || "[*][Insert reason(s) for denial here.]"}
+[/list]
+
+This decision does not prevent you from applying again in the future. We encourage you to take the feedback provided into consideration and continue developing your knowledge, experience, and ability to effectively instruct and mentor department personnel.
+
+Should you have any questions regarding this decision or the feedback provided, you may reach out to TD Command for clarification.
+
+Thank you for your interest in contributing to the Training Division and for the time and effort put into your application.
+
+[/list]
+
+[hr][/hr]
+
+[list=none]
+${[deputyData.dRank, deputyData.name].filter(Boolean).join(" ") || "Rank Fname Lname"}
+${[formatData.bureauPosition, formatData.certifications].filter(Boolean).join(", ") || "Bureau Position, [Insert Certifications if Desired]"}
+Training Division
+Special Enforcement Bureau
+[/divbox]
+[lssdfooter][/lssdfooter]`,
+		},
 	};
 
 	Object.keys(formats).forEach((key) => {

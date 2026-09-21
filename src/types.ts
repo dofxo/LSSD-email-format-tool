@@ -252,6 +252,30 @@ export interface FormatData {
 	confiscatedItems?: string[];
 	suspects?: string[];
 	eventDescription?: string;
+	trainingName?: string;
+	sessionDate?: string;
+	sessionTime?: string;
+	location?: string;
+	instructor?: string;
+
+	// Probationary Operator profile (30) and the OTP sessions (31-33)
+	traineeName?: string;
+	traineeRank?: string;
+	traineeJoinDate?: string;
+	traineeBadge?: string;
+	otp1Date?: string;
+	otp1Time?: string;
+	otp1Instructor?: string;
+	otp1Classroom?: string[];
+	otp1Theory?: string[];
+	otp2Date?: string;
+	otp2Time?: string;
+	otp2Instructor?: string;
+	otp2GroundTactics?: string[];
+	otp3Date?: string;
+	otp3Time?: string;
+	otp3Instructor?: string;
+	otp3AirTactics?: string[];
 
 	// Crisis Negotiator practical review, one grade + reason per criterion
 	cnGrade0?: string;

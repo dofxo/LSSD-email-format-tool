@@ -30,9 +30,30 @@ export interface FormatOption {
 	label: string;
 }
 
-/** Every format available in a division, in the order the registry defines it. */
-export const formatsForDivision = (division: divisionsType): FormatOption[] =>
-	Object.entries(labelsByDivision[division]).map(([id, label]) => ({ id, label }));
+/**
+ * Formats that lead their division's picker instead of sitting in id order. SEB
+ * opens with the blank Email, since that is the one its operators reach for
+ * most; every other format then follows in id order, one row further down.
+ * Keeping the ids untouched means saved drafts keep pointing at the format they
+ * were typed into.
+ */
+const leadingFormats: Partial<Record<divisionsType, string[]>> = {
+	SEB: ["29"],
+};
+
+/** Every format available in a division, in the order the picker should show it. */
+export const formatsForDivision = (division: divisionsType): FormatOption[] => {
+	const labels = labelsByDivision[division];
+	const leading = leadingFormats[division] ?? [];
+	const toOption = ([id, label]: [string, string]): FormatOption => ({ id, label });
+	if (!leading.length) return Object.entries(labels).map(toOption);
+
+	const leads = leading.filter((id) => id in labels).map((id) => ({ id, label: labels[id] }));
+	const rest = Object.entries(labels)
+		.filter(([id]) => !leading.includes(id))
+		.map(toOption);
+	return [...leads, ...rest];
+};
 
 export const formatLabelFor = (division: divisionsType, formatId: string): string =>
 	labelsByDivision[division][formatId] ?? "";
