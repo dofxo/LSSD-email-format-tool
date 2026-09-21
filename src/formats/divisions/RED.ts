@@ -33,7 +33,7 @@ export const REDFormats = ({
 		"1": {
 			text: `
     [img]https://i.imgur.com/a3aDjGi.png[/img][divbox=white]
-[aligntable=left,0,0,0,0,0,0][fimg=120,120]https://i.imgur.com/VUBguS0.png[/fimg][fimg=120,120]https://i.imgur.com/FAyEyJd.png[[/fimg][/aligntable][aligntable=right,0,0,0,0,0,0][right][font=Arial][b]
+[aligntable=left,0,0,0,0,0,0][fimg=120,120]https://i.imgur.com/VUBguS0.png[/fimg][fimg=120,120]https://i.imgur.com/FAyEyJd.png[/fimg][/aligntable][aligntable=right,0,0,0,0,0,0][right][font=Arial][b]
 [size=150]Los Santos County Sheriff's Department[/size][/b]
 [size=115]RE: Application for Employment - PENDING REVIEW[/size]
 [size=95]"A TRADITION OF SERVICE"[/size][/font][/right][/aligntable]
@@ -70,7 +70,7 @@ Los Santos County Sheriff's Department
 		"2": {
 			text: `
         [img]https://i.imgur.com/a3aDjGi.png[/img][divbox=white]
-[aligntable=left,0,0,0,0,0,0][fimg=120,120]https://i.imgur.com/VUBguS0.png[/fimg][fimg=120,120]https://i.imgur.com/FAyEyJd.png[[/fimg][/aligntable][aligntable=right,0,0,0,0,0,0][right][font=Arial][b]
+[aligntable=left,0,0,0,0,0,0][fimg=120,120]https://i.imgur.com/VUBguS0.png[/fimg][fimg=120,120]https://i.imgur.com/FAyEyJd.png[/fimg][/aligntable][aligntable=right,0,0,0,0,0,0][right][font=Arial][b]
 [size=150]Los Santos County Sheriff's Department[/size][/b]
 [size=115]RE: Application for Employment - SHORTLISTED[/size]
 [size=95]"A TRADITION OF SERVICE"[/size][/font][/right][/aligntable]
