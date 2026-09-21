@@ -244,6 +244,7 @@ export interface FormatData {
 	callsign?: string;
 	operatorLastName?: string;
 	applicationDate?: string;
+	practicalDate?: string;
 	senderPosition?: string;
 	logDate?: string;
 	deploymentStart?: string;
@@ -251,6 +252,20 @@ export interface FormatData {
 	confiscatedItems?: string[];
 	suspects?: string[];
 	eventDescription?: string;
+
+	// Crisis Negotiator practical review, one grade + reason per criterion
+	cnGrade0?: string;
+	cnReason0?: string;
+	cnGrade1?: string;
+	cnReason1?: string;
+	cnGrade2?: string;
+	cnReason2?: string;
+	cnGrade3?: string;
+	cnReason3?: string;
+	cnGrade4?: string;
+	cnReason4?: string;
+	cnGrade5?: string;
+	cnReason5?: string;
 
 	// Reinstatement Evaluation
 	rteDate?: string;
