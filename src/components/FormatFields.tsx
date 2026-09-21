@@ -44,13 +44,13 @@ interface FormatFieldsProps {
 
 export function FormatFields({ formatId, fields, formatData, setFormatData, resetKey = 0 }: FormatFieldsProps) {
 	const [rawDates, setRawDates] = useState<Record<string, string>>({});
-	const [reasonDraft, setReasonDraft] = useState("");
+	const [listDrafts, setListDrafts] = useState<Record<string, string>>({});
 
 	// Drop local (unformatted) values whenever the fields are reset upstream.
 	useEffect(() => {
 		if (resetKey === 0) return;
 		setRawDates({});
-		setReasonDraft("");
+		setListDrafts({});
 	}, [resetKey]);
 
 	// Pre-fill the email date with today so common cases need zero typing.
@@ -137,20 +137,6 @@ export function FormatFields({ formatId, fields, formatData, setFormatData, rese
 		}));
 	};
 
-	const addReason = () => {
-		const value = reasonDraft.trim();
-		if (!value) return;
-		setFormatData((prev) => ({ ...prev, reasons: [...(prev.reasons ?? []), value] }));
-		setReasonDraft("");
-	};
-
-	const removeReason = (index: number) => {
-		setFormatData((prev) => ({
-			...prev,
-			reasons: (prev.reasons ?? []).filter((_, itemIndex) => itemIndex !== index),
-		}));
-	};
-
 	if (!formatId) {
 		return (
 			<PanelEmpty
@@ -182,8 +168,26 @@ export function FormatFields({ formatId, fields, formatData, setFormatData, rese
 				) : null;
 				const label = cleanLabel(field.label);
 
-				if (field.name === "reasons") {
-					const reasons = formatData.reasons ?? [];
+				if (field.type === "list") {
+					const items = Array.isArray(rawValue) ? (rawValue as string[]) : [];
+					const draft = listDrafts[field.name] ?? "";
+					const addItem = () => {
+						const value = draft.trim();
+						if (!value) return;
+						setFormatData((prev) => ({
+							...prev,
+							[field.name]: [...((prev[field.name as keyof FormatData] as string[]) ?? []), value],
+						}));
+						setListDrafts((prev) => ({ ...prev, [field.name]: "" }));
+					};
+					const removeItem = (index: number) => {
+						setFormatData((prev) => ({
+							...prev,
+							[field.name]: ((prev[field.name as keyof FormatData] as string[]) ?? []).filter(
+								(_, itemIndex) => itemIndex !== index,
+							),
+						}));
+					};
 					return (
 						<Field
 							key={field.name}
@@ -191,27 +195,27 @@ export function FormatFields({ formatId, fields, formatData, setFormatData, rese
 							label={label}
 							htmlFor={field.name}
 							hint={field.hint}
-							meta={reasons.length ? `${reasons.length} added` : undefined}
+							meta={items.length ? `${items.length} added` : undefined}
 						>
 							<div className="flex gap-2">
 								<Input
 									id={field.name}
 									name={field.name}
-									value={reasonDraft}
-									placeholder="Type a reason, then press Enter"
-									onChange={(event) => setReasonDraft(event.target.value)}
+									value={draft}
+									placeholder={field.itemPlaceholder ?? "Type an item, then press Enter"}
+									onChange={(event) => setListDrafts((prev) => ({ ...prev, [field.name]: event.target.value }))}
 									onKeyDown={(event) => {
 										if (event.key === "Enter") {
 											event.preventDefault();
-											addReason();
+											addItem();
 										}
 									}}
 								/>
 								<Button
 									variant="secondary"
 									size="md"
-									onClick={addReason}
-									disabled={!reasonDraft.trim()}
+									onClick={addItem}
+									disabled={!draft.trim()}
 									className="shrink-0"
 								>
 									<Plus />
@@ -219,18 +223,18 @@ export function FormatFields({ formatId, fields, formatData, setFormatData, rese
 								</Button>
 							</div>
 
-							{reasons.length > 0 ? (
+							{items.length > 0 ? (
 								<ul className="mt-1 flex flex-col gap-1.5">
-									{reasons.map((reason, index) => (
+									{items.map((item, index) => (
 										<li
-											key={`${reason}-${index}`}
+											key={`${item}-${index}`}
 											className="animate-fade flex items-center gap-2.5 rounded-xl border border-subtle bg-surface-2 py-1.5 pr-1.5 pl-3"
 										>
-											<span className="min-w-0 flex-1 truncate text-[13px] text-ink">{reason}</span>
+											<span className="min-w-0 flex-1 truncate text-[13px] text-ink">{item}</span>
 											<button
 												type="button"
-												onClick={() => removeReason(index)}
-												aria-label={`Remove reason ${index + 1}`}
+												onClick={() => removeItem(index)}
+												aria-label={`Remove item ${index + 1}`}
 												className="flex size-7 shrink-0 items-center justify-center rounded-lg text-ink-faint transition-colors duration-150 hover:bg-danger-soft hover:text-danger focus-visible:ring-4 focus-visible:ring-[var(--brand-ring)] focus-visible:outline-hidden"
 											>
 												<Trash2 className="size-3.5" />

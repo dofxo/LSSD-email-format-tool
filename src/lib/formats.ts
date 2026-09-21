@@ -5,8 +5,15 @@ import { SupervisoryLabels } from "@/formats/divisions/Supervisory";
 import { ATDLabels } from "@/formats/divisions/ATD";
 import { TSDLabels } from "@/formats/divisions/TSD";
 import { FTBLabels } from "@/formats/divisions/FTB";
+import { SEBLabels } from "@/formats/divisions/SEB";
 import { inputsByDivision } from "@/data/formatInputs";
+import { SEBInputs } from "@/data/sebInputs";
 import type { FormatInputField } from "@/types";
+
+// SEB keeps its own field module, mirroring the FTBInputs split.
+if (inputsByDivision.SEB.length === 0 && SEBInputs.length > 0) {
+	inputsByDivision.SEB = SEBInputs;
+}
 
 export const labelsByDivision: Record<divisionsType, Record<string, string>> = {
 	RED: REDLabels,
@@ -15,6 +22,7 @@ export const labelsByDivision: Record<divisionsType, Record<string, string>> = {
 	General: GeneralLabels,
 	Supervisory: SupervisoryLabels,
 	FTB: FTBLabels,
+	SEB: SEBLabels,
 };
 
 export interface FormatOption {

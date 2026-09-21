@@ -1,4 +1,4 @@
-import { Car, ClipboardCheck, GraduationCap, ScrollText, ShieldCheck, Users, type LucideIcon } from "lucide-react";
+import { Car, ClipboardCheck, GraduationCap, Landmark, ScrollText, ShieldCheck, Users, type LucideIcon } from "lucide-react";
 
 import type { divisionsType } from "@/types";
 
@@ -51,6 +51,14 @@ export const divisions: Division[] = [
 		blurb: "Field training session reports, evaluations and observation reports.",
 		icon: ClipboardCheck,
 		accent: "accent-sky",
+	},
+	{
+		id: "SEB",
+		label: "SEB",
+		name: "Special Enforcement Bureau",
+		blurb: "Bureau correspondence, operations and personnel notices.",
+		icon: Landmark,
+		accent: "accent-rose",
 	},
 	{
 		id: "General",

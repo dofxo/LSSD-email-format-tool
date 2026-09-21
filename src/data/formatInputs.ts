@@ -2,6 +2,9 @@ import { FTBInputs } from "@/data/ftbInputs";
 import { deputyRanks } from "@/data/deputyRanks";
 import type { FormatInputField, divisionsType } from "@/types";
 
+// SEB fields live in their own module and are attached to inputsByDivision
+// from lib/formats (same split as FTBInputs).
+
 
 export const inputsByDivision: Record<divisionsType, FormatInputField[]> = {
 	RED: [
@@ -35,8 +38,9 @@ export const inputsByDivision: Record<divisionsType, FormatInputField[]> = {
 		},
 		{
 			name: "reasons",
-			label: "Reason(s)",
-			type: "text",
+			label: "Reason(s) (each item, click add)",
+			type: "list",
+			itemPlaceholder: "Type a reason, then press Enter",
 			formats: ["4", "6"],
 		},
 		{ name: "appLink", label: "Application Link", type: "text", formats: ["13"] },
@@ -227,8 +231,9 @@ export const inputsByDivision: Record<divisionsType, FormatInputField[]> = {
 		},
 		{
 			name: "reasons",
-			label: "Reason(s)",
-			type: "text",
+			label: "Reason(s) (each item, click add)",
+			type: "list",
+			itemPlaceholder: "Type a reason, then press Enter",
 			formats: ["43", "45"],
 		},
 		{
@@ -382,7 +387,8 @@ export const inputsByDivision: Record<divisionsType, FormatInputField[]> = {
 		{
 			name: "reasons",
 			label: "Reason(s) (each item, click add)",
-			type: "text",
+			type: "list",
+			itemPlaceholder: "Type a reason, then press Enter",
 			formats: ["12", "13"],
 		},
 		{
@@ -394,4 +400,6 @@ export const inputsByDivision: Record<divisionsType, FormatInputField[]> = {
 	],
 
 	FTB: FTBInputs,
+	// SEB: attached from sebInputs via lib/formats once its formats are added.
+	SEB: [],
 };
