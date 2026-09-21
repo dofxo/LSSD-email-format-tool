@@ -3,6 +3,7 @@ import { TSDFormats } from "./divisions/TSD";
 import { ATDFormats } from "./divisions/ATD";
 import { GeneralFormats } from "./divisions/General";
 import { SupervisoryFormats } from "./divisions/Supervisory";
+import { FTBFormats } from "./divisions/FTB";
 import type { DeputyData, divisionsType, FormatData } from "@/types";
 
 export const getFormat = ({
@@ -27,6 +28,8 @@ export const getFormat = ({
 			return GeneralFormats({ formatData, deputyData, formatId });
 		case "Supervisory":
 			return SupervisoryFormats({ formatData, deputyData, formatId });
+		case "FTB":
+			return FTBFormats({ formatData, deputyData, formatId });
 		default:
 			return { format: "[Invalid division]", formats: {} };
 	}

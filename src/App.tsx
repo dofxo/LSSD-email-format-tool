@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Panel, PanelBody, PanelFooter, PanelHeader, PanelHeading } from "@/components/ui/panel";
 import { Progress } from "@/components/ui/progress";
 import { useCopy } from "@/hooks/useCopy";
+import { useFormatData } from "@/hooks/useFormatData";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { useTheme } from "@/hooks/useTheme";
 import { getDivision } from "@/lib/divisions";
@@ -29,7 +30,7 @@ const emptyDetails: DeputyData = {
 	name: "",
 	signature: "",
 	dRank: "",
-	divisionRanks: { RED: "", TSD: "", ATD: "", General: "", Supervisory: "" },
+	divisionRanks: { RED: "", TSD: "", ATD: "", General: "", Supervisory: "", FTB: "" },
 };
 
 /** Restores the saved profile, tolerating older shapes stored in localStorage. */
@@ -64,8 +65,13 @@ const App = () => {
 
 	const [division, setDivision] = useState<divisionsType>("RED");
 	const [formatId, setFormatId] = useState("");
-	const [formatData, setFormatData] = useState<FormatData>({});
 	const [resetKey, setResetKey] = useState(0);
+
+	// Every format keeps its own inputs, saved under one localStorage key as an
+	// array of objects (one per division/format) so nothing is lost on restart.
+	const { formatData, setFormatData, clearFormat } = useFormatData(
+		formatId ? `${division}/${formatId}` : "",
+	);
 	const [details, setDetails] = useState<DeputyData>(loadDetails);
 
 	const [pickerOpen, setPickerOpen] = useState(false);
@@ -105,7 +111,6 @@ const App = () => {
 		if (next === division) return;
 		setDivision(next);
 		setFormatId("");
-		setFormatData({});
 	};
 
 	const handleSelectFormat = (next: string) => {
@@ -126,7 +131,6 @@ const App = () => {
 			setDivision(pendingDivision);
 			setPendingDivision(null);
 			setFormatId("");
-			setFormatData({});
 		}
 
 		toast.success("Supervisory formats unlocked");
@@ -143,7 +147,6 @@ const App = () => {
 		if (division === "Supervisory") {
 			setDivision("RED");
 			setFormatId("");
-			setFormatData({});
 		}
 		toast.info("Supervisory formats locked");
 	};
@@ -295,12 +298,11 @@ const App = () => {
 										<Button
 											key="reset"
 											variant="secondary"
-											size="icon"
-											onClick={() => {
-												setFormatData({});
-												setResetKey((value) => value + 1);
-											}}
-											title="Clear the fields for this format"
+											size="icon"												onClick={() => {
+													clearFormat();
+													setResetKey((value) => value + 1);
+												}}
+												title="Clear the fields for this format"
 											aria-label="Clear the fields for this format"
 										>
 											<RotateCcw />
