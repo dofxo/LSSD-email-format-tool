@@ -31,12 +31,20 @@ function Label({ className, ...props }: React.ComponentProps<"label">) {
 	);
 }
 
+/**
+ * Single-line controls all share one column width, so form rows line up and a
+ * hint beside a control starts at the same x on every row. Multi-line controls
+ * set `wide` and take the whole row instead.
+ */
+const controlColumnClass = "w-full min-w-0 sm:max-w-[30rem]";
+
 function Field({
 	label,
 	hint,
 	htmlFor,
 	meta,
 	className,
+	wide = false,
 	children,
 }: {
 	label: React.ReactNode;
@@ -44,16 +52,35 @@ function Field({
 	htmlFor?: string;
 	meta?: React.ReactNode;
 	className?: string;
+	/** Lets the control fill the row. For textareas, checklists and other multi-line controls. */
+	wide?: boolean;
 	children: React.ReactNode;
 }) {
+	// Hints sit beside the control when the field is wide enough for both, and
+	// drop underneath when it is not, rather than squeezing the control.
+	const inlineHint = !wide && Boolean(hint);
+	const hintNode = hint ? (
+		<p className="min-w-0 text-[12px] leading-relaxed text-ink-faint">{hint}</p>
+	) : null;
+
 	return (
-		<div className={cn("flex min-w-0 flex-col gap-1.5", className)}>
-			<div className="flex items-baseline justify-between gap-3">
+		<div className={cn("flex min-w-0 flex-col gap-1.5", inlineHint && "@container", className)}>
+			<div className={cn("flex items-baseline justify-between gap-3", !wide && controlColumnClass)}>
 				<Label htmlFor={htmlFor}>{label}</Label>
 				{meta ? <span className="shrink-0 text-[11.5px] text-ink-faint">{meta}</span> : null}
 			</div>
-			{children}
-			{hint ? <p className="text-[12px] leading-relaxed text-ink-faint">{hint}</p> : null}
+
+			{wide ? (
+				<>
+					{children}
+					{hintNode}
+				</>
+			) : (
+				<div className="flex min-w-0 flex-col gap-1.5 @2xl:flex-row @2xl:items-center @2xl:gap-x-3">
+					<div className={controlColumnClass}>{children}</div>
+					{hintNode}
+				</div>
+			)}
 		</div>
 	);
 }

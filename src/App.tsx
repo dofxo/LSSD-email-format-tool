@@ -187,7 +187,7 @@ const App = () => {
 				onLock={handleLock}
 			/>
 
-			<main className="mx-auto flex w-full max-w-[1240px] flex-1 flex-col gap-6 px-4 pt-6 pb-14 sm:px-6 lg:px-8">
+			<main className="mx-auto flex w-full max-w-[1680px] flex-1 flex-col gap-6 px-4 pt-6 pb-14 sm:px-6 lg:px-8 2xl:px-12">
 				<div className="flex flex-col gap-3">
 					<DivisionSwitcher value={division} onChange={handleDivisionChange} locked={!unlocked} />
 					<p className="text-[12.5px] text-ink-muted">
@@ -197,7 +197,7 @@ const App = () => {
 					</p>
 				</div>
 
-				<div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[minmax(0,1.55fr)_minmax(320px,1fr)]">
+				<div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(380px,1fr)] xl:gap-7">
 					<div className="flex min-w-0 flex-col gap-6">
 						<Panel>
 							<PanelHeader>
