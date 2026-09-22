@@ -85,8 +85,8 @@ export function DeputyDetails({ details, setDetails, division }: DeputyDetailsPr
 
 			{expanded ? (
 			<PanelBody className="flex flex-col gap-5">
-				<div className="grid grid-cols-1 gap-x-5 gap-y-5 sm:grid-cols-2">
-					<Field label="Deputy full name" htmlFor="deputy-name">
+				<div className="flex min-w-0 flex-col gap-5">
+					<Field label="Deputy full name" htmlFor="deputy-name" wide>
 						<Input
 							id="deputy-name"
 							name="name"
@@ -97,7 +97,7 @@ export function DeputyDetails({ details, setDetails, division }: DeputyDetailsPr
 						/>
 					</Field>
 
-					<Field label="Deputy rank" htmlFor="deputy-rank">
+					<Field label="Deputy rank" htmlFor="deputy-rank" wide>
 						<Combobox
 							id="deputy-rank"
 							value={details.dRank}
@@ -111,7 +111,7 @@ export function DeputyDetails({ details, setDetails, division }: DeputyDetailsPr
 					</Field>
 
 					{needsDivisionRank ? (
-						<Field label={`${division} rank`} htmlFor="deputy-division-rank" className="sm:col-span-2">
+						<Field label={`${division} rank`} htmlFor="deputy-division-rank" wide>
 							<Combobox
 								id="deputy-division-rank"
 								value={details.divisionRanks[division]}
@@ -131,10 +131,10 @@ export function DeputyDetails({ details, setDetails, division }: DeputyDetailsPr
 					) : null}
 
 					<Field
-						className="sm:col-span-2"
 						label="Signature image link"
 						htmlFor="deputy-signature"
 						hint="Direct image link, for example https://i.ibb.co/xxxx/name.png"
+						wide
 					>
 						<Input
 							id="deputy-signature"

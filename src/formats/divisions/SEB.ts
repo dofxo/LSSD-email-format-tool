@@ -141,6 +141,19 @@ Special Enforcement Bureau
 [/divbox]
 [lssdfooter][/lssdfooter]`;
 
+	/**
+	 * The signature line every certification letter shares: the sender's role,
+	 * then the division, which is the same in all of them. Only the role is typed,
+	 * an empty field falls back to Instructor, and a role saved with the division
+	 * already on the end still renders once.
+	 */
+	const positionLine = () => {
+		const role = (formatData.senderPosition ?? "")
+			.replace(/\s*,?\s*Training Division\s*$/i, "")
+			.trim();
+		return `${role || "Instructor"}, Training Division`;
+	};
+
 	/** One OTP checklist: a single [list] with a tick box at the end of each line. */
 	const otpChecklist = (items: string[], field: string) => {
 		const ticked = (formatData[field as keyof FormatData] as string[] | undefined) ?? [];
@@ -227,7 +240,7 @@ Kind Regards,
 
 [img]${deputyData.signature || " SIGNATURE IMAGE HERE "}[/img]
 ${[deputyData.dRank, deputyData.name].filter(Boolean).join(" ") || "Rank Fname Lname"}
-${formatData.senderPosition || "Instructor, Training Division"}
+${positionLine()}
 Special Enforcement Bureau
 [/list]
 [/divbox]`;
@@ -341,7 +354,7 @@ Congratulations, and good luck!
 
 [img]${deputyData.signature || "Image"}[/img]
 ${[deputyData.dRank, deputyData.name].filter(Boolean).join(" ") || "RANK FNAME LNAME"}
-${formatData.senderPosition || "Instructor, Training Division"}
+${positionLine()}
 Special Enforcement Bureau
 [/divbox]
 [lssdfooter][/lssdfooter]`,
@@ -377,7 +390,7 @@ We thank you for your interest in the certification program, and wish you luck o
 
 [img]${deputyData.signature || "Image"}[/img]
 ${[deputyData.dRank, deputyData.name].filter(Boolean).join(" ") || "RANK FNAME LNAME"}
-${formatData.senderPosition || "Instructor, Training Division"}
+${positionLine()}
 Special Enforcement Bureau
 [/divbox]
 [lssdfooter][/lssdfooter]`,
@@ -408,7 +421,7 @@ Congratulations, and good luck!
 
 [font=cursive][size=90][img]${deputyData.signature || "INSERT LINK HERE"}[/img][/size][/font]
 ${[deputyData.dRank, deputyData.name].filter(Boolean).join(" ") || "RANK FNAME LNAME"}
-${formatData.senderPosition || "Instructor, Training Division"}
+${positionLine()}
 Special Enforcement Bureau
 [/divbox]
 [lssdfooter][/lssdfooter]`,
@@ -445,7 +458,7 @@ We thank you for your interest in the certification program, and wish you luck o
 
 [font=cursive][size=90][img]${deputyData.signature || "INSERT LINK HERE"}[/img][/size][/font]
 ${[deputyData.dRank, deputyData.name].filter(Boolean).join(" ") || "RANK FNAME LNAME"}
-${formatData.senderPosition || "Instructor, Training Division"}
+${positionLine()}
 Special Enforcement Bureau
 [/divbox]
 [lssdfooter][/lssdfooter]`,
@@ -476,7 +489,7 @@ Congratulations, and good luck!
 
 [font=cursive][size=90][img]${deputyData.signature || "INSERT LINK HERE"}[/img][/size][/font]
 ${[deputyData.dRank, deputyData.name].filter(Boolean).join(" ") || "RANK FNAME LNAME"}
-${formatData.senderPosition || "Instructor, Training Division"}
+${positionLine()}
 Special Enforcement Bureau
 [/divbox]
 [lssdfooter][/lssdfooter]`,
@@ -513,7 +526,7 @@ We thank you for your interest in the certification program, and wish you luck o
 
 [font=cursive][size=90][img]${deputyData.signature || "INSERT LINK HERE"}[/img][/size][/font]
 ${[deputyData.dRank, deputyData.name].filter(Boolean).join(" ") || "RANK FNAME LNAME"}
-${formatData.senderPosition || "Instructor, Training Division"}
+${positionLine()}
 Special Enforcement Bureau
 [/divbox]
 [lssdfooter][/lssdfooter]`,
@@ -544,7 +557,7 @@ Congratulations, and good luck!
 
 [font=cursive][size=90][img]${deputyData.signature || "INSERT LINK HERE"}[/img][/size][/font]
 ${[deputyData.dRank, deputyData.name].filter(Boolean).join(" ") || "RANK FNAME LNAME"}
-${formatData.senderPosition || "Instructor, Training Division"}
+${positionLine()}
 Special Enforcement Bureau
 [/divbox]
 [lssdfooter][/lssdfooter]`,
@@ -581,7 +594,7 @@ We thank you for your interest in the certification program, and wish you luck o
 
 [font=cursive][size=90][img]${deputyData.signature || "INSERT LINK HERE"}[/img][/size][/font]
 ${[deputyData.dRank, deputyData.name].filter(Boolean).join(" ") || "RANK FNAME LNAME"}
-${formatData.senderPosition || "Instructor, Training Division"}
+${positionLine()}
 Special Enforcement Bureau
 [/divbox]
 [lssdfooter][/lssdfooter]`,
@@ -612,7 +625,7 @@ Congratulations, and good luck!
 
 [font=cursive][size=90][img]${deputyData.signature || "INSERT LINK HERE"}[/img][/size][/font]
 ${[deputyData.dRank, deputyData.name].filter(Boolean).join(" ") || "RANK FNAME LNAME"}
-${formatData.senderPosition || "Instructor, Training Division"}
+${positionLine()}
 Special Enforcement Bureau
 [/divbox]
 [lssdfooter][/lssdfooter]`,
@@ -649,7 +662,7 @@ We thank you for your interest in the certification program, and wish you luck o
 
 [font=cursive][size=90][img]${deputyData.signature || "INSERT LINK HERE"}[/img][/size][/font]
 ${[deputyData.dRank, deputyData.name].filter(Boolean).join(" ") || "RANK FNAME LNAME"}
-${formatData.senderPosition || "Instructor, Training Division"}
+${positionLine()}
 Special Enforcement Bureau
 [/divbox]
 [lssdfooter][/lssdfooter]`,
@@ -679,7 +692,7 @@ Congratulations, and good luck!
 
 [img]${deputyData.signature || "Image"}[/img]
 ${[deputyData.dRank, deputyData.name].filter(Boolean).join(" ") || "RANK FNAME LNAME"}
-${formatData.senderPosition || "Instructor, Training Division"}
+${positionLine()}
 Special Enforcement Bureau
 [/divbox]
 [lssdfooter][/lssdfooter]`,
@@ -713,7 +726,7 @@ You are free to reapply for the Dive Team Program in 7 days unless other require
 
 [img]${deputyData.signature || "Image"}[/img]
 ${[deputyData.dRank, deputyData.name].filter(Boolean).join(" ") || "RANK FNAME LNAME"}
-${formatData.senderPosition || "Instructor, Training Division"}
+${positionLine()}
 Special Enforcement Bureau
 [/divbox]
 [lssdfooter][/lssdfooter]`,
@@ -744,7 +757,7 @@ Congratulations, and good luck!
 
 [font=cursive][size=90][img]${deputyData.signature || "INSERT LINK HERE"}[/img][/size][/font]
 ${[deputyData.dRank, deputyData.name].filter(Boolean).join(" ") || "RANK FNAME LNAME"}
-${formatData.senderPosition || "Instructor, Training Division"}
+${positionLine()}
 Special Enforcement Bureau
 [/divbox]
 [lssdfooter][/lssdfooter]`,
@@ -779,7 +792,7 @@ You are free to reapply for the Advanced Aerial Unit Program in 7 days unless ot
 
 [font=cursive][size=90][img]${deputyData.signature || "INSERT LINK HERE"}[/img][/size][/font]
 ${[deputyData.dRank, deputyData.name].filter(Boolean).join(" ") || "RANK FNAME LNAME"}
-${formatData.senderPosition || "Instructor, Training Division"}
+${positionLine()}
 Special Enforcement Bureau
 [/divbox]
 [lssdfooter][/lssdfooter]`,
@@ -810,7 +823,7 @@ Congratulations, and good luck!
 
 [font=cursive][size=90][img]${deputyData.signature || "INSERT LINK HERE"}[/img][/size][/font]
 ${[deputyData.dRank, deputyData.name].filter(Boolean).join(" ") || "RANK FNAME LNAME"}
-${formatData.senderPosition || "Instructor, Training Division"}
+${positionLine()}
 Special Enforcement Bureau
 [/divbox]
 [lssdfooter][/lssdfooter]`,
@@ -845,7 +858,7 @@ You are free to reapply for the Long Range Rifleperson Program in 7 days unless 
 
 [font=cursive][size=90][img]${deputyData.signature || "INSERT LINK HERE"}[/img][/size][/font]
 ${[deputyData.dRank, deputyData.name].filter(Boolean).join(" ") || "RANK FNAME LNAME"}
-${formatData.senderPosition || "Instructor, Training Division"}
+${positionLine()}
 Special Enforcement Bureau
 [/divbox]
 [lssdfooter][/lssdfooter]`,
@@ -876,7 +889,7 @@ Congratulations, and good luck!
 
 [font=cursive][size=90][img]${deputyData.signature || "INSERT LINK HERE"}[/img][/size][/font]
 ${[deputyData.dRank, deputyData.name].filter(Boolean).join(" ") || "RANK FNAME LNAME"}
-${formatData.senderPosition || "Instructor, Training Division"}
+${positionLine()}
 Special Enforcement Bureau
 [/divbox]
 [lssdfooter][/lssdfooter]`,
@@ -911,7 +924,7 @@ You are free to reapply for the EOD Technician Program in 7 days unless other re
 
 [font=cursive][size=90][img]${deputyData.signature || "INSERT LINK HERE"}[/img][/size][/font]
 ${[deputyData.dRank, deputyData.name].filter(Boolean).join(" ") || "RANK FNAME LNAME"}
-${formatData.senderPosition || "Instructor, Training Division"}
+${positionLine()}
 Special Enforcement Bureau
 [/divbox]
 [lssdfooter][/lssdfooter]`,
@@ -1144,7 +1157,8 @@ Welcome to the team, and congratulations on your acceptance.
 
 [list=none]
 ${[deputyData.dRank, deputyData.name].filter(Boolean).join(" ") || "Rank Fname Lname"}
-${[formatData.bureauPosition, formatData.certifications].filter(Boolean).join(", ") || "Bureau Position, [Insert Certifications if Desired]"}				Training Division
+${[formatData.bureauPosition, formatData.certifications].filter(Boolean).join(", ") || "Bureau Position, [Insert Certifications if Desired]"}
+Training Division
 Special Enforcement Bureau
 [/divbox]
 [lssdfooter][/lssdfooter]`,

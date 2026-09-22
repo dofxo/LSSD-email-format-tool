@@ -196,7 +196,13 @@ export const SEBInputs: FormatInputField[] = [
 		dateStyle: "full",
 		formats: ["14", "15", "16", "17", "18", "19", "20", "21"],
 	},
-	{ name: "senderPosition", label: "Your position (e.g. Instructor, Training Division)", type: "text", formats: ["4", "5", "6", "7", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"] },
+	{
+		name: "senderPosition",
+		label: "Your position (e.g. Instructor)",
+		type: "text",
+		hint: "\"Training Division\" is added automatically. If left empty, \"Instructor\" is used.",
+		formats: ["4", "5", "6", "7", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"],
+	},
 	// The signature image comes from the deputy profile, not a per-format field.
 	// Email date used by formats 6-13 (renders in the letter's top-right corner).
 	{ name: "date", label: "Email Date", type: "date", formats: ["6", "7", "8", "9", "10", "11", "12", "13", "16", "17", "18", "19", "20", "21"] },
@@ -272,8 +278,9 @@ export const SEBInputs: FormatInputField[] = [
 		...session.sections.map((section) => ({
 			name: section.field,
 			label: `${session.label} - ${section.heading}`,
-			type: "check" as const,		items: section.items,
-		formats: ["30", session.id],
+			type: "check" as const,
+			items: section.items,
+			formats: ["30", session.id],
 	})),
 ]),
 ];

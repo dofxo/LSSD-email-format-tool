@@ -159,7 +159,7 @@ export function FormatFields({ formatId, fields, formatData, setFormatData, rese
 	}
 
 	return (
-		<div className="grid grid-cols-1 gap-x-5 gap-y-5 sm:grid-cols-2">
+		<div className="flex min-w-0 flex-col gap-5">
 			{fields.map((field) => {
 				const rawValue = formatData[field.name as keyof FormatData];
 				const stringValue = typeof rawValue === "string" ? rawValue : "";
@@ -191,10 +191,10 @@ export function FormatFields({ formatId, fields, formatData, setFormatData, rese
 					return (
 						<Field
 							key={field.name}
-							className="sm:col-span-2"
 							label={label}
 							htmlFor={field.name}
 							hint={field.hint}
+							wide
 							meta={items.length ? `${items.length} added` : undefined}
 						>
 							<div className="flex gap-2">
@@ -253,7 +253,7 @@ export function FormatFields({ formatId, fields, formatData, setFormatData, rese
 					return (
 						<Field
 							key={field.name}
-							className={hasFormatToggle ? "sm:col-span-2" : undefined}
+							wide
 							label={label}
 							htmlFor={field.name}
 							hint={field.hint}
@@ -300,9 +300,9 @@ export function FormatFields({ formatId, fields, formatData, setFormatData, rese
 					return (
 						<Field
 							key={field.name}
-							className="sm:col-span-2"
 							label={label}
 							hint={field.hint}
+							wide
 							meta={selected.length ? `${selected.length} ticked` : undefined}
 						>
 							<div className="grid gap-1.5 sm:grid-cols-2">
@@ -345,7 +345,7 @@ export function FormatFields({ formatId, fields, formatData, setFormatData, rese
 
 				if (field.type === "time") {
 					return (
-						<Field key={field.name} label={label} htmlFor={field.name} hint={field.hint} meta={meta}>
+						<Field key={field.name} label={label} htmlFor={field.name} hint={field.hint} wide meta={meta}>
 							<div className="flex flex-wrap items-center gap-2">
 								<Input
 									id={field.name}
@@ -375,7 +375,6 @@ export function FormatFields({ formatId, fields, formatData, setFormatData, rese
 					return (
 						<Field
 							key={field.name}
-							className="sm:col-span-2"
 							label={label}
 							htmlFor={field.name}
 							hint={field.hint}
@@ -397,10 +396,10 @@ export function FormatFields({ formatId, fields, formatData, setFormatData, rese
 					return (
 						<Field
 							key={field.name}
-							className="sm:col-span-2"
 							label={label}
 							htmlFor={field.name}
 							hint={field.hint}
+							wide
 							meta={meta}
 						>
 							<Textarea
@@ -414,7 +413,13 @@ export function FormatFields({ formatId, fields, formatData, setFormatData, rese
 				}
 
 				return (
-					<Field key={field.name} label={label} htmlFor={field.name} hint={field.hint} meta={meta}>
+					<Field
+						key={field.name}
+						label={label}
+						htmlFor={field.name}
+						hint={field.hint}
+						meta={meta}
+					>
 						<Input
 							id={field.name}
 							name={field.name}
