@@ -148,9 +148,7 @@ Special Enforcement Bureau
 	 * already on the end still renders once.
 	 */
 	const positionLine = () => {
-		const role = (formatData.senderPosition ?? "")
-			.replace(/\s*,?\s*Training Division\s*$/i, "")
-			.trim();
+		const role = (formatData.senderPosition ?? "").replace(/\s*,?\s*Training Division\s*$/i, "").trim();
 		return `${role || "Instructor"}, Training Division`;
 	};
 
@@ -179,20 +177,6 @@ Special Enforcement Bureau
 			.map((section) => otpChecklistSection(section.heading, section.field, section.items))
 			.join("\n\n");
 		return `[img]${session.image}[/img]\n${details}\n${worksheet}`;
-	};
-
-	/**
-	 * An OTP session as the profile carries it: the worksheet the instructor
-	 * fills in, followed by the [code] copy of it under "OTP #n" headings. Only
-	 * the profile wants that copy, so the standalone formats print the worksheet
-	 * alone.
-	 */
-	const otpSession = (session: OtpSessionSpec) => {
-		const details = otpSessionDetails(session.prefix);
-		const copy = session.sections
-			.map((section) => otpChecklistSection(section.copyHeading, section.field, section.items))
-			.join("\n\n");
-		return `${otpSessionWorksheet(session)}\n[code]\n[img]${session.image}[/img]\n${details}\n${copy}\n[/code]`;
 	};
 
 	/**
@@ -228,12 +212,12 @@ Below you will find a grading system based on several criteria that we have dete
 [hr][/hr]
 [list=none]
 ${CN_CRITERIA.map((label, index) =>
-		cnGradeBlock(
-			label,
-			formatData[`cnGrade${index}` as keyof FormatData] as string | undefined,
-			formatData[`cnReason${index}` as keyof FormatData] as string | undefined,
-		),
-	).join("\n\n[hr][/hr]\n")}
+	cnGradeBlock(
+		label,
+		formatData[`cnGrade${index}` as keyof FormatData] as string | undefined,
+		formatData[`cnReason${index}` as keyof FormatData] as string | undefined,
+	),
+).join("\n\n[hr][/hr]\n")}
 
 [/divbox]
 
@@ -294,21 +278,29 @@ ${(formatData.operators ?? []).map((operator) => `[*]${operator}`).join("\n") ||
 [b]Deployment Hours:[/b] ${formatData.deploymentStart || "00:00"}
 [b]Deployment End Time:[/b] ${formatData.deploymentEnd || "00:00"}
 
-${formatData.confiscatedItems?.length ? `[spoiler=Confiscated Items (Optional - if arrest report is linked)]
+${
+	formatData.confiscatedItems?.length
+		? `[spoiler=Confiscated Items (Optional - if arrest report is linked)]
 [b]Confiscated Items: [/b]
 [list]
 ${formatData.confiscatedItems.map((item) => `[*]${item}`).join("\n")}
 [/list]
 [/spoiler]
 
-` : ""}${formatData.suspects?.length ? `[spoiler=Suspects (Optional - if arrest report is linked) ]
+`
+		: ""
+}${
+				formatData.suspects?.length
+					? `[spoiler=Suspects (Optional - if arrest report is linked) ]
 [b]Suspects:[/b]
 [list]
 ${formatData.suspects.map((suspect) => `[*]${suspect}`).join("\n")}
 [/list]
 [/spoiler]
 
-` : ""}[b]Event Description:[/b]
+`
+					: ""
+			}[b]Event Description:[/b]
 ${formatData.eventDescription ?? ""}
 
 
@@ -418,7 +410,7 @@ Special Enforcement Bureau
 
 [b]Operator ${formatData.operatorLastName || "LName"},[/b]
 
-You are being contacted today in regards to your Advanced Aerial Unit Certification Application that you submitted on ${formatData.applicationDate || "DATE"}, 
+You are being contacted today in regards to your Advanced Aerial Unit Certification Application that you submitted on ${formatData.applicationDate || "DATE"},
 
 This email serves as notice that you have successfully passed the written examination portion of your Crisis Negotiator Application and are invited to take the next step in becoming a certified Long Range Rifleperson. Please reach out to a member of the instructor team in order to schedule a training time that works for you!
 
@@ -449,7 +441,7 @@ Special Enforcement Bureau
 
 [b]Operator ${formatData.operatorLastName || "LName"},[/b]
 
-You are being contacted today in regards to your Advanced Aerial Unit Certification Application that you submitted on ${formatData.applicationDate || "DATE"}, 
+You are being contacted today in regards to your Advanced Aerial Unit Certification Application that you submitted on ${formatData.applicationDate || "DATE"},
 
 This email serves as notice that unfortunately your performance on the written examination was not sufficient to consider you for continued progress in the Advanced Aerial Unit Certification Program.
 
@@ -486,7 +478,7 @@ Special Enforcement Bureau
 
 [b]Operator ${formatData.operatorLastName || "LName"},[/b]
 
-You are being contacted today in regards to your Long Range Rifle Certification Application that you submitted, 
+You are being contacted today in regards to your Long Range Rifle Certification Application that you submitted,
 
 This email serves as notice that you have successfully passed the written examination portion of your Long Range Rifle Application and are invited to take the next step in becoming a certified Long Range Rifleperson. Please reach out to a member of the instructor team in order to schedule a training time that works for you!
 
@@ -517,7 +509,7 @@ Special Enforcement Bureau
 
 [b]Operator ${formatData.operatorLastName || "LName"},[/b]
 
-You are being contacted today in regards to your Long Range Rifle Certification Application that you submitted, 
+You are being contacted today in regards to your Long Range Rifle Certification Application that you submitted,
 
 This email serves as notice that unfortunately your performance on the written examination was not sufficient to consider you for continued progress in the Long Range Rifle Certification Program.
 
@@ -554,7 +546,7 @@ Special Enforcement Bureau
 
 [b]Operator ${formatData.operatorLastName || "LName"},[/b]
 
-You are being contacted today in regards to your EOD Technician Application that you submitted on ${formatData.applicationDate || "DATE"}, 
+You are being contacted today in regards to your EOD Technician Application that you submitted on ${formatData.applicationDate || "DATE"},
 
 This email serves as notice that you have successfully passed the written examination portion of your EOD Technician Application and are invited to take the next step in becoming a certified EOD Technician. Please reach out to a member of the instructor team in order to schedule a training time that works for you!
 
@@ -585,7 +577,7 @@ Special Enforcement Bureau
 
 [b]Operator ${formatData.operatorLastName || "LName"},[/b]
 
-You are being contacted today in regards to your Crisis Negotiator Application that you submitted on ${formatData.applicationDate || "DATE"}, 
+You are being contacted today in regards to your Crisis Negotiator Application that you submitted on ${formatData.applicationDate || "DATE"},
 
 This email serves as notice that unfortunately your performance on the written examination was not sufficient to consider you for continued progress in the Crisis Negotiator Certification Program.
 
@@ -622,7 +614,7 @@ Special Enforcement Bureau
 
 [b]Operator ${formatData.operatorLastName || "LName"},[/b]
 
-You are being contacted today in regards to your Crisis Negotiator Application that you submitted on ${formatData.applicationDate || "DATE"}, 
+You are being contacted today in regards to your Crisis Negotiator Application that you submitted on ${formatData.applicationDate || "DATE"},
 
 This email serves as notice that you have successfully passed the written examination portion of your Crisis Negotiator Application and are invited to take the next step in becoming a certified Crisis Negotiator. Please reach out to a member of the instructor team in order to schedule a training time that works for you!
 
@@ -653,7 +645,7 @@ Special Enforcement Bureau
 
 [b]Operator ${formatData.operatorLastName || "LName"},[/b]
 
-You are being contacted today in regards to your Crisis Negotiator Application that you submitted on ${formatData.applicationDate || "DATE"}, 
+You are being contacted today in regards to your Crisis Negotiator Application that you submitted on ${formatData.applicationDate || "DATE"},
 
 This email serves as notice that unfortunately your performance on the written examination was not sufficient to consider you for continued progress in the Crisis Negotiator Certification Program.
 
@@ -754,7 +746,7 @@ Special Enforcement Bureau
 
 [b]Operator ${formatData.operatorLastName || "LName"},[/b]
 
-You are being contacted today in regards to your Advanced Aerial Unit training that you underwent on ${formatData.practicalDate || "DATE"}, 
+You are being contacted today in regards to your Advanced Aerial Unit training that you underwent on ${formatData.practicalDate || "DATE"},
 
 This email serves as notice that you have successfully passed the practical portion of your Advanced Aerial Unit Certification Program and are now authorized to perform Advanced Aerial Unit operations.
 
@@ -785,14 +777,14 @@ Special Enforcement Bureau
 
 [b]Operator ${formatData.operatorLastName || "LName"},[/b]
 
-You are being contacted today in regards to your Advanced Aerial Unit Application that you underwent on ${formatData.practicalDate || "DATE"}, 
+You are being contacted today in regards to your Advanced Aerial Unit Application that you underwent on ${formatData.practicalDate || "DATE"},
 
-This email serves as notice that unfortunately, we must reject your certification. 
+This email serves as notice that unfortunately, we must reject your certification.
 The reasons for your denial are the following:
 [list]
 ${(formatData.reasons ?? []).map((reason) => `[*]${reason}`).join("\n") || "[*]Reason 1\n[*]Reason 2"}
 [/list]
-Do not let this impede your future, take the critique received, and improve yourself using it as a baseline. 
+Do not let this impede your future, take the critique received, and improve yourself using it as a baseline.
 You are free to reapply for the Advanced Aerial Unit Program in 7 days unless other requirements have already been laid out.
 [/list]
 [hr][/hr]
@@ -820,7 +812,7 @@ Special Enforcement Bureau
 
 [b]Operator ${formatData.operatorLastName || "LName"},[/b]
 
-You are being contacted today in regards to your Long Range Rifle Certification that you underwent on ${formatData.practicalDate || "DATE"}, 
+You are being contacted today in regards to your Long Range Rifle Certification that you underwent on ${formatData.practicalDate || "DATE"},
 
 This email serves as notice that you have successfully passed the practical portion of your Long Range Rifleperson Certification Program and are now authorized to perform Long Range Rifle operations.
 
@@ -851,14 +843,14 @@ Special Enforcement Bureau
 
 [b]Operator ${formatData.operatorLastName || "LName"},[/b]
 
-You are being contacted today in regards to your Long Range Rifle Certification that you underwent on ${formatData.practicalDate || "DATE"}, 
+You are being contacted today in regards to your Long Range Rifle Certification that you underwent on ${formatData.practicalDate || "DATE"},
 
-This email serves as notice that unfortunately, we must reject your certification. 
+This email serves as notice that unfortunately, we must reject your certification.
 The reasons for your denial are the following:
 [list]
 ${(formatData.reasons ?? []).map((reason) => `[*]${reason}`).join("\n") || "[*]Reason 1\n[*]Reason 2"}
 [/list]
-Do not let this impede your future, take the critique received, and improve yourself using it as a baseline. 
+Do not let this impede your future, take the critique received, and improve yourself using it as a baseline.
 You are free to reapply for the Long Range Rifleperson Program in 7 days unless other requirements have already been laid out.
 [/list]
 [hr][/hr]
@@ -886,7 +878,7 @@ Special Enforcement Bureau
 
 [b]Operator ${formatData.operatorLastName || "LName"},[/b]
 
-You are being contacted today in regards to your EOD Technician training that you underwent on ${formatData.practicalDate || "DATE"}, 
+You are being contacted today in regards to your EOD Technician training that you underwent on ${formatData.practicalDate || "DATE"},
 
 This email serves as notice that you have successfully passed the practical portion of your EOD Technician Certification Program and are now authorized to perform EOD Technician operations.
 
@@ -917,14 +909,14 @@ Special Enforcement Bureau
 
 [b]Operator ${formatData.operatorLastName || "LName"},[/b]
 
-You are being contacted today in regards to your EOD Technician Application that you underwent on ${formatData.practicalDate || "DATE"}, 
+You are being contacted today in regards to your EOD Technician Application that you underwent on ${formatData.practicalDate || "DATE"},
 
-This email serves as notice that unfortunately, we must reject your certification. 
+This email serves as notice that unfortunately, we must reject your certification.
 The reasons for your denial are the following:
 [list]
 ${(formatData.reasons ?? []).map((reason) => `[*]${reason}`).join("\n") || "[*]Reason 1\n[*]Reason 2"}
 [/list]
-Do not let this impede your future, take the critique received, and improve yourself using it as a baseline. 
+Do not let this impede your future, take the critique received, and improve yourself using it as a baseline.
 You are free to reapply for the EOD Technician Program in 7 days unless other requirements have already been laid out.
 [/list]
 [hr][/hr]
@@ -1074,7 +1066,7 @@ ${sebLetterSignature(formatData.bureauPosition, formatData.certifications)}`,
 [divbox=white]
 
 [spoiler=OTP Session 1]
-${otpSession(OTP_SESSIONS[0])}
+${otpSessionWorksheet(OTP_SESSIONS[0])}
 [/spoiler]
 
 
@@ -1082,7 +1074,7 @@ ${otpSession(OTP_SESSIONS[0])}
 
 
 [spoiler=OTP Session 2]
-${otpSession(OTP_SESSIONS[1])}
+${otpSessionWorksheet(OTP_SESSIONS[1])}
 [/spoiler]
 
 
@@ -1090,17 +1082,13 @@ ${otpSession(OTP_SESSIONS[1])}
 
 
 [spoiler=OTP Session 3]
-${otpSession(OTP_SESSIONS[2])}
+${otpSessionWorksheet(OTP_SESSIONS[2])}
 [/spoiler]
 
 [hr][/hr]
 
 [spoiler=Exam Sent to Trainee]
 ${OTP_EXAM_NOTICE}
-
-[code]
-${OTP_EXAM_NOTICE}
-[/code]
 [/spoiler]
 [hr][/hr]
 
@@ -1148,6 +1136,7 @@ To help you get started, please familiarize yourself with the following resource
 [*][url=https://gov.eclipse-rp.net/viewforum.php?f=4090]TD - External Database[/url]
 [*][url=https://docs.google.com/forms/d/e/1FAIpQLSdvMfhud5onI4FVfiN1vNIyhne_ulCOvvkXyFF7A7rTDwgzfw/viewform]SEB Training Division Response Sheet[/url]
 [*][url=https://docs.google.com/spreadsheets/d/17W5Oz-_mAk7xFJ9ggnouqUl-jLCXkkVcaP8K8kMbSv4/edit?gid=606853931#gid=606853931]SEB Training Division - Activity Tracker[/url]
+[*][url=https://docs.google.com/spreadsheets/d/1wqRppbk8rfMA4AILezcYyg4MBYNRUjuwzSIQAOb2uUI/edit?usp=sharing]Roster for updating certifications/OTP sessions[/url]
 [/list]
 
 We are pleased to welcome you to the Training Division and look forward to seeing the contribution you will make as an instructor. Please do not hesitate to reach out to TD Command should you have any questions or require assistance getting started.
