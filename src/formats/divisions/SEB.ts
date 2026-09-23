@@ -172,19 +172,27 @@ Special Enforcement Bureau
 	const otpChecklistSection = (heading: string, field: string, items: string[]) =>
 		`[lssdsubtitle]${heading}[/lssdsubtitle]\n[divbox=white]\n[b][center]Mark with the following with (X)[/center][/b]${otpChecklist(items, field)}\n[/divbox]`;
 
-	/**
-	 * An OTP session: the worksheet the instructor fills in, followed by the
-	 * [code] copy of it that the source profile carries under "OTP #n" headings.
-	 */
-	const otpSession = (session: OtpSessionSpec) => {
+	/** The OTP session worksheet on its own: details block, then every checklist. */
+	const otpSessionWorksheet = (session: OtpSessionSpec) => {
 		const details = otpSessionDetails(session.prefix);
 		const worksheet = session.sections
 			.map((section) => otpChecklistSection(section.heading, section.field, section.items))
 			.join("\n\n");
+		return `[img]${session.image}[/img]\n${details}\n${worksheet}`;
+	};
+
+	/**
+	 * An OTP session as the profile carries it: the worksheet the instructor
+	 * fills in, followed by the [code] copy of it under "OTP #n" headings. Only
+	 * the profile wants that copy, so the standalone formats print the worksheet
+	 * alone.
+	 */
+	const otpSession = (session: OtpSessionSpec) => {
+		const details = otpSessionDetails(session.prefix);
 		const copy = session.sections
 			.map((section) => otpChecklistSection(section.copyHeading, section.field, section.items))
 			.join("\n\n");
-		return `[img]${session.image}[/img]\n${details}\n${worksheet}\n[code]\n[img]${session.image}[/img]\n${details}\n${copy}\n[/code]`;
+		return `${otpSessionWorksheet(session)}\n[code]\n[img]${session.image}[/img]\n${details}\n${copy}\n[/code]`;
 	};
 
 	/**
@@ -1102,18 +1110,13 @@ ${OTP_EXAM_NOTICE}
 		},
 
 		// 31/32/33. Each OTP session on its own, extracted from the profile above
-		"31": { text: otpSession(OTP_SESSIONS[0]) },
-		"32": { text: otpSession(OTP_SESSIONS[1]) },
-		"33": { text: otpSession(OTP_SESSIONS[2]) },
+		// but without the [code] copy, which belongs to the profile alone.
+		"31": { text: otpSessionWorksheet(OTP_SESSIONS[0]) },
+		"32": { text: otpSessionWorksheet(OTP_SESSIONS[1]) },
+		"33": { text: otpSessionWorksheet(OTP_SESSIONS[2]) },
 
 		// 34. Exam Sent to Trainee
-		"34": {
-			text: `${OTP_EXAM_NOTICE}
-
-[code]
-${OTP_EXAM_NOTICE}
-[/code]`,
-		},
+		"34": { text: OTP_EXAM_NOTICE },
 
 		// 35. TD Instructor Acceptance
 		"35": {
