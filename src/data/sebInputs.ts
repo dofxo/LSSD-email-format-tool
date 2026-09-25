@@ -143,6 +143,7 @@ export const SEBInputs: FormatInputField[] = [
 		name: "bureauPosition",
 		label: "Bureau position (e.g. Sergeant, Operational Support Deputy)",
 		type: "text",
+		hint: "Leave empty to use your SEB rank from the deputy profile. Anything typed here replaces it.",
 		formats: ["1", "24", "25", "26", "28", "29", "35", "36"],
 	},
 	{

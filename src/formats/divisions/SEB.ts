@@ -126,8 +126,22 @@ export const SEBFormats = ({
 	};
 
 	/**
+	 * The bureau rank line of the SEB letters: the sender's SEB rank from the
+	 * deputy profile, unless a Bureau position is typed into the format, followed
+	 * by any certifications. Empty both ways it falls back to the letter's own
+	 * placeholder, so a blank profile never prints an empty line.
+	 */
+	const bureauLine = (bureauPosition?: string, certifications?: string, fallback = "") =>
+		[
+			bureauPosition || deputyData.divisionRanks.SEB,
+			certifications,
+		]
+			.filter(Boolean)
+			.join(", ") || fallback;
+
+	/**
 	 * The closing block shared by the SEB emails: rank and name from the deputy
-	 * profile, then the sender's bureau position and any certifications.
+	 * profile, then the sender's bureau rank and any certifications.
 	 */
 	const sebLetterSignature = (
 		bureauPosition?: string,
@@ -136,7 +150,7 @@ export const SEBFormats = ({
 	) => `[list=none]
 
 ${[deputyData.dRank, deputyData.name].filter(Boolean).join(" ") || "Rank Fname Lname"}
-${[bureauPosition, certifications].filter(Boolean).join(", ") || fallback}
+${bureauLine(bureauPosition, certifications, fallback)}
 Special Enforcement Bureau
 [/divbox]
 [lssdfooter][/lssdfooter]`;
@@ -259,7 +273,7 @@ ${formatData.body || "[Insert text]"}
 [list=none]
 
 ${[deputyData.dRank, deputyData.name].filter(Boolean).join(" ") || "Rank Fname Lname"}
-${[formatData.bureauPosition, formatData.certifications].filter(Boolean).join(", ") || "BureauPosition, [Insert Certifications if Desired]"}
+${bureauLine(formatData.bureauPosition, formatData.certifications, "BureauPosition, [Insert Certifications if Desired]")}
 Special Enforcement Bureau
 [/divbox]
 [lssdfooter][/lssdfooter]`,
@@ -984,7 +998,7 @@ If you have any questions, feel free to reach out.
 [list=none]
 On behalf of the SEB command,
 ${[deputyData.dRank, deputyData.name].filter(Boolean).join(" ") || "Rank Fname Lname"}
-${[formatData.bureauPosition, formatData.certifications].filter(Boolean).join(", ") || "BureauPosition, [Insert Certifications if Desired]"}
+${bureauLine(formatData.bureauPosition, formatData.certifications, "BureauPosition, [Insert Certifications if Desired]")}
 Special Enforcement Bureau
 [/divbox]
 [lssdfooter][/lssdfooter]`,
@@ -1149,7 +1163,7 @@ Welcome to the team, and congratulations on your acceptance.
 
 [list=none]
 ${[deputyData.dRank, deputyData.name].filter(Boolean).join(" ") || "Rank Fname Lname"}
-${[formatData.bureauPosition, formatData.certifications].filter(Boolean).join(", ") || "Bureau Position, [Insert Certifications if Desired]"}
+${bureauLine(formatData.bureauPosition, formatData.certifications, "Bureau Position, [Insert Certifications if Desired]")}
 Training Division
 Special Enforcement Bureau
 [/divbox]
@@ -1186,7 +1200,7 @@ Thank you for your interest in contributing to the Training Division and for the
 
 [list=none]
 ${[deputyData.dRank, deputyData.name].filter(Boolean).join(" ") || "Rank Fname Lname"}
-${[formatData.bureauPosition, formatData.certifications].filter(Boolean).join(", ") || "Bureau Position, [Insert Certifications if Desired]"}
+${bureauLine(formatData.bureauPosition, formatData.certifications, "Bureau Position, [Insert Certifications if Desired]")}
 Training Division
 Special Enforcement Bureau
 [/divbox]

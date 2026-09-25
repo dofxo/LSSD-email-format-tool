@@ -29,10 +29,23 @@ export const divisionRanks: Record<divisionsType, { value: string; label: string
 		{ value: "Instructor", label: "Instructor" },
 		{ value: "Trainee Instructor", label: "Trainee Instructor" },
 	],
+	// Ordered bottom-up as the bureau ladder is read: Unit Commander sits at the
+	// top of the dropdown, Operator Trainee at the bottom.
+	SEB: [
+		{ value: "Unit Commander", label: "Unit Commander" },
+		{ value: "Operations Lieutenant", label: "Operations Lieutenant" },
+		{ value: "Operations Sergeant", label: "Operations Sergeant" },
+		{ value: "Training Team Leader", label: "Training Team Leader" },
+		{ value: "Team Leader", label: "Team Leader" },
+		{ value: "Team Scout", label: "Team Scout" },
+		{ value: "Instructor", label: "Instructor" },
+		{ value: "Operator", label: "Operator" },
+		{ value: "Reserve Operator", label: "Reserve Operator" },
+		{ value: "Operator Trainee", label: "Operator Trainee" },
+	],
 	General: [],
 	Supervisory: [],
 	FTB: [],
-	SEB: [],
 };
 
 export const divisionRankOptionsFor = (division: divisionsType) => divisionRanks[division] ?? [];
