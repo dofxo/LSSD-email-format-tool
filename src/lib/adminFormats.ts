@@ -1,6 +1,6 @@
 import { adminFormatStore } from "@/formats/admin";
 import type { AdminFormatOverride, AdminFormatStore } from "@/formats/adminTypes";
-import type { divisionsType } from "@/types";
+import type { FormatInputField, divisionsType } from "@/types";
 
 const ENDPOINT = "/api/admin/formats";
 
@@ -34,6 +34,15 @@ export const adminGovLinkFor = (division: divisionsType, formatId: string): stri
 	const override = overrideFor(division, formatId);
 	if (override?.govLink !== undefined) return override.govLink.trim() ? override.govLink : null;
 	return null;
+};
+
+/**
+ * A division's input fields replaced at /admin, or null when it should keep
+ * using the built-in list from src/data/formatInputs.ts.
+ */
+export const adminInputsFor = (division: divisionsType): FormatInputField[] | null => {
+	const stored = adminFormatStore.inputs?.[division];
+	return Array.isArray(stored) ? stored : null;
 };
 
 /**

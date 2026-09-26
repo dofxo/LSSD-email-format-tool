@@ -6,15 +6,9 @@ import { ATDLabels } from "@/formats/divisions/ATD";
 import { TSDLabels } from "@/formats/divisions/TSD";
 import { FTBLabels } from "@/formats/divisions/FTB";
 import { SEBLabels } from "@/formats/divisions/SEB";
-import { adminLabelFor, customFormatsFor } from "@/lib/adminFormats";
+import { adminInputsFor, adminLabelFor, customFormatsFor } from "@/lib/adminFormats";
 import { inputsByDivision } from "@/data/formatInputs";
-import { SEBInputs } from "@/data/sebInputs";
 import type { FormatInputField } from "@/types";
-
-// SEB keeps its own field module, mirroring the FTBInputs split.
-if (inputsByDivision.SEB.length === 0 && SEBInputs.length > 0) {
-	inputsByDivision.SEB = SEBInputs;
-}
 
 export const labelsByDivision: Record<divisionsType, Record<string, string>> = {
 	RED: REDLabels,
@@ -69,24 +63,34 @@ export const formatsForDivision = (division: divisionsType): FormatOption[] => {
 export const formatLabelFor = (division: divisionsType, formatId: string): string =>
 	adminLabelFor(division, formatId) ?? labelsByDivision[division][formatId] ?? "";
 
+/**
+ * Every input field defined for a division: the list replaced at /admin when
+ * one is saved, otherwise the built-in fields from src/data/formatInputs.ts.
+ */
+export const inputsForDivision = (division: divisionsType): FormatInputField[] =>
+	adminInputsFor(division) ?? inputsByDivision[division] ?? [];
+
 /** The dynamic form fields a specific format requires. */
 export const formatFieldsFor = (division: divisionsType, formatId: string): FormatInputField[] =>
-	formatId ? (inputsByDivision[division] ?? []).filter((field) => field.formats.includes(formatId)) : [];
+	formatId ? inputsForDivision(division).filter((field) => field.formats.includes(formatId)) : [];
 
 /**
  * Dev-time integrity check: every field's `formats` ids must exist in its
- * division's labels, otherwise that field can never render (the id points at
- * a format that is not selectable). Runs once per session; silently no-ops in
- * production builds.
+ * division's labels (or in the formats added at /admin), otherwise that field
+ * can never render (the id points at a format that is not selectable). Runs
+ * once per session; silently no-ops in production builds.
  */
 const checkInputsConsistency = () => {
 	if (import.meta.env.PROD) return;
 	const problems: string[] = [];
 	for (const division of Object.keys(inputsByDivision) as divisionsType[]) {
-		const labels = labelsByDivision[division];
-		for (const field of inputsByDivision[division]) {
+		const known = new Set([
+			...Object.keys(labelsByDivision[division]),
+			...customFormatsFor(division).map((entry) => entry.id),
+		]);
+		for (const field of inputsForDivision(division)) {
 			for (const id of field.formats) {
-				if (!(id in labels)) {
+				if (!known.has(id)) {
 					problems.push(`${division}: field "${field.name}" points at unknown format id "${id}"`);
 				}
 			}

@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { ChevronDown, Lock, Moon, Plus, Save, Sun } from "lucide-react";
+import { ChevronDown, ListChecks, Lock, Moon, Plus, Save, Sun } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
 
 import { FormatEditor } from "@/components/admin/FormatEditor";
+import { InputFieldsEditor } from "@/components/admin/InputFieldsEditor";
 import { PasswordGate } from "@/components/admin/PasswordGate";
 import { Button } from "@/components/ui/button";
 import { Field, Input, Textarea } from "@/components/ui/input";
@@ -13,11 +14,11 @@ import type { AdminFormatFields, AdminFormatStore } from "@/formats/adminTypes";
 import { useTheme } from "@/hooks/useTheme";
 import { fetchAdminFormats, overrideKey, saveAdminFormats } from "@/lib/adminFormats";
 import { divisions } from "@/lib/divisions";
-import { labelsByDivision } from "@/lib/formats";
+import { formatsForDivision, inputsForDivision, labelsByDivision } from "@/lib/formats";
 import { templateTokenHints } from "@/lib/formatTemplates";
 import { controlFieldClass } from "@/lib/styles";
 import { cn } from "@/lib/utils";
-import type { DeputyData, divisionsType } from "@/types";
+import type { DeputyData, FormatInputField, divisionsType } from "@/types";
 
 const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD as string | undefined;
 const GATE_KEY = "adminUnlocked";
@@ -41,6 +42,12 @@ const loadUnlocked = () => {
 const cloneStore = (store: AdminFormatStore): AdminFormatStore => ({
 	overrides: { ...store.overrides },
 	custom: store.custom.map((entry) => ({ ...entry })),
+	inputs: Object.fromEntries(
+		Object.entries(store.inputs ?? {}).map(([division, fields]) => [
+			division,
+			(fields ?? []).map((field) => ({ ...field })),
+		]),
+	) as AdminFormatStore["inputs"],
 });
 
 /** Next free numeric id in a division, so added formats never clash. */
@@ -66,6 +73,8 @@ const AdminPage = () => {
 	const [dirty, setDirty] = useState(false);
 	const [saving, setSaving] = useState(false);
 	const [openDivisions, setOpenDivisions] = useState<Record<string, boolean>>({});
+	const [openInputs, setOpenInputs] = useState<Record<string, boolean>>({});
+	const [inputsOpen, setInputsOpen] = useState(true);
 
 	const [newDivision, setNewDivision] = useState<divisionsType>("RED");
 	const [newTitle, setNewTitle] = useState("");
@@ -89,6 +98,24 @@ const AdminPage = () => {
 
 	const toggleDivision = (division: divisionsType) =>
 		setOpenDivisions((prev) => ({ ...prev, [division]: !prev[division] }));
+
+	const toggleInputs = (division: divisionsType) =>
+		setOpenInputs((prev) => ({ ...prev, [division]: !prev[division] }));
+
+	/** Replace a division's whole field list; the built-in one is the fallback. */
+	const saveDivisionInputs = (division: divisionsType, fields: FormatInputField[]) => {
+		setStore((prev) => ({ ...prev, inputs: { ...prev.inputs, [division]: fields } }));
+		markDirty();
+	};
+
+	const resetDivisionInputs = (division: divisionsType) => {
+		setStore((prev) => {
+			const inputs = { ...prev.inputs };
+			delete inputs[division];
+			return { ...prev, inputs };
+		});
+		markDirty();
+	};
 
 	const unlock = (password: string) => {
 		if (!ADMIN_PASSWORD || password !== ADMIN_PASSWORD) return false;
@@ -313,6 +340,103 @@ const AdminPage = () => {
 									))}
 								</div>
 							</PanelBody>
+						</Panel>
+
+						<Panel className="overflow-hidden border-accent/25 bg-accent/5">
+							<header className="flex items-center gap-3 px-5 py-4 sm:px-6">
+								<span
+									aria-hidden
+									className="flex size-7 shrink-0 items-center justify-center rounded-[10px] bg-accent/12 text-accent ring-1 ring-inset ring-accent/20"
+								>
+									<ListChecks className="size-4" />
+								</span>
+								<div className="min-w-0 flex-1">
+									<h2 className="text-[15px] leading-6 font-semibold text-ink">Input fields</h2>
+									<p className="text-[12.5px] leading-relaxed text-ink-muted">
+										Control which inputs each format asks for and how each one behaves. Saving a
+										division replaces its built-in fields.
+									</p>
+								</div>
+								<Button
+									variant="ghost"
+									size="icon-sm"
+									onClick={() => setInputsOpen((value) => !value)}
+									aria-expanded={inputsOpen}
+									aria-controls="input-fields-body"
+									title={inputsOpen ? "Collapse input fields" : "Expand input fields"}
+									aria-label={inputsOpen ? "Collapse input fields" : "Expand input fields"}
+								>
+									<ChevronDown
+										className={cn("size-4 transition-transform duration-200", inputsOpen && "rotate-180")}
+									/>
+								</Button>
+							</header>
+
+							{inputsOpen ? (
+								<PanelBody id="input-fields-body" className="flex flex-col gap-3">
+									{divisions.map((division) => {
+										const customised = Boolean(store.inputs[division.id]);
+										const fields = customised ? store.inputs[division.id]! : inputsForDivision(division.id);
+										const Icon = division.icon;
+										const open = Boolean(openInputs[division.id]);
+
+										return (
+											<Panel key={division.id} className="overflow-hidden">
+												<h2>
+													<button
+														type="button"
+														onClick={() => toggleInputs(division.id)}
+														aria-expanded={open}
+														aria-controls={`inputs-${division.id}`}
+														className="flex w-full items-center gap-3 px-5 py-4 text-left transition-colors duration-150 hover:bg-surface-2 sm:px-6"
+													>
+														<span className="flex size-7 shrink-0 items-center justify-center rounded-[10px] bg-accent/12 text-accent ring-1 ring-inset ring-accent/20">
+															<Icon className="size-4" />
+														</span>
+														<span className="min-w-0 flex-1">
+															<span className="block truncate text-[15px] leading-6 font-semibold text-ink">
+																{division.name}
+															</span>
+															<span className="block truncate text-[12.5px] text-ink-muted">
+																{division.blurb}
+															</span>
+														</span>
+														{customised ? (
+															<span className="shrink-0 rounded-full border border-accent/25 bg-accent/12 px-2 py-0.5 text-[11.5px] font-medium text-accent">
+																replaced
+															</span>
+														) : null}
+														<span className="shrink-0 rounded-full border border-subtle bg-surface-2 px-2 py-0.5 text-[11.5px] text-ink-muted">
+															{fields.length}
+														</span>
+														<ChevronDown
+															className={cn(
+																"size-4 shrink-0 text-ink-faint transition-transform duration-200",
+																open && "rotate-180",
+															)}
+														/>
+													</button>
+												</h2>
+
+												{open ? (
+													<div id={`inputs-${division.id}`}>
+														<PanelBody className="flex flex-col gap-3 border-t border-subtle">
+															<InputFieldsEditor
+																division={division.id}
+																fields={fields}
+																formatOptions={formatsForDivision(division.id)}
+																customised={customised}
+																onChange={(next) => saveDivisionInputs(division.id, next)}
+																onReset={() => resetDivisionInputs(division.id)}
+															/>
+														</PanelBody>
+													</div>
+												) : null}
+											</Panel>
+										);
+									})}
+								</PanelBody>
+							) : null}
 						</Panel>
 
 						{groups.map(({ division, formats, editedCount }) => {

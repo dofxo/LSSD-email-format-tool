@@ -16,6 +16,7 @@ import type {
 	AdminFormatOverride,
 	AdminFormatStore,
 } from "../src/formats/adminTypes";
+import type { FormatInputField } from "../src/types";
 
 const ENDPOINT = "/api/admin/formats";
 const STORE_FILE = path.join("src", "formats", "admin.ts");
@@ -25,9 +26,63 @@ const END = "/* /ADMIN_DATA */";
 const DIVISIONS = ["RED", "TSD", "ATD", "General", "Supervisory", "FTB", "SEB"] as const;
 type DivisionId = (typeof DIVISIONS)[number];
 
-const emptyStore = (): AdminFormatStore => ({ overrides: {}, custom: [] });
+const FIELD_TYPES: FormatInputField["type"][] = [
+	"text",
+	"number",
+	"date",
+	"time",
+	"select",
+	"textarea",
+	"check",
+	"list",
+];
+const DATE_STYLES: NonNullable<FormatInputField["dateStyle"]>[] = ["full", "short", "shortYear"];
+
+const emptyStore = (): AdminFormatStore => ({ overrides: {}, custom: [], inputs: {} });
 
 const asString = (value: unknown) => (typeof value === "string" ? value : "");
+
+/** Keeps a single input field well-formed, or drops it when it cannot be used. */
+const sanitizeField = (input: unknown): FormatInputField | null => {
+	if (!input || typeof input !== "object") return null;
+	const raw = input as Partial<FormatInputField>;
+	const name = asString(raw.name).trim();
+	const type = FIELD_TYPES.includes(raw.type as FormatInputField["type"])
+		? (raw.type as FormatInputField["type"])
+		: null;
+	if (!name || !type) return null;
+
+	const clean: FormatInputField = {
+		name,
+		label: asString(raw.label),
+		type,
+		formats: Array.isArray(raw.formats) ? raw.formats.map(asString).filter(Boolean) : [],
+	};
+
+	const hint = asString(raw.hint);
+	if (hint) clean.hint = hint;
+
+	if (type === "select" && Array.isArray(raw.options)) {
+		clean.options = raw.options
+			.filter((option): option is { value: string; label: string } => !!option && typeof option === "object")
+			.map((option) => ({ value: asString(option.value), label: asString(option.label) }))
+			.filter((option) => option.value);
+	}
+
+	if (type === "check" && Array.isArray(raw.items)) {
+		clean.items = raw.items.map(asString).filter(Boolean);
+	}
+
+	if (type === "list" && typeof raw.itemPlaceholder === "string" && raw.itemPlaceholder) {
+		clean.itemPlaceholder = raw.itemPlaceholder;
+	}
+
+	if (type === "date" && DATE_STYLES.includes(raw.dateStyle as NonNullable<FormatInputField["dateStyle"]>)) {
+		clean.dateStyle = raw.dateStyle;
+	}
+
+	return clean;
+};
 
 /** Keeps only well-formed entries, so a bad request can never corrupt the file. */
 const sanitize = (input: unknown): AdminFormatStore => {
@@ -61,6 +116,14 @@ const sanitize = (input: unknown): AdminFormatStore => {
 				body: asString(entry.body),
 				govLink: asString(entry.govLink),
 			});
+		}
+	}
+
+	if (raw.inputs && typeof raw.inputs === "object") {
+		for (const [division, fields] of Object.entries(raw.inputs)) {
+			if (!DIVISIONS.includes(division as DivisionId) || !Array.isArray(fields)) continue;
+			const clean = fields.map(sanitizeField).filter((field): field is FormatInputField => field !== null);
+			store.inputs[division as DivisionId] = clean;
 		}
 	}
 
