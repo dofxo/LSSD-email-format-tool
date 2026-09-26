@@ -1,3 +1,4 @@
+import { adminGovLinkFor } from "@/lib/adminFormats";
 import type { divisionsType } from "@/types";
 
 /**
@@ -17,4 +18,4 @@ const govLinks: Partial<Record<divisionsType, Record<string, string>>> = {};
 
 /** The government website section a format is pasted into, if one is set up. */
 export const govLinkFor = (division: divisionsType, formatId: string): string | null =>
-	govLinks[division]?.[formatId] ?? null;
+	adminGovLinkFor(division, formatId) ?? govLinks[division]?.[formatId] ?? null;
