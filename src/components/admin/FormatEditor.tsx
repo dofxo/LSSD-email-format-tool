@@ -3,6 +3,7 @@ import { ChevronDown, RotateCcw, Save, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Field, Input, Textarea } from "@/components/ui/input";
+import { formatsForDivision } from "@/lib/formats";
 import { cn } from "@/lib/utils";
 import type { AdminFormatFields } from "@/formats/adminTypes";
 import type { divisionsType } from "@/types";
@@ -32,6 +33,7 @@ export function FormatEditor({
 	onDelete,
 }: FormatEditorProps) {
 	const [title, setTitle] = useState(fields.title);
+	const [category, setCategory] = useState(fields.category);
 	const [govLink, setGovLink] = useState(fields.govLink);
 	const [body, setBody] = useState(fields.body);
 	const [bodyOpen, setBodyOpen] = useState(fields.body.trim().length > 0);
@@ -39,8 +41,18 @@ export function FormatEditor({
 	const [confirming, setConfirming] = useState(false);
 
 	const hasOverride = fields.body.trim().length > 0;
-	const dirty = title !== fields.title || govLink !== fields.govLink || bodyEdited;
+	const dirty =
+		title !== fields.title || category !== fields.category || govLink !== fields.govLink || bodyEdited;
 	const fieldId = `${division}-${formatId}`;
+
+	// Headings already used in this division, so categories stay consistent.
+	const categoryOptions = [
+		...new Set(
+			formatsForDivision(division)
+				.map((option) => option.category?.trim())
+				.filter((value): value is string => Boolean(value)),
+		),
+	];
 
 	const toggleBody = () => {
 		// First open of an untouched built-in format loads what it generates
@@ -55,7 +67,7 @@ export function FormatEditor({
 				<span className="rounded-md border border-subtle bg-surface px-1.5 py-0.5 font-mono text-[11px] text-ink-muted">
 					{formatId}
 				</span>
-				<span className="text-[12px] text-ink-faint">{custom ? "Added format" : "Built-in format"}</span>
+				{custom ? <span className="text-[12px] text-ink-faint">Added format</span> : null}
 				{dirty ? <span className="text-[12px] font-medium text-warning">Unsaved changes</span> : null}
 
 				<div className="ml-auto flex items-center gap-2">
@@ -63,7 +75,7 @@ export function FormatEditor({
 						<Button
 							size="sm"
 							variant="primary"
-							onClick={() => onSave({ title, body: bodyEdited ? body : fields.body, govLink })}
+							onClick={() => onSave({ title, body: bodyEdited ? body : fields.body, govLink, category })}
 							aria-label={`Save ${title || formatId}`}
 						>
 							<Save />
@@ -113,6 +125,25 @@ export function FormatEditor({
 						onChange={(event) => setTitle(event.target.value)}
 						placeholder="Shown in the format picker"
 					/>
+				</Field>
+
+				<Field
+					label="Category"
+					htmlFor={`category-${fieldId}`}
+					hint="Heading this format is grouped under in the picker. Clear it to use the division default."
+				>
+					<Input
+						id={`category-${fieldId}`}
+						list={`categories-format-${fieldId}`}
+						value={category}
+						onChange={(event) => setCategory(event.target.value)}
+						placeholder="e.g. Applications"
+					/>
+					<datalist id={`categories-format-${fieldId}`}>
+						{categoryOptions.map((option) => (
+							<option key={option} value={option} />
+						))}
+					</datalist>
 				</Field>
 
 				<Field label="Government website link" htmlFor={`gov-${fieldId}`}>

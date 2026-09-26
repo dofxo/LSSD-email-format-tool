@@ -98,6 +98,7 @@ const sanitize = (input: unknown): AdminFormatStore => {
 			if (typeof entry.title === "string") clean.title = entry.title;
 			if (typeof entry.body === "string") clean.body = entry.body;
 			if (typeof entry.govLink === "string") clean.govLink = entry.govLink;
+			if (typeof entry.category === "string") clean.category = entry.category;
 			if (Object.keys(clean).length > 0) store.overrides[key] = clean;
 		}
 	}
@@ -115,6 +116,7 @@ const sanitize = (input: unknown): AdminFormatStore => {
 				title: asString(entry.title),
 				body: asString(entry.body),
 				govLink: asString(entry.govLink),
+				category: asString(entry.category),
 			});
 		}
 	}

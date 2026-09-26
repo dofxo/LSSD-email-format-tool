@@ -1,6 +1,6 @@
 import type { FormatInputField, divisionsType } from "@/types";
 
-/** The three things the /admin page lets you edit on any format. */
+/** The four things the /admin page lets you edit on any format. */
 export interface AdminFormatFields {
 	/** Name shown in the format picker. */
 	title: string;
@@ -8,6 +8,8 @@ export interface AdminFormatFields {
 	body: string;
 	/** Government website section this format is pasted into. */
 	govLink: string;
+	/** Heading the format is grouped under in the picker. `""` falls back to the default. */
+	category: string;
 }
 
 /** A format added from /admin, collected alongside the built-in ones. */
@@ -22,6 +24,8 @@ export interface AdminFormatOverride {
 	title?: string;
 	body?: string;
 	govLink?: string;
+	/** Set to `""` to drop the format out of its default category. */
+	category?: string;
 }
 
 /**

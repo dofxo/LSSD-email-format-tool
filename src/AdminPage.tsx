@@ -11,6 +11,7 @@ import { Panel, PanelBody, PanelHeader, PanelHeading } from "@/components/ui/pan
 import { getFormat } from "@/formats";
 import { adminFormatStore } from "@/formats/admin";
 import type { AdminFormatFields, AdminFormatStore } from "@/formats/adminTypes";
+import { formatCategories } from "@/formats/formatCategories";
 import { useTheme } from "@/hooks/useTheme";
 import { fetchAdminFormats, overrideKey, saveAdminFormats } from "@/lib/adminFormats";
 import { divisions } from "@/lib/divisions";
@@ -78,6 +79,7 @@ const AdminPage = () => {
 
 	const [newDivision, setNewDivision] = useState<divisionsType>("RED");
 	const [newTitle, setNewTitle] = useState("");
+	const [newCategory, setNewCategory] = useState("");
 	const [newGovLink, setNewGovLink] = useState("");
 	const [newBody, setNewBody] = useState("");
 
@@ -187,8 +189,10 @@ const AdminPage = () => {
 			title: newTitle.trim() || "New format",
 			body: newBody,
 			govLink: newGovLink.trim(),
+			category: newCategory.trim(),
 		});
 		setNewTitle("");
+		setNewCategory("");
 		setNewGovLink("");
 		setNewBody("");
 		toast.success("Format added. Press Save formats to write it to the file.");
@@ -220,6 +224,7 @@ const AdminPage = () => {
 								title: override?.title ?? label,
 								body: override?.body ?? "",
 								govLink: override?.govLink ?? "",
+								category: override?.category ?? formatCategories[division.id]?.[id] ?? "",
 							},
 						};
 					}),
@@ -229,7 +234,12 @@ const AdminPage = () => {
 							id: entry.id,
 							custom: true,
 							hasOverride: true,
-							fields: { title: entry.title, body: entry.body, govLink: entry.govLink },
+							fields: {
+								title: entry.title,
+								body: entry.body,
+								govLink: entry.govLink,
+								category: entry.category ?? "",
+							},
 						})),
 				];
 
@@ -542,6 +552,15 @@ const AdminPage = () => {
 										value={newTitle}
 										onChange={(event) => setNewTitle(event.target.value)}
 										placeholder="Shown in the format picker"
+									/>
+								</Field>
+
+								<Field label="Category" htmlFor="new-format-category">
+									<Input
+										id="new-format-category"
+										value={newCategory}
+										onChange={(event) => setNewCategory(event.target.value)}
+										placeholder="Heading it is grouped under in the picker"
 									/>
 								</Field>
 

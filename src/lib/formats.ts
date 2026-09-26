@@ -6,8 +6,9 @@ import { ATDLabels } from "@/formats/divisions/ATD";
 import { TSDLabels } from "@/formats/divisions/TSD";
 import { FTBLabels } from "@/formats/divisions/FTB";
 import { SEBLabels } from "@/formats/divisions/SEB";
-import { adminInputsFor, adminLabelFor, customFormatsFor } from "@/lib/adminFormats";
+import { adminInputsFor, adminLabelFor, customFormatsFor, overrideFor } from "@/lib/adminFormats";
 import { inputsByDivision } from "@/data/formatInputs";
+import { formatCategories } from "@/formats/formatCategories";
 import type { FormatInputField } from "@/types";
 
 export const labelsByDivision: Record<divisionsType, Record<string, string>> = {
@@ -23,6 +24,8 @@ export const labelsByDivision: Record<divisionsType, Record<string, string>> = {
 export interface FormatOption {
 	id: string;
 	label: string;
+	/** Heading this format is grouped under in the picker; undefined when it is not filed anywhere. */
+	category?: string;
 }
 
 /**
@@ -36,6 +39,22 @@ const leadingFormats: Partial<Record<divisionsType, string[]>> = {
 	SEB: ["29"],
 };
 
+/**
+ * The heading a format is grouped under, or undefined when it has none. A
+ * format added at /admin uses its own category, an edited one can clear its
+ * default by saving an empty category, and everything else falls back to the
+ * built-in table.
+ */
+export const formatCategoryFor = (division: divisionsType, formatId: string): string | undefined => {
+	const custom = customFormatsFor(division).find((entry) => entry.id === formatId);
+	if (custom) return custom.category?.trim() || undefined;
+
+	const override = overrideFor(division, formatId);
+	if (override && override.category !== undefined) return override.category.trim() || undefined;
+
+	return formatCategories[division]?.[formatId];
+};
+
 /** Every format available in a division, in the order the picker should show it. */
 export const formatsForDivision = (division: divisionsType): FormatOption[] => {
 	const labels = labelsByDivision[division];
@@ -44,6 +63,7 @@ export const formatsForDivision = (division: divisionsType): FormatOption[] => {
 	const toOption = ([id, label]: [string, string]): FormatOption => ({
 		id,
 		label: adminLabelFor(division, id) ?? label,
+		category: formatCategoryFor(division, id),
 	});
 
 	const builtIn = leading.length
@@ -56,7 +76,11 @@ export const formatsForDivision = (division: divisionsType): FormatOption[] => {
 		: Object.entries(labels).map(toOption);
 
 	// Formats added at /admin sit after the built-in ones.
-	const custom = customFormatsFor(division).map((entry) => ({ id: entry.id, label: entry.title }));
+	const custom = customFormatsFor(division).map((entry) => ({
+		id: entry.id,
+		label: entry.title,
+		category: entry.category?.trim() || undefined,
+	}));
 	return [...builtIn, ...custom];
 };
 
