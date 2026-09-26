@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { AlertTriangle, Check, Copy, FileText, RotateCcw, ShieldCheck } from "lucide-react";
+import { AlertTriangle, Check, Copy, ExternalLink, FileText, RotateCcw, ShieldCheck } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
 
 import { AppHeader } from "@/components/AppHeader";
@@ -18,6 +18,7 @@ import { useFormatData } from "@/hooks/useFormatData";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { useTheme } from "@/hooks/useTheme";
 import { getDivision } from "@/lib/divisions";
+import { govLinkFor } from "@/lib/govLinks";
 import { formatFieldsFor, formatsForDivision, formatLabelFor, isFilled } from "@/lib/formats";
 import { listIssues, profileIssues } from "@/lib/profile";
 import { cn } from "@/lib/utils";
@@ -150,6 +151,16 @@ const App = () => {
 		}
 		toast.info("Supervisory formats locked");
 	};
+
+	const handleOpenGovLink = useCallback(() => {
+		if (!formatId) return;
+		const url = govLinkFor(division, formatId);
+		if (url) {
+			window.open(url, "_blank", "noopener,noreferrer");
+		} else {
+			toast.info(`No government website link is set up for "${formatLabelFor(division, formatId)}" yet.`);
+		}
+	}, [division, formatId]);
 
 	const handleCopyFormat = useCallback(async () => {
 		if (!formatId) return;
@@ -295,10 +306,10 @@ const App = () => {
 
 								<div className="flex items-center gap-2">
 									{formatId ? (
-										<Button
-											key="reset"
+										<Button											key="reset"
 											variant="secondary"
-											size="icon"												onClick={() => {
+											size="icon-sm"
+											onClick={() => {
 													clearFormat();
 													setResetKey((value) => value + 1);
 												}}
@@ -311,11 +322,25 @@ const App = () => {
 
 									{formatId ? (
 										<Button
+											key="gov-link"
+											variant="secondary"
+											size="sm"
+											onClick={handleOpenGovLink}
+											title="Open the government website section where this format is pasted"
+											aria-label="Open the government website section where this format is pasted"
+										>
+											<ExternalLink />
+											<span className="hidden lg:inline">Open in government website</span>
+										</Button>
+									) : null}
+
+									{formatId ? (
+										<Button
 											key="copy"
 											variant="primary"
-											size="lg"
+											size="sm"
 											onClick={() => void handleCopyFormat()}
-											className="flex-1 sm:min-w-[170px] sm:flex-none"
+											className="flex-1 sm:min-w-[140px] sm:flex-none"
 										>
 											{formatCopied ? <Check /> : <Copy />}
 											{formatCopied ? "Copied" : "Copy format"}
