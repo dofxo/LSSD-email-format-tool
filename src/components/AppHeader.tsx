@@ -23,7 +23,7 @@ export function AppHeader({
 					</span>
 					<div className="min-w-0">
 						<h1 className="truncate text-[15px] leading-tight font-semibold text-ink">
-							LSSD Email Format Tool
+							LSSD Paperwork Tool
 						</h1>
 						<p className="hidden truncate text-[11.5px] text-ink-muted sm:block">
 							Los Santos County Sheriff&apos;s Department
