@@ -6,6 +6,7 @@ import { ATDLabels } from "@/formats/divisions/ATD";
 import { TSDLabels } from "@/formats/divisions/TSD";
 import { FTBLabels } from "@/formats/divisions/FTB";
 import { SEBLabels } from "@/formats/divisions/SEB";
+import { adminLabelFor, customFormatsFor } from "@/lib/adminFormats";
 import { inputsByDivision } from "@/data/formatInputs";
 import { SEBInputs } from "@/data/sebInputs";
 import type { FormatInputField } from "@/types";
@@ -45,18 +46,28 @@ const leadingFormats: Partial<Record<divisionsType, string[]>> = {
 export const formatsForDivision = (division: divisionsType): FormatOption[] => {
 	const labels = labelsByDivision[division];
 	const leading = leadingFormats[division] ?? [];
-	const toOption = ([id, label]: [string, string]): FormatOption => ({ id, label });
-	if (!leading.length) return Object.entries(labels).map(toOption);
+	// Titles edited at /admin override the built-in label.
+	const toOption = ([id, label]: [string, string]): FormatOption => ({
+		id,
+		label: adminLabelFor(division, id) ?? label,
+	});
 
-	const leads = leading.filter((id) => id in labels).map((id) => ({ id, label: labels[id] }));
-	const rest = Object.entries(labels)
-		.filter(([id]) => !leading.includes(id))
-		.map(toOption);
-	return [...leads, ...rest];
+	const builtIn = leading.length
+		? [
+				...leading.filter((id) => id in labels).map((id) => toOption([id, labels[id]])),
+				...Object.entries(labels)
+					.filter(([id]) => !leading.includes(id))
+					.map(toOption),
+			]
+		: Object.entries(labels).map(toOption);
+
+	// Formats added at /admin sit after the built-in ones.
+	const custom = customFormatsFor(division).map((entry) => ({ id: entry.id, label: entry.title }));
+	return [...builtIn, ...custom];
 };
 
 export const formatLabelFor = (division: divisionsType, formatId: string): string =>
-	labelsByDivision[division][formatId] ?? "";
+	adminLabelFor(division, formatId) ?? labelsByDivision[division][formatId] ?? "";
 
 /** The dynamic form fields a specific format requires. */
 export const formatFieldsFor = (division: divisionsType, formatId: string): FormatInputField[] =>

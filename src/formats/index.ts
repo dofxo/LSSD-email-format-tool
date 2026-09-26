@@ -5,6 +5,8 @@ import { GeneralFormats } from "./divisions/General";
 import { SupervisoryFormats } from "./divisions/Supervisory";
 import { FTBFormats } from "./divisions/FTB";
 import { SEBFormats } from "./divisions/SEB";
+import { adminBodyFor } from "@/lib/adminFormats";
+import { renderFormatTemplate } from "@/lib/formatTemplates";
 import type { DeputyData, divisionsType, FormatData } from "@/types";
 
 export const registry = {
@@ -28,6 +30,16 @@ export const getFormat = ({
 	formatId: string;
 	division: divisionsType;
 }) => {
+	// A body saved at /admin (an edited or newly added format) replaces the
+	// generator entirely, with its {{tokens}} filled from the form data.
+	const adminBody = adminBodyFor(division, formatId);
+	if (adminBody !== null) {
+		return {
+			format: renderFormatTemplate(adminBody, { formatData, deputyData, division }),
+			formats: {},
+		};
+	}
+
 	const build = registry[division];
 	if (!build) return { format: "[Invalid division]", formats: {} };
 	return build({ formatData, deputyData, division, formatId });
