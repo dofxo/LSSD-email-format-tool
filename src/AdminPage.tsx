@@ -16,7 +16,6 @@ import { useTheme } from "@/hooks/useTheme";
 import { fetchAdminFormats, overrideKey, saveAdminFormats } from "@/lib/adminFormats";
 import { divisions } from "@/lib/divisions";
 import { formatsForDivision, inputsForDivision, labelsByDivision } from "@/lib/formats";
-import { templateTokenHints } from "@/lib/formatTemplates";
 import { controlFieldClass } from "@/lib/styles";
 import { cn } from "@/lib/utils";
 import type { DeputyData, FormatInputField, divisionsType } from "@/types";
@@ -328,29 +327,6 @@ const AdminPage = () => {
 								</PanelBody>
 							</Panel>
 						) : null}
-
-						<Panel>
-							<PanelHeader>
-								<PanelHeading
-									step="?"
-									title="Token reference"
-									description="Drop these into a body and the app fills them in when the report is generated."
-								/>
-							</PanelHeader>
-							<PanelBody>
-								<div className="flex flex-wrap gap-2">
-									{templateTokenHints.map((hint) => (
-										<span
-											key={hint.token}
-											title={hint.description}
-											className="rounded-md border border-subtle bg-surface-2 px-2 py-1 font-mono text-[11.5px] text-ink-muted"
-										>
-											{`{{${hint.token}}}`}
-										</span>
-									))}
-								</div>
-							</PanelBody>
-						</Panel>
 
 						<Panel className="overflow-hidden border-accent/25 bg-accent/5">
 							<header className="flex items-center gap-3 px-5 py-4 sm:px-6">
