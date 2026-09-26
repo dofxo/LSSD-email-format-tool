@@ -43,11 +43,11 @@ Special Enforcement Bureau Command
 [/divbox]
 [lssdfooter][/lssdfooter]`;
 
-/** A 24h time spelled the way the OTP worksheets write it: "hh:mm AM/PM". */
+/** A 24h time written the way the OTP worksheets use it: "HH:mm". */
 const otpTime = (time?: string) => {
-	if (!time) return "HH:MM AM/PM";
+	if (!time) return "HH:MM";
 	const parsed = moment(time, "HH:mm");
-	return parsed.isValid() ? parsed.format("hh:mm A") : time;
+	return parsed.isValid() ? parsed.format("HH:mm") : time;
 };
 
 // Labels for Special Enforcement Bureau formats.

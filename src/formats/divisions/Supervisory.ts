@@ -495,8 +495,8 @@ You are being contacted to inform you that following deliberations, you are bein
 			}. 
 
 [list]
-[*][b]Start:[/b] ${formatData.suspensionStart || "MONTH DAY, YYYY 00:00 am/pm"}
-[*][b]End:[/b] ${formatData.suspensionEnd || "MONTH DAY, YYYY 00:00 am/pm"}
+[*][b]Start:[/b] ${formatData.suspensionStart || "MONTH DAY, YYYY 00:00"}
+[*][b]End:[/b] ${formatData.suspensionEnd || "MONTH DAY, YYYY 00:00"}
 [/list]
 
 [b]The reason for your suspension:[/b] ${formatData.summary || "Input Summary"}

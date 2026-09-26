@@ -41,14 +41,14 @@ const GRADE_SYSTEM = `[spoiler=Grade System]
 
 /** Header block shared by every dated report: "Date: DD/MMM/YYYY" + patrol hours. */
 const datedHeader = (date?: string, start?: string, end?: string) => {
-	const toAmPm = (time?: string) => {
-		if (!time) return "00:00 PM/AM";
+	const to24h = (time?: string) => {
+		if (!time) return "00:00";
 		const parsed = moment(time, "HH:mm");
-		return parsed.isValid() ? parsed.format("hh:mm A") : time;
+		return parsed.isValid() ? parsed.format("HH:mm") : time;
 	};
 	return `[divbox=white]
 [b]Date:[/b] ${date || "DD/MMM/YYYY"} 
-[b]Patrol Hours [ooc]Please use UTC: [url=https://time.is/UTC]https://time.is/UTC [/url][/ooc]:[/b] ${toAmPm(start)} > ${toAmPm(end)}
+[b]Patrol Hours [ooc]Please use UTC: [url=https://time.is/UTC]https://time.is/UTC [/url][/ooc]:[/b] ${to24h(start)} > ${to24h(end)}
 [/divbox]`;
 };
 
@@ -685,7 +685,7 @@ ${LSSD_FOOTER}`,
 [b]Date:[/b] ${f.mprDate || "DD/MMM/YY"}
 [b]Time:[/b] ${(() => {
 	const parsed = moment(f.mprTime, "HH:mm");
-	return f.mprTime ? (parsed.isValid() ? parsed.format("hh:mm A") : f.mprTime) : "XX:XX PM/AM";
+	return f.mprTime ? (parsed.isValid() ? parsed.format("HH:mm") : f.mprTime) : "XX:XX";
 })()} ((UTC))
 [b]Your Rank and Name:[/b] ${yourRankName}
 [b]FTD Rank and Name:[/b] ${f.mprFtdRankName || "Rank FName LName"}
