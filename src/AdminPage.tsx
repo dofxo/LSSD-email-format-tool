@@ -328,6 +328,81 @@ const AdminPage = () => {
 							</Panel>
 						) : null}
 
+						<Panel>
+							<PanelHeader>
+								<PanelHeading
+									icon={Plus}
+									title="Add a format"
+									description="Creates a new format for the chosen division, saved to the same file."
+								/>
+							</PanelHeader>
+							<PanelBody className="flex flex-col gap-4">
+								<Field label="Division" htmlFor="new-format-division">
+									<select
+										id="new-format-division"
+										value={newDivision}
+										onChange={(event) => setNewDivision(event.target.value as divisionsType)}
+										className={cn(controlFieldClass, "h-11 px-3.5")}
+									>
+										{divisions.map((division) => (
+											<option key={division.id} value={division.id}>
+												{division.name}
+											</option>
+										))}
+									</select>
+								</Field>
+
+								<Field label="Title" htmlFor="new-format-title">
+									<Input
+										id="new-format-title"
+										value={newTitle}
+										onChange={(event) => setNewTitle(event.target.value)}
+										placeholder="Shown in the format picker"
+									/>
+								</Field>
+
+								<Field label="Category" htmlFor="new-format-category">
+									<Input
+										id="new-format-category"
+										value={newCategory}
+										onChange={(event) => setNewCategory(event.target.value)}
+										placeholder="Heading it is grouped under in the picker"
+									/>
+								</Field>
+
+								<Field label="Government website link" htmlFor="new-format-gov">
+									<Input
+										id="new-format-gov"
+										value={newGovLink}
+										onChange={(event) => setNewGovLink(event.target.value)}
+										placeholder="https://gov.eclipse-rp.net/viewforum.php?f=..."
+									/>
+								</Field>
+
+								<Field
+									label="Body (phpBBcode)"
+									htmlFor="new-format-body"
+									hint="Use {{tokens}} to pull in form values."
+									wide
+								>
+									<Textarea
+										id="new-format-body"
+										value={newBody}
+										onChange={(event) => setNewBody(event.target.value)}
+										placeholder="[divbox=white]…[/divbox]"
+										className="min-h-[160px] font-mono text-[12.5px]"
+									/>
+								</Field>
+
+								<div>
+									<Button variant="primary" size="sm" onClick={handleAddFormat}>
+										<Plus />
+										Add format
+									</Button>
+								</div>
+							</PanelBody>
+						</Panel>
+
 						<Panel className="overflow-hidden border-accent/25 bg-accent/5">
 							<header className="flex items-center gap-3 px-5 py-4 sm:px-6">
 								<span
@@ -498,80 +573,6 @@ const AdminPage = () => {
 							);
 						})}
 
-						<Panel>
-							<PanelHeader>
-								<PanelHeading
-									icon={Plus}
-									title="Add a format"
-									description="Creates a new format for the chosen division, saved to the same file."
-								/>
-							</PanelHeader>
-							<PanelBody className="flex flex-col gap-4">
-								<Field label="Division" htmlFor="new-format-division">
-									<select
-										id="new-format-division"
-										value={newDivision}
-										onChange={(event) => setNewDivision(event.target.value as divisionsType)}
-										className={cn(controlFieldClass, "h-11 px-3.5")}
-									>
-										{divisions.map((division) => (
-											<option key={division.id} value={division.id}>
-												{division.name}
-											</option>
-										))}
-									</select>
-								</Field>
-
-								<Field label="Title" htmlFor="new-format-title">
-									<Input
-										id="new-format-title"
-										value={newTitle}
-										onChange={(event) => setNewTitle(event.target.value)}
-										placeholder="Shown in the format picker"
-									/>
-								</Field>
-
-								<Field label="Category" htmlFor="new-format-category">
-									<Input
-										id="new-format-category"
-										value={newCategory}
-										onChange={(event) => setNewCategory(event.target.value)}
-										placeholder="Heading it is grouped under in the picker"
-									/>
-								</Field>
-
-								<Field label="Government website link" htmlFor="new-format-gov">
-									<Input
-										id="new-format-gov"
-										value={newGovLink}
-										onChange={(event) => setNewGovLink(event.target.value)}
-										placeholder="https://gov.eclipse-rp.net/viewforum.php?f=..."
-									/>
-								</Field>
-
-								<Field
-									label="Body (phpBBcode)"
-									htmlFor="new-format-body"
-									hint="Use {{tokens}} to pull in form values."
-									wide
-								>
-									<Textarea
-										id="new-format-body"
-										value={newBody}
-										onChange={(event) => setNewBody(event.target.value)}
-										placeholder="[divbox=white]…[/divbox]"
-										className="min-h-[160px] font-mono text-[12.5px]"
-									/>
-								</Field>
-
-								<div>
-									<Button variant="primary" size="sm" onClick={handleAddFormat}>
-										<Plus />
-										Add format
-									</Button>
-								</div>
-							</PanelBody>
-						</Panel>
 					</>
 				)}
 			</main>
