@@ -361,13 +361,13 @@ export const inputsByDivision: Record<divisionsType, FormatInputField[]> = {
 		},
 		{
 			name: "suspensionStart",
-			label: "Suspension start (Month DD, YYYY - 00:00 AM/PM )",
+			label: "Suspension start (Month DD, YYYY - HH:mm )",
 			type: "text",
 			formats: ["5", "17"],
 		},
 		{
 			name: "suspensionEnd",
-			label: "Suspension end (Month DD, YYYY - 00:00 AM/PM )",
+			label: "Suspension end (Month DD, YYYY - HH:mm )",
 			type: "text",
 			formats: ["5", "17"],
 		},

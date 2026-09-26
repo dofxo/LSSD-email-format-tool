@@ -8,6 +8,7 @@ import { Combobox } from "@/components/ui/combobox";
 import { Field, Input, Textarea } from "@/components/ui/input";
 import { PanelEmpty } from "@/components/ui/panel";
 import { Segmented } from "@/components/ui/segmented";
+import { TimeInput } from "@/components/ui/timeInput";
 import { isFilled } from "@/lib/formats";
 import type { FormatData, FormatInputField } from "@/types";
 
@@ -259,12 +260,12 @@ export function FormatFields({ formatId, fields, formatData, setFormatData, rese
 							hint={field.hint}
 							meta={meta}
 						>
-							<div className="flex flex-wrap items-center gap-2">
-								<Input
-									id={field.name}
-									name={field.name}
-									type={withTime ? "datetime-local" : "date"}
-									value={rawDates[field.name] ?? ""}
+							<div className="flex flex-wrap items-center gap-2">									<Input
+										id={field.name}
+										name={field.name}
+										type={withTime ? "datetime-local" : "date"}
+										lang="en-GB"
+										value={rawDates[field.name] ?? ""}
 									onChange={(event) => handleDateChange(field.name, event.target.value, field.dateStyle)}
 									className="min-w-[150px] flex-1 sm:max-w-[220px]"
 								/>
@@ -341,19 +342,15 @@ export function FormatFields({ formatId, fields, formatData, setFormatData, rese
 							</div>
 						</Field>
 					);
-				}
-
-				if (field.type === "time") {
+				}				if (field.type === "time") {
 					return (
 						<Field key={field.name} label={label} htmlFor={field.name} hint={field.hint} wide meta={meta}>
 							<div className="flex flex-wrap items-center gap-2">
-								<Input
+								<TimeInput
 									id={field.name}
-									name={field.name}
-									type="time"
 									value={stringValue}
-									onChange={handleTextChange}
-									className="min-w-[110px] sm:max-w-[150px]"
+									ariaLabel={label}
+									onChange={(value) => setFormatData((prev) => ({ ...prev, [field.name]: value || undefined }))}
 								/>
 								<Button
 									variant="ghost"

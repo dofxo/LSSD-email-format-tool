@@ -266,7 +266,7 @@ export const SEBInputs: FormatInputField[] = [
 		},
 		{
 			name: `${session.prefix}Time`,
-			label: `${session.label} - start time (24h, shown as AM/PM)`,
+			label: `${session.label} - start time (UTC, 24h)`,
 			type: "time" as const,
 			formats: ["30", session.id],
 		},
