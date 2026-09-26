@@ -8,5 +8,6 @@ import type { AdminFormatStore } from "./adminTypes";
 
 export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 	"overrides": {},
-	"custom": []
+	"custom": [],
+	"inputs": {}
 } /* /ADMIN_DATA */;
