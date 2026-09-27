@@ -1,4 +1,6 @@
 import { ArrowDown, ArrowUp, Trash2, TriangleAlert } from "lucide-react";
+import { copyText } from "@/hooks/useCopy";
+import { toast } from "react-toastify";
 
 import { FieldPicker } from "@/components/admin/FieldPicker";
 import { Button } from "@/components/ui/button";
@@ -21,6 +23,12 @@ interface FormatFieldsEditorProps {
 	onChange: (picks: FormatFieldPick[]) => void;
 	/** Creates a brand-new catalogue field, available to every format. */
 	onCreate: (input: CatalogueInput) => void;
+	/** Deletes an admin-created field from the catalogue; row-level guards decide which rows show it. */
+	onDelete?: (input: CatalogueInput) => void;
+	/** Which fields are deletable, with the reason shown on hover when not. */
+	deleteGuard?: (name: string) => { ok: boolean; reason?: string };
+	/** Takes a field's `{{token}}` back out of the body (token-driven rows only). */
+	onRemoveFromBody?: (name: string) => void;
 }
 
 /** Replaces (or adds) the wording override for one catalogue field. */
@@ -53,7 +61,7 @@ const withWording = (
  * A format with a body of its own needs no choice at all — its `{{tokens}}` are
  * the fields, so this only edits their wording.
  */
-export function FormatFieldsEditor({ tokenDriven, body, picks, onChange, onCreate }: FormatFieldsEditorProps) {
+export function FormatFieldsEditor({ tokenDriven, body, picks, onChange, onCreate, onDelete, deleteGuard, onRemoveFromBody }: FormatFieldsEditorProps) {
 	const tokens = tokenDriven ? [...new Set(bodyTokens(body))] : [];
 	const unknown = tokenDriven
 		? tokens.filter((token) => !PROFILE_TOKENS.has(token) && !isCatalogueField(token))
@@ -98,8 +106,8 @@ export function FormatFieldsEditor({ tokenDriven, body, picks, onChange, onCreat
 					{tokenDriven ? (
 						<>
 							This format has its own body, so its fields are the ones that body asks for — {names.length}{" "}
-							of them. Change the body to add or remove a field; edit a label or hint here to word one
-							differently for this format.
+							of them. Add one from the body editor above; the trash on a row takes it back out
+							again. Edit a label or hint to word a field differently for this format.
 						</>
 					) : (
 						<>
@@ -133,12 +141,23 @@ export function FormatFieldsEditor({ tokenDriven, body, picks, onChange, onCreat
 				{names.map((name, position) => {
 					const definition = catalogueInputFor(name)!;
 					const pick = pickByName.get(name);
-					return (
-						<div key={name} className="rounded-xl border border-subtle bg-surface/60 p-2.5">
-							<div className="flex items-center gap-2">
-								<span className="shrink-0 rounded-full border border-subtle bg-surface-2 px-2 py-0.5 text-[11px] text-ink-muted">
-									{TYPE_LABELS[definition.type]}
-								</span>
+					return (							<div key={name} className="rounded-xl border border-subtle bg-surface/60 p-2.5">
+								<div className="flex items-center gap-2">
+									<span className="shrink-0 rounded-full border border-subtle bg-surface-2 px-2 py-0.5 text-[11px] text-ink-muted">
+										{TYPE_LABELS[definition.type]}
+									</span>
+									<button
+										type="button"
+										title={`The body fills this in as {{${name}}} — click to copy`}
+										aria-label={`Copy token ${name}`}
+										onClick={() => {
+											void copyText(`{{${name}}}`);
+											toast.info(`Copied {{${name}}} — paste it anywhere in the body`);
+										}}
+										className="shrink-0 cursor-pointer rounded-full border border-subtle bg-surface px-1.5 py-0.5 font-mono text-[10.5px] text-ink-muted transition-colors duration-150 hover:border-accent/40 hover:text-accent"
+									>
+										{`{{${name}}}`}
+									</button>
 								{rowKeys.filter((key) => key === rowKeys[position]).length > 1 ? (
 									<span
 										className="flex min-w-0 flex-1 items-center gap-1 text-[11px] text-warning"
@@ -150,6 +169,17 @@ export function FormatFieldsEditor({ tokenDriven, body, picks, onChange, onCreat
 								) : (
 									<span className="min-w-0 flex-1" />
 								)}
+								{tokenDriven && onRemoveFromBody ? (
+									<Button
+										size="icon-sm"
+										variant="ghost"
+										title="Remove this field from the body"
+										aria-label={`Remove ${name} from the body`}
+										onClick={() => onRemoveFromBody(name)}
+									>
+										<Trash2 />
+									</Button>
+								) : null}
 								{!tokenDriven ? (
 									<div className="ml-auto flex shrink-0 items-center gap-0.5">
 										<Button
@@ -209,7 +239,7 @@ export function FormatFieldsEditor({ tokenDriven, body, picks, onChange, onCreat
 			</div>
 
 			{tokenDriven ? null : (
-				<FieldPicker used={names} onPick={addField} onCreate={onCreate} />
+				<FieldPicker used={names} onPick={addField} onCreate={onCreate} onDelete={onDelete} deleteGuard={deleteGuard} />
 			)}
 		</div>
 	);

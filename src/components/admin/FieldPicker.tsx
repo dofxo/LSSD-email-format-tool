@@ -1,5 +1,5 @@
 import { useMemo, useRef, useState } from "react";
-import { Check, ChevronsUpDown, Plus, Search, TriangleAlert } from "lucide-react";
+import { Check, ChevronsUpDown, Plus, Search, Trash2, TriangleAlert } from "lucide-react";
 
 import { NewInputForm } from "@/components/admin/NewInputForm";
 import { Button } from "@/components/ui/button";
@@ -24,6 +24,13 @@ interface FieldPickerProps {
 	onPick: (name: string) => void;
 	/** Creates a brand-new catalogue field; the picker then picks it. */
 	onCreate: (input: CatalogueInput) => void;
+	/**
+	 * Deletes an admin-created field from the catalogue. Left out, nothing in the
+	 * list can be deleted — used everywhere except /admin.
+	 */
+	onDelete?: (input: CatalogueInput) => void;
+	/** Which fields are deletable here, with the reason when they are not. */
+	deleteGuard?: (name: string) => { ok: boolean; reason?: string };
 }
 
 /**
@@ -34,18 +41,21 @@ interface FieldPickerProps {
  * behind them. Choosing a type filters the list, so nothing has to be searched
  * by a name nobody should have to remember.
  */
-export function FieldPicker({ used, onPick, onCreate }: FieldPickerProps) {
+export function FieldPicker({ used, onPick, onCreate, onDelete, deleteGuard }: FieldPickerProps) {
 	const [open, setOpen] = useState(false);
 	const [search, setSearch] = useState("");
 	const [type, setType] = useState<FieldType | null>(null);
 	const [creating, setCreating] = useState(false);
+
 	const searchRef = useRef(search);
 	searchRef.current = search;
 
 	const usedSet = useMemo(() => new Set(used), [used]);
 
-	// Every catalogue field, typed, with a flag for wording that repeats.
-	const entries = useMemo(() => {
+	// Every catalogue field, typed, with a flag for wording that repeats. Computed
+	// on render: the catalogue is a live registry rather than React state, so a
+	// create or delete made anywhere (this picker included) shows up at once.
+	const entries = (() => {
 		const names = catalogueFieldNames();
 		const byLabel = new Map<string, number>();
 		for (const name of names) {
@@ -58,9 +68,14 @@ export function FieldPicker({ used, onPick, onCreate }: FieldPickerProps) {
 			const key = `${definition.type}:${definition.label.trim().toLowerCase()}`;
 			return { name, definition, duplicate: (byLabel.get(key) ?? 0) > 1 };
 		});
-	}, []);
+	})();
 
 	const shown = type ? entries.filter((entry) => entry.definition.type === type) : entries;
+
+	// Deletion is a catalogue-level action, so a row's guard is recomputed on
+	// every render — a save elsewhere can make a field deletable mid-session.
+	const guardFor = (name: string) =>
+		deleteGuard ? deleteGuard(name) : { ok: false, reason: "" };
 
 	const create = (input: CatalogueInput) => {
 		onCreate(input);
@@ -156,8 +171,32 @@ export function FieldPicker({ used, onPick, onCreate }: FieldPickerProps) {
 										<span className="shrink-0 rounded-full border border-subtle bg-surface-2 px-1.5 py-0.5 text-[10.5px] text-ink-faint">
 											{TYPE_LABELS[definition.type]}
 										</span>
-										{inUse ? <Check className="size-3.5 shrink-0 text-success" /> : null}
-									</CommandItem>
+									{inUse ? <Check className="size-3.5 shrink-0 text-success" /> : null}
+									{onDelete ? (
+										guardFor(name).ok ? (
+											<button
+												type="button"
+												className={trashClass}
+												title={`Delete the ${TYPE_LABELS[definition.type].toLowerCase()} "${definition.label}" from the catalogue`}
+												aria-label={`Delete field ${definition.label}`}
+												onMouseDown={(event) => event.stopPropagation()}
+												onClick={(event) => {
+													event.stopPropagation();
+													onDelete({ name, ...definition });
+												}}
+											>
+												<Trash2 className="size-3.5" />
+											</button>
+										) : guardFor(name).reason ? (
+											<span
+												className="flex shrink-0"
+												title={guardFor(name).reason}
+											>
+												<Trash2 className="size-3.5 text-ink-faint/40" />
+											</span>
+										) : null
+									) : null}
+								</CommandItem>
 								);
 							})}
 						</CommandGroup>
@@ -181,5 +220,9 @@ export function FieldPicker({ used, onPick, onCreate }: FieldPickerProps) {
 
 const typeChipClass =
 	"cursor-pointer rounded-full border border-subtle bg-surface-2 px-2 py-0.5 text-[11px] text-ink-muted transition-colors duration-150 hover:border-accent/40 hover:text-ink";
+
+/** A quiet trash button that stops the row's select from firing. */
+const trashClass =
+	"flex shrink-0 cursor-pointer rounded-md p-1 text-ink-faint transition-colors duration-150 hover:bg-danger/10 hover:text-danger";
 
 const typeChipActive = "border-accent/45 bg-accent-soft text-accent";

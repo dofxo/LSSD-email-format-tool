@@ -9,6 +9,14 @@
 export const tokenSnippet = (token: string) => `{{${token}}}`;
 
 /**
+ * The body with every `{{token}}` for a field taken back out, so a token-driven
+ * format can drop a field from its rows without anyone hunting through the body
+ * text by hand. Whatever the token held reverts to plain (empty) text.
+ */
+export const removeTokenFromBody = (body: string, token: string): string =>
+	body.split(tokenSnippet(token)).join("");
+
+/**
  * The body with `{{token}}` dropped in at the textarea's caret, replacing any
  * selection. Returns the next value and moves the caret after the insertion.
  */
