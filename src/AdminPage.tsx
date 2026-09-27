@@ -14,6 +14,7 @@ import type { AdminFormatFields, AdminFormatStore } from "@/formats/adminTypes";
 import { formatCategories } from "@/formats/formatCategories";
 import { useTheme } from "@/hooks/useTheme";
 import { applyStoreInputs, fetchAdminFormats, overrideKey, saveAdminFormats } from "@/lib/adminFormats";
+import { bodyTokens, profileTokens } from "@/lib/formatTemplates";
 import { catalogueInputFor } from "@/data/inputCatalogue";
 import { insertTokenAtCaret } from "@/lib/bodyInsert";
 import { divisions } from "@/lib/divisions";
@@ -109,10 +110,43 @@ const AdminPage = () => {
 		};
 	}, []);
 
-	const markDirty = useCallback(() => {
-		setVersion((value) => value + 1);
+	/**
+	 * Marks the store as changed. The version bump remounts the format cards so
+	 * they re-read the store; a card persisting its own draft (create/delete of a
+	 * field from its pickers) skips it — its local state already matches what was
+	 * just saved, and remounting would throw away the open picker mid-use.
+	 */
+	const markDirty = useCallback((opts?: { skipRemount?: boolean }) => {
+		if (!opts?.skipRemount) setVersion((value) => value + 1);
 		setDirty(true);
 	}, []);
+
+	/**
+	 * Every saved format that mentions a field: in its picks, or asked for by its
+	 * body's `{{tokens}}`. The delete guard in the pickers is built on this.
+	 */
+	const usedNamesFor = (current: AdminFormatStore): Map<string, string[]> => {
+		const used = new Map<string, string[]>();
+		const note = (name: string, format: string) => {
+			const list = used.get(name) ?? [];
+			if (!list.includes(format)) list.push(format);
+			used.set(name, list);
+		};
+		const profile = new Set(profileTokens.map((token) => token.token));
+		for (const override of Object.values(current.overrides)) {
+			for (const pick of override.fields ?? []) note(pick.name, override.title || "a format");
+			for (const token of bodyTokens(override.body ?? "")) {
+				if (!profile.has(token)) note(token, override.title || "a format");
+			}
+		}
+		for (const custom of current.custom) {
+			for (const pick of custom.fields ?? []) note(pick.name, custom.title || "a format");
+			for (const token of bodyTokens(custom.body)) {
+				if (!profile.has(token)) note(token, custom.title || "a format");
+			}
+		}
+		return used;
+	};
 
 	const toggleDivision = (division: divisionsType) =>
 		setOpenDivisions((prev) => ({ ...prev, [division]: !prev[division] }));
@@ -139,7 +173,12 @@ const AdminPage = () => {
 		}
 	};
 
-	const saveOverride = (division: divisionsType, formatId: string, fields: AdminFormatFields) => {
+	const saveOverride = (
+		division: divisionsType,
+		formatId: string,
+		fields: AdminFormatFields,
+		opts?: { skipRemount?: boolean },
+	) => {
 		// An empty title means "keep the built-in one", so it is left out of the
 		// override entirely rather than written as an empty string.
 		const { topicTitle, ...rest } = fields;
@@ -150,7 +189,7 @@ const AdminPage = () => {
 				[overrideKey(division, formatId)]: topicTitle.trim() ? { ...rest, topicTitle } : rest,
 			},
 		}));
-		markDirty();
+		markDirty(opts);
 	};
 
 	const resetOverride = (division: divisionsType, formatId: string) => {
@@ -162,14 +201,19 @@ const AdminPage = () => {
 		markDirty();
 	};
 
-	const saveCustom = (division: divisionsType, formatId: string, fields: AdminFormatFields) => {
+	const saveCustom = (
+		division: divisionsType,
+		formatId: string,
+		fields: AdminFormatFields,
+		opts?: { skipRemount?: boolean },
+	) => {
 		setStore((prev) => ({
 			...prev,
 			custom: prev.custom.map((entry) =>
 				entry.division === division && entry.id === formatId ? { ...entry, ...fields } : entry,
 			),
 		}));
-		markDirty();
+		markDirty(opts);
 	};
 
 	const deleteCustom = (division: divisionsType, formatId: string) => {
@@ -210,6 +254,58 @@ const AdminPage = () => {
 		setStore(next);
 		setDirty(true);
 		toast.success(`Field {{${input.name}}} created — press Save formats to keep it.`);
+	};
+
+	/**
+	 * Removes an admin-created field from the catalogue. Built-in fields are not
+	 * deletable — the pickers simply don't offer it — so anything reaching here is
+	 * in the store's `inputs`. A field still used by a saved format is refused:
+	 * deleting it would leave that format asking for something nobody can fill.
+	 */
+	const deleteInput = (input: CatalogueInput) => {
+		const usedBy = usedNamesFor(store).get(input.name);
+		if (usedBy?.length) {
+			toast.error(
+				`{{${input.name}}} is still used by ${usedBy.join(", ")} — remove it from there first.`,
+			);
+			return;
+		}
+		const next: AdminFormatStore = {
+			...store,
+			inputs: (store.inputs ?? []).filter((entry) => entry.name !== input.name),
+		};
+		applyStoreInputs(next);
+		setStore(next);
+		setDirty(true);
+		toast.success(`Field {{${input.name}}} deleted — press Save formats to keep that.`);
+	};
+
+	/**
+	 * Whether a field can be deleted from the catalogue right now. Only fields
+	 * created at /admin can be — built-ins are part of the source tree. A saved
+	 * format still asking for the field blocks deletion; unsaved local usage is
+	 * checked by the format cards themselves, which know their draft state.
+	 */
+	const deleteGuardFor = (name: string): { ok: boolean; reason?: string } => {
+		if (!catalogueInputFor(name)) return { ok: false };
+		if (!(store.inputs ?? []).some((entry) => entry.name === name)) {
+			return { ok: false, reason: "Built-in field — it ships with the tool and cannot be deleted." };
+		}
+		const usedBy = usedNamesFor(store).get(name);
+		if (usedBy?.length) {
+			return { ok: false, reason: `Still used by ${usedBy.join(", ")} — remove it from there first.` };
+		}
+		return { ok: true };
+	};
+
+	/** The new-format picker's guard, which also sees the draft body's tokens. */
+	const newFormatGuard = (name: string): { ok: boolean; reason?: string } => {
+		const base = deleteGuardFor(name);
+		if (!base.ok) return base;
+		if (newBody.includes(`{{${name}}}`)) {
+			return { ok: false, reason: "The new format's draft body still uses it." };
+		}
+		return { ok: true };
 	};
 
 	/** Inserts a token into the new-format body at the caret. */
@@ -457,6 +553,8 @@ const AdminPage = () => {
 									body={newBody}
 									onInsert={insertNewBodyToken}
 									onCreate={createInput}
+									onDelete={deleteInput}
+									deleteGuard={newFormatGuard}
 								/>
 
 								<div>
@@ -523,11 +621,13 @@ const AdminPage = () => {
 										defaultDeputy={EMPTY_DEPUTY}
 										initialPicks={format.picks}
 										onCreate={createInput}
+										onDeleteField={deleteInput}
+										deleteGuard={deleteGuardFor}
 										defaultTopicTitle={format.defaultTopicTitle}
-										onSave={(fields) =>
+										onSave={(fields, opts) =>
 											format.custom
-												? saveCustom(division.id, format.id, fields)
-												: saveOverride(division.id, format.id, fields)
+												? saveCustom(division.id, format.id, fields, opts)
+												: saveOverride(division.id, format.id, fields, opts)
 										}
 										onReset={() => resetOverride(division.id, format.id)}
 										onDelete={() => deleteCustom(division.id, format.id)}

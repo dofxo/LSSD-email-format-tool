@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ChevronDown, RotateCcw, Save, Trash2 } from "lucide-react";
 
 import { BodyVariables } from "@/components/admin/BodyVariables";
@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Field, Input, Textarea } from "@/components/ui/input";
 import { catalogueInputFor } from "@/data/inputCatalogue";
 import { autoTokenizeBody } from "@/lib/autoTokenize";
-import { insertTokenAtCaret } from "@/lib/bodyInsert";
+import { insertTokenAtCaret, removeTokenFromBody } from "@/lib/bodyInsert";
 import { formatsForDivision } from "@/lib/formats";
 import { cn } from "@/lib/utils";
 import type { AdminFormatFields } from "@/formats/adminTypes";
@@ -44,7 +44,11 @@ interface FormatEditorProps {
 	initialPicks: FormatFieldPick[];
 	/** Creates a brand-new catalogue input, available to every format. */
 	onCreate: (input: CatalogueInput) => void;
-	onSave: (fields: AdminFormatFields) => void;
+	/** Deletes an admin-created catalogue field; row-level guards decide which rows show the affordance. */
+	onDeleteField?: (input: CatalogueInput) => void;
+	/** Which fields are deletable, with the reason shown on hover when not. */
+	deleteGuard?: (name: string) => { ok: boolean; reason?: string };
+	onSave: (fields: AdminFormatFields, opts?: { skipRemount?: boolean }) => void;
 	onReset: () => void;
 	onDelete: () => void;
 }
@@ -61,6 +65,8 @@ export function FormatEditor({
 	defaultDeputy,
 	initialPicks,
 	onCreate,
+	onDeleteField,
+	deleteGuard,
 	onSave,
 	onReset,
 	onDelete,
@@ -124,6 +130,83 @@ export function FormatEditor({
 	const insertToken = (token: string) => {
 		setBody((previous) => insertTokenAtCaret(bodyRef.current, token, previous));
 		setBodyEdited(true);
+	};
+
+	// Takes a field's {{token}} back out of the body, the way the picker put it
+	// in: the row disappears from Fields and the spot reverts to plain text. The
+	// next body is worked out here rather than read back from state, so the save
+	// carries exactly this edit even though React has not re-rendered yet.
+	const removeTokenAndPersist = (token: string) => {
+		const nextBody = removeTokenFromBody(bodyRef.current?.value ?? body, token);
+		setBody(nextBody);
+		setBodyEdited(true);
+		onSave(
+			{
+				title,
+				topicTitle,
+				body: nextBody,
+				govLink,
+				category,
+				fields: ownBody ? picksRef.current.filter((pick) => pick.label || pick.hint) : picksRef.current,
+			},
+			{ skipRemount: true },
+		);
+	};
+
+	// The body as it is right now, so a persist below never re-saves what the
+	// state was before the very edit it is meant to keep.
+	const bodyValueRef = useRef(body);
+	useEffect(() => {
+		bodyValueRef.current = body;
+	});
+
+	// The picks as they are right now, so the create-and-persist below can read
+	// them without depending on a stale closure.
+	const picksRef = useRef(picks);
+	useEffect(() => {
+		picksRef.current = picks;
+	});
+	// A field created from one of this card's pickers is wired up locally a
+	// moment later — the token lands in the body, or the pick in the list — while
+	// the create toast points at the page-wide "Save formats" rather than this
+	// card's own button. Persisting the wiring here keeps that save from keeping
+	// the field but silently dropping the token that connects it.
+	const createAndPersist = (input: CatalogueInput) => {
+		onCreate(input);
+		setTimeout(() => {
+			onSave(
+				{
+					title,
+					topicTitle,
+					body: bodyValueRef.current,
+					govLink,
+					category,
+					fields: ownBody ? picksRef.current.filter((pick) => pick.label || pick.hint) : picksRef.current,
+				},
+				// No remount: the card's local state already matches what was saved,
+				// and remounting would throw away the open picker mid-use.
+				{ skipRemount: true },
+			);
+		}, 0);
+	};
+
+	// Deletion needs no local wiring — a field comes off the catalogue itself —
+	// so these pass straight through to the pickers.
+	const deleteAndPersist = (input: CatalogueInput) => {
+		onDeleteField?.(input);
+		setTimeout(() => {
+			onSave(
+				{
+					title,
+					topicTitle,
+					body: bodyValueRef.current,
+					govLink,
+					category,
+					fields: ownBody ? picksRef.current.filter((pick) => pick.label || pick.hint) : picksRef.current,
+				},
+				{ skipRemount: true },
+			);
+		}, 0);
 	};
 
 	// Rewrites the output this format already prints so each value it copies
@@ -349,20 +432,25 @@ export function FormatEditor({
 								<BodyVariables
 									body={body}
 									onInsert={insertToken}
-									onCreate={onCreate}
+									onCreate={createAndPersist}
+									onDelete={deleteAndPersist}
+									deleteGuard={deleteGuard}
 									onAutoTokenize={
 										body === generated && generated.trim() ? matchOutputToInputs : undefined
 									}
 								/>
 							</div>
 						) : null}
-					</div>						<FormatFieldsEditor
-							tokenDriven={ownBody}
-							body={body}
-							picks={picks}
-							onChange={setPicks}
-							onCreate={onCreate}
-						/>
+					</div>							<FormatFieldsEditor
+								tokenDriven={ownBody}
+								body={body}
+								picks={picks}
+								onChange={setPicks}
+								onCreate={createAndPersist}
+								onDelete={deleteAndPersist}
+								deleteGuard={deleteGuard}
+								onRemoveFromBody={removeTokenAndPersist}
+							/>
 				</div>
 			) : null}
 		</div>
