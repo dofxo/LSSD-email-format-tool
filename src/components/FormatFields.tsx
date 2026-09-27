@@ -10,16 +10,12 @@ import { PanelEmpty } from "@/components/ui/panel";
 import { Segmented } from "@/components/ui/segmented";
 import { TimeInput } from "@/components/ui/timeInput";
 import { isFilled } from "@/lib/formats";
-import type { FormatData, FormatInputField } from "@/types";
+import type { DateStyle, FormatData, FormatInputField } from "@/types";
 
 const currentDateValue = (withTime: boolean) => moment().format(withTime ? "YYYY-MM-DDTHH:mm" : "YYYY-MM-DD");
 
 /** Reformats a native date/datetime input value into the email's date style. */
-const formatDateValue = (
-	raw: string,
-	format: "full" | "short" | "shortYear" = "full",
-	hasTime = false,
-) => {
+const formatDateValue = (raw: string, format: DateStyle = "full", hasTime = false) => {
 	const date = moment.utc(raw);
 	if (!date.isValid()) return raw;
 	if (format === "shortYear") {
@@ -31,6 +27,13 @@ const formatDateValue = (
 	}
 	return hasTime ? date.format("MMMM Do, YYYY - HH:mm") : date.format("MMMM Do, YYYY");
 };
+
+/** The output styles every date input can be switched between, picker order. */
+const DATE_STYLE_OPTIONS: { value: DateStyle; label: string }[] = [
+	{ value: "full", label: "Month DD, YYYY" },
+	{ value: "short", label: "DD/MMM/YYYY" },
+	{ value: "shortYear", label: "DD/MMM/YY" },
+];
 
 const cleanLabel = (label: string) => label.replace(/\s*\n\s*$/, "").trim();
 
@@ -105,11 +108,17 @@ export function FormatFields({ formatId, fields, formatData, setFormatData, rese
 		setFormatData((prev) => ({ ...prev, [name]: value }));
 	};
 
-	const handleDateChange = (
-		name: string,
-		value: string,
-		dateStyle?: "full" | "short" | "shortYear",
-	) => {
+	/**
+	 * The style a date field prints in: whatever was chosen for it here, then the
+	 * catalogue's own default, then (for the shared `date` field) the app-wide
+	 * style saved with earlier drafts.
+	 */
+	const dateStyleFor = (field: FormatInputField): DateStyle =>
+		formatData.dateFormats?.[field.name] ??
+		field.dateStyle ??
+		(field.name === "date" ? (formatData.dateFormat ?? "full") : "full");
+
+	const handleDateChange = (name: string, value: string, dateStyle?: DateStyle) => {
 		setRawDates((prev) => {
 			const next = { ...prev };
 			if (value) next[name] = value;
@@ -130,11 +139,19 @@ export function FormatFields({ formatId, fields, formatData, setFormatData, rese
 		}));
 	};
 
-	const handleDateFormatChange = (value: "full" | "short") => {
+	/**
+	 * Switches one date field's output style, re-printing whatever it already
+	 * holds. The choice is remembered per field, so changing the Dive Team's log
+	 * date leaves every other format's dates exactly as they were.
+	 */
+	const handleDateStyleChange = (name: string, value: DateStyle) => {
+		const raw = rawDates[name];
 		setFormatData((prev) => ({
 			...prev,
-			dateFormat: value,
-			date: prev.date && rawDates.date ? formatDateValue(rawDates.date, value, false) : prev.date,
+			dateFormats: { ...prev.dateFormats, [name]: value },
+			// The field named `date` keeps the app-wide style in step with it.
+			...(name === "date" ? { dateFormat: value } : {}),
+			...(raw ? { [name]: formatDateValue(raw, value, raw.includes("T")) } : {}),
 		}));
 	};
 
@@ -250,7 +267,7 @@ export function FormatFields({ formatId, fields, formatData, setFormatData, rese
 
 				if (field.type === "date") {
 					const withTime = field.name === "interviewDate";
-					const hasFormatToggle = field.name === "date";
+					const dateStyle = dateStyleFor(field);
 					return (
 						<Field
 							key={field.name}
@@ -266,31 +283,26 @@ export function FormatFields({ formatId, fields, formatData, setFormatData, rese
 										type={withTime ? "datetime-local" : "date"}
 										lang="en-GB"
 										value={rawDates[field.name] ?? ""}
-									onChange={(event) => handleDateChange(field.name, event.target.value, field.dateStyle)}
+									onChange={(event) => handleDateChange(field.name, event.target.value, dateStyle)}
 									className="min-w-[150px] flex-1 sm:max-w-[220px]"
 								/>
 								<Button
 									variant="ghost"
 									size="sm"
-									onClick={() => handleDateChange(field.name, currentDateValue(withTime), field.dateStyle)}
+									onClick={() => handleDateChange(field.name, currentDateValue(withTime), dateStyle)}
 									className="shrink-0"
 								>
 									<CalendarDays />
 									{withTime ? "Now" : "Today"}
 								</Button>
-								{hasFormatToggle ? (
-									<Segmented
-										size="sm"
-										ariaLabel="Date style"
-										value={(formatData.dateFormat ?? "full") as "full" | "short"}
-										onChange={handleDateFormatChange}
-										options={[
-											{ value: "full", label: "Month DD, YYYY" },
-											{ value: "short", label: "DD/MMM/YYYY" },
-										]}
-										className="shrink-0"
-									/>
-								) : null}
+								<Segmented
+									size="sm"
+									ariaLabel={`${label} date style`}
+									value={dateStyle}
+									onChange={(value) => handleDateStyleChange(field.name, value)}
+									options={DATE_STYLE_OPTIONS}
+									className="shrink-0"
+								/>
 							</div>
 						</Field>
 					);
