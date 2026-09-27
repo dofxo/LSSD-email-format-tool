@@ -1,7 +1,8 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ChevronDown, ListChecks, Lock, Moon, Plus, Save, Sun } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
 
+import { BodyVariables } from "@/components/admin/BodyVariables";
 import { FormatEditor } from "@/components/admin/FormatEditor";
 import { InputFieldsEditor } from "@/components/admin/InputFieldsEditor";
 import { PasswordGate } from "@/components/admin/PasswordGate";
@@ -14,12 +15,13 @@ import type { AdminFormatFields, AdminFormatStore } from "@/formats/adminTypes";
 import { formatCategories } from "@/formats/formatCategories";
 import { useTheme } from "@/hooks/useTheme";
 import { fetchAdminFormats, overrideKey, saveAdminFormats } from "@/lib/adminFormats";
+import { insertTokenAtCaret } from "@/lib/bodyInsert";
 import { divisions } from "@/lib/divisions";
 import { formatsForDivision, inputsForDivision, labelsByDivision } from "@/lib/formats";
 import { renderTitleTemplate, titleTemplates } from "@/lib/formatTitles";
 import { controlFieldClass } from "@/lib/styles";
 import { cn } from "@/lib/utils";
-import type { DeputyData, FormatInputField, divisionsType } from "@/types";
+import type { DeputyData, FormatData, FormatInputField, divisionsType } from "@/types";
 
 const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD as string | undefined;
 // Persisted in localStorage (like the supervisory unlock on the main page), so
@@ -96,6 +98,12 @@ const AdminPage = () => {
 	const [newCategory, setNewCategory] = useState("");
 	const [newGovLink, setNewGovLink] = useState("");
 	const [newBody, setNewBody] = useState("");
+	const newBodyRef = useRef<HTMLTextAreaElement | null>(null);
+
+	// The id the next added format will take, so its body editor can offer the
+	// same variables (and tick any new input) before the format exists.
+	const pendingFormatId = nextCustomId(newDivision, store);
+	const pendingFields = store.inputs[newDivision] ?? inputsForDivision(newDivision);
 
 	useEffect(() => {
 		let active = true;
@@ -203,6 +211,19 @@ const AdminPage = () => {
 		}));
 		markDirty();
 	};
+
+	/** Adds one input field to a division, straight from a body editor. */
+	const addInputField = (division: divisionsType, field: FormatInputField) => {
+		setStore((prev) => {
+			const current = prev.inputs[division] ?? inputsForDivision(division);
+			return { ...prev, inputs: { ...prev.inputs, [division]: [...current, field] } };
+		});
+		markDirty();
+	};
+
+	/** Inserts a token into the new-format body at the caret. */
+	const insertNewBodyToken = (token: string) =>
+		setNewBody((previous) => insertTokenAtCaret(newBodyRef.current, token, previous));
 
 	const handleAddFormat = () => {
 		addCustom(newDivision, {
@@ -423,17 +444,26 @@ const AdminPage = () => {
 								<Field
 									label="Body (phpBBcode)"
 									htmlFor="new-format-body"
-									hint="The body this format posts to the government website."
+									hint="The body this format posts to the government website. Wrap any part in double braces to fill it from an input."
 									wide
 								>
 									<Textarea
 										id="new-format-body"
+										ref={newBodyRef}
 										value={newBody}
 										onChange={(event) => setNewBody(event.target.value)}
 										placeholder="[divbox=white]…[/divbox]"
 										className="min-h-[160px] font-mono text-[12.5px]"
 									/>
 								</Field>
+
+								<BodyVariables
+									formatId={pendingFormatId}
+									divisionFields={pendingFields}
+									body={newBody}
+									onInsert={insertNewBodyToken}
+									onCreateField={(field) => addInputField(newDivision, field)}
+								/>
 
 								<div>
 									<Button variant="primary" size="sm" onClick={handleAddFormat}>
@@ -590,14 +620,18 @@ const AdminPage = () => {
 										formatId={format.id}
 										custom={format.custom}
 										fields={format.fields}
-										getDefaultBody={() =>
+										renderBody={(formatData: FormatData, deputyData: DeputyData) =>
 											getFormat({
-												formatData: {},
-												deputyData: EMPTY_DEPUTY,
+												formatData,
+												deputyData,
 												formatId: format.id,
 												division: division.id,
 											}).format
-										}										defaultTopicTitle={format.defaultTopicTitle}
+										}
+										defaultDeputy={EMPTY_DEPUTY}
+										divisionFields={store.inputs[division.id] ?? inputsForDivision(division.id)}
+										onCreateField={(field) => addInputField(division.id, field)}
+										defaultTopicTitle={format.defaultTopicTitle}
 										onSave={(fields) =>
 											format.custom
 												? saveCustom(division.id, format.id, fields)

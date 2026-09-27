@@ -39,16 +39,22 @@ export const renderFormatTemplate = (template: string, context: TemplateContext)
 	return template.replace(TOKEN_PATTERN, (_match, token: string) => stringify(values[token]));
 };
 
-/** A short reference the admin editor shows above the body field. */
-export const templateTokenHints: { token: string; description: string }[] = [
-	{ token: "name", description: "Deputy's full name from the profile" },
-	{ token: "dRank", description: "Deputy's department rank" },
-	{ token: "signature", description: "Deputy's signature image URL" },
-	{ token: "rankName", description: "`dRank name` combined" },
-	{ token: "division", description: "The division the format belongs to" },
-	{ token: "date", description: "The email date field" },
-	{ token: "recipientName", description: "Recipient name (where the format has it)" },
-	{ token: "applicantName", description: "RED applicant name" },
-	{ token: "deputyName", description: "TSD/ATD deputy name" },
-	{ token: "body", description: "Free body text (SEB emails)" },
+/**
+ * Tokens that always resolve, whichever fields a format declares: they come
+ * from the deputy profile rather than from a form input.
+ */
+export const profileTokens: { token: string; label: string }[] = [
+	{ token: "name", label: "Deputy full name (profile)" },
+	{ token: "dRank", label: "Deputy rank (profile)" },
+	{ token: "rankName", label: "Rank and name together (profile)" },
+	{ token: "signature", label: "Signature image URL (profile)" },
+	{ token: "division", label: "Division the format belongs to" },
 ];
+
+/**
+ * Every distinct `{{token}}` a body references, in the order they appear. Used
+ * by the admin body editor to show what a template is wired up to, and to call
+ * out tokens no input can ever fill.
+ */
+export const bodyTokens = (body: string): string[] =>
+	[...new Set(Array.from(body.matchAll(TOKEN_PATTERN), (match) => match[1].trim()))];
