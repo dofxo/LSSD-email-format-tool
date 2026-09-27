@@ -1,12 +1,15 @@
-import { useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { ChevronDown, RotateCcw, Save, Trash2 } from "lucide-react";
 
+import { BodyVariables } from "@/components/admin/BodyVariables";
 import { Button } from "@/components/ui/button";
 import { Field, Input, Textarea } from "@/components/ui/input";
+import { autoTokenizeBody } from "@/lib/autoTokenize";
+import { insertTokenAtCaret } from "@/lib/bodyInsert";
 import { formatsForDivision } from "@/lib/formats";
 import { cn } from "@/lib/utils";
 import type { AdminFormatFields } from "@/formats/adminTypes";
-import type { divisionsType } from "@/types";
+import type { DeputyData, FormatData, FormatInputField, divisionsType } from "@/types";
 
 interface FormatEditorProps {
 	division: divisionsType;
@@ -16,8 +19,14 @@ interface FormatEditorProps {
 	fields: AdminFormatFields;
 	/** Readable preview of the title this format uses when none is set here. */
 	defaultTopicTitle?: string;
-	/** Builds the format's current output, used to seed the body editor. */
-	getDefaultBody: () => string;
+	/** Builds the format's own output for any set of values. */
+	renderBody: (formatData: FormatData, deputyData: DeputyData) => string;
+	/** The blank profile the format's output is rendered with in this editor. */
+	defaultDeputy: DeputyData;
+	/** Every input field in the division, so the body editor can offer its variables. */
+	divisionFields: FormatInputField[];
+	/** Adds an input bound to this format, straight from the body editor. */
+	onCreateField: (field: FormatInputField) => void;
 	onSave: (fields: AdminFormatFields) => void;
 	onReset: () => void;
 	onDelete: () => void;
@@ -31,7 +40,10 @@ export function FormatEditor({
 	custom,
 	fields,
 	defaultTopicTitle = "",
-	getDefaultBody,
+	renderBody,
+	defaultDeputy,
+	divisionFields,
+	onCreateField,
 	onSave,
 	onReset,
 	onDelete,
@@ -41,6 +53,7 @@ export function FormatEditor({
 	const [category, setCategory] = useState(fields.category);
 	const [govLink, setGovLink] = useState(fields.govLink);
 	const [body, setBody] = useState(fields.body);
+	const bodyRef = useRef<HTMLTextAreaElement | null>(null);
 	const [bodyOpen, setBodyOpen] = useState(fields.body.trim().length > 0);
 	const [bodyEdited, setBodyEdited] = useState(false);
 	const [confirming, setConfirming] = useState(false);
@@ -68,11 +81,46 @@ export function FormatEditor({
 		),
 	];
 
+	// What this format prints right now, with every value blank. It is what the
+	// body editor loads, and what the automatic matching works against.
+	const generated = useMemo(() => {
+		try {
+			return renderBody({}, defaultDeputy);
+		} catch {
+			return "";
+		}
+	}, [renderBody, defaultDeputy]);
+
 	const toggleBody = () => {
 		// First open of an untouched built-in format loads what it generates
 		// today, so it can be edited in place without retyping it.
-		if (!bodyOpen && !hasOverride && !bodyEdited) setBody(getDefaultBody());
+		if (!bodyOpen && !hasOverride && !bodyEdited) setBody(generated);
 		setBodyOpen((value) => !value);
+	};
+
+	// Drops {{token}} in at the caret, replacing whatever is selected. Selecting a
+	// literal value in a loaded body and clicking its input is how a generated
+	// body becomes a template.
+	const insertToken = (token: string) => {
+		setBody((previous) => insertTokenAtCaret(bodyRef.current, token, previous));
+		setBodyEdited(true);
+	};
+
+	// Rewrites the output this format already prints so each value it copies
+	// verbatim becomes that input's variable. Refuses anything it cannot prove.
+	const matchOutputToInputs = () => {
+		const result = autoTokenizeBody({
+			base: generated,
+			fields: divisionFields.filter((field) => field.formats.includes(formatId)),
+			render: renderBody,
+			deputy: defaultDeputy,
+			division,
+		});
+		if (result.tokenized.length) {
+			setBody(result.body);
+			setBodyEdited(true);
+		}
+		return { tokenized: result.tokenized, skipped: result.skipped, refused: Boolean(result.refused) };
 	};
 
 	return (
@@ -270,6 +318,7 @@ export function FormatEditor({
 							<div className="mt-2 flex flex-col gap-2">
 								<Textarea
 									id={`body-${fieldId}`}
+									ref={bodyRef}
 									value={body}
 									onChange={(event) => {
 										setBody(event.target.value);
@@ -291,6 +340,17 @@ export function FormatEditor({
 								</p>
 
 								<p className="text-[11.5px] text-ink-faint">{body.length} characters</p>
+
+								<BodyVariables
+									formatId={formatId}
+									divisionFields={divisionFields}
+									body={body}
+									onInsert={insertToken}
+									onCreateField={onCreateField}
+									onAutoTokenize={
+										body === generated && generated.trim() ? matchOutputToInputs : undefined
+									}
+								/>
 							</div>
 						) : null}
 					</div>

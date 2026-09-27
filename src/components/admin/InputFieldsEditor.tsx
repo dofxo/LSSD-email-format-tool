@@ -11,34 +11,13 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { Field, Input, Textarea } from "@/components/ui/input";
+import { FIELD_TYPES, TYPE_LABELS } from "@/lib/fieldTypes";
 import type { FormatOption } from "@/lib/formats";
 import { controlFieldClass } from "@/lib/styles";
 import { cn } from "@/lib/utils";
 import type { FormatInputField, divisionsType } from "@/types";
 
-const FIELD_TYPES: FormatInputField["type"][] = [
-	"text",
-	"number",
-	"date",
-	"time",
-	"select",
-	"textarea",
-	"check",
-	"list",
-];
-
 const DATE_STYLES: NonNullable<FormatInputField["dateStyle"]>[] = ["full", "short", "shortYear"];
-
-const TYPE_LABELS: Record<FormatInputField["type"], string> = {
-	text: "Single line text",
-	number: "Number",
-	date: "Date picker",
-	time: "Time picker",
-	select: "Dropdown",
-	textarea: "Paragraph",
-	check: "Checklist",
-	list: "Repeating list",
-};
 
 const newField = (): FormatInputField => ({
 	name: "newField",
