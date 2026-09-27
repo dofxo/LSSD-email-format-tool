@@ -392,13 +392,13 @@ const AdminPage = () => {
 								<Field
 									label="Government website title"
 									htmlFor="new-format-topic-title"
-									hint="The post title used on the government website. Anything in square brackets is a reminder to the person filling the format in to replace that part, e.g. “Promotion notice [deputy name]”."
+									hint="The post title used on the government website. Anything in curly braces is a reminder to the person filling the format in to replace that part, e.g. “Promotion notice {deputy name}”."
 								>
 									<Input
 										id="new-format-topic-title"
 										value={newTopicTitle}
 										onChange={(event) => setNewTopicTitle(event.target.value)}
-										placeholder="e.g. Promotion notice [deputy name]"
+										placeholder="e.g. Promotion notice {deputy name}"
 									/>
 								</Field>
 

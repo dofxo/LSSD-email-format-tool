@@ -17,8 +17,8 @@ interface TopicTitleFieldProps {
 /**
  * The topic title shown for formats that post to the government website.
  *
- * Anything the format put in square brackets is a part the person filling it in
- * has to replace themselves — "Promotion notice [deputy name]" — so those are
+ * Anything the format put in curly braces is a part the person filling it in
+ * has to replace themselves — "Promotion notice {deputy name}" — so those are
  * listed until they are gone, and the title is only considered ready after that.
  */
 export function TopicTitleField({ suggested, edited, onChange, onReset }: TopicTitleFieldProps) {

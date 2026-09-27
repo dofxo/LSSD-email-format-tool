@@ -68,14 +68,14 @@ export const hasTitleFor = (division: divisionsType, formatId: string): boolean 
 // Prompts the title asks the person to fill in
 // ---------------------------------------------------------------------------
 
-/** Matches a bracketed prompt such as "[deputy name]". */
-const PROMPT_PATTERN = /\[([^[\]]+)\]/g;
+/** Matches a braced prompt such as "{deputy name}". */
+const PROMPT_PATTERN = /\{([^{}]+)\}/g;
 
 /**
- * Whatever is written in square brackets is a note to whoever fills the format
- * in: "Promotion notice [deputy name]" asks them to swap the bracketed part for
+ * Whatever is written in curly braces is a note to whoever fills the format
+ * in: "Promotion notice {deputy name}" asks them to swap the braced part for
  * the real value. There is no list of variable names to choose from — the text
- * between the brackets is simply shown back to them as a reminder.
+ * between the braces is simply shown back to them as a reminder.
  */
 export const titlePrompts = (title: string): string[] =>
 	Array.from(title.matchAll(PROMPT_PATTERN), (match) => match[1].trim()).filter(Boolean);
@@ -89,7 +89,7 @@ export const titlePrompts = (title: string): string[] =>
  * (the built-in titles use them, e.g. to drop in a date), blank gaps collapse,
  * and no separator is left dangling when the trailing value is empty.
  *
- * Bracketed prompts are left untouched — they are for the person filling the
+ * Braced prompts are left untouched — they are for the person filling the
  * format in, not something the app can work out on its own.
  */
 export const renderTitleTemplate = (
