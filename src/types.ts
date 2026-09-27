@@ -35,7 +35,8 @@ export interface FormatInputField {
 export interface FormatData {
 	/**
 	 * Editable topic/post title for formats that post to the government website.
-	 * Empty means "use the suggested title" from src/lib/formatTitles.ts.
+	 * Undefined means "use the suggested title" from src/lib/formatTitles.ts;
+	 * any string, including an empty one, is the deputy's own title.
 	 */
 	topicTitle?: string;
 

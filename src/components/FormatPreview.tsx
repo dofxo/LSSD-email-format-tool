@@ -12,9 +12,11 @@ interface FormatPreviewProps {
 	formatLabel: string;
 	/** Topic title for formats that post to the government website. */
 	title?: string;
+	/** Whether the person has taken the title over, rather than it being the suggestion. */
+	titleEdited?: boolean;
 }
 
-export function FormatPreview({ text, formatLabel, title }: FormatPreviewProps) {
+export function FormatPreview({ text, formatLabel, title, titleEdited }: FormatPreviewProps) {
 	const { copy, isCopied } = useCopy();
 	const copied = isCopied("preview");
 	const titleCopied = isCopied("preview-title");
@@ -64,7 +66,13 @@ export function FormatPreview({ text, formatLabel, title }: FormatPreviewProps) 
 							</Button>
 						</div>
 						<p className="mt-1 text-[13px] leading-relaxed font-medium break-words text-ink">
-							{title.trim() || <span className="text-ink-faint">Fill in the details to build a title.</span>}
+							{title.trim() || (
+								<span className="text-ink-faint">
+									{titleEdited
+										? "Title cleared — this post will go up without one."
+										: "Fill in the details to build a title."}
+								</span>
+							)}
 						</p>
 						{titlePromptsLeft.length > 0 ? (
 							<p className="mt-1.5 flex items-start gap-1.5 text-[11.5px] leading-relaxed text-warning">
