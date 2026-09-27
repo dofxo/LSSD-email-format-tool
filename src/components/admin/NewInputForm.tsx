@@ -1,12 +1,15 @@
 import { useState } from "react";
-import { Plus, Trash2 } from "lucide-react";
+import { Copy, Plus, Trash2, Wand2 } from "lucide-react";
+import { toast } from "react-toastify";
 
 import { Button } from "@/components/ui/button";
 import { Field, Input } from "@/components/ui/input";
 import { catalogueInputFor } from "@/data/inputCatalogue";
+import { copyText } from "@/hooks/useCopy";
 import {
 	isValidTokenName,
 	normaliseInput,
+	suggestTokenName,
 	FIELD_TYPES,
 	TYPE_LABELS,
 	type CatalogueInput,
@@ -45,6 +48,8 @@ export function NewInputForm({ existingNames, initialType, onCreate, onCancel }:
 	const trimmed = name.trim();
 	const nameValid = isValidTokenName(trimmed);
 	const taken = existingNames.has(trimmed);
+	// What the label suggests as a token name, offered when the box is still empty.
+	const suggestion = suggestTokenName(label);
 	// The field this name already belongs to, so a clash can point at it rather
 	// than silently adding a second field with the same name.
 	const existing = taken ? catalogueInputFor(trimmed) : undefined;
@@ -65,7 +70,12 @@ export function NewInputForm({ existingNames, initialType, onCreate, onCancel }:
 				<Field
 					label="Name"
 					htmlFor="new-input-name"
-					hint="Typed once: this is how the body refers to the field."
+					hint={
+						<>
+							The <code className="font-mono">{'{{token}}'}</code> the body uses to fill this in — type it
+							here, and change it any time before you create the field.
+						</>
+					}
 				>
 					<Input
 						id="new-input-name"
@@ -101,6 +111,38 @@ export function NewInputForm({ existingNames, initialType, onCreate, onCancel }:
 					</select>
 				</Field>
 			</div>
+
+			{!trimmed && suggestion ? (
+				<button
+					type="button"
+					onClick={() => setName(suggestion)}
+					title="Use this token name, or type your own in the box above"
+					className="flex cursor-pointer items-center gap-1.5 self-start rounded-full border border-subtle bg-surface-2 px-2 py-0.5 font-mono text-[11px] text-ink-muted transition-colors duration-150 hover:border-accent/40 hover:text-accent"
+				>
+					<Wand2 className="size-3" />
+					{`Use {{${suggestion}}}`}
+				</button>
+			) : null}
+
+			{trimmed && nameValid && !taken ? (
+				<div className="flex flex-wrap items-center gap-1.5 text-[11.5px] text-ink-faint">
+					<span>In the body:</span>
+					<button
+						type="button"
+						title={`Copy {{${trimmed}}}`}
+						aria-label={`Copy the token {{${trimmed}}}`}
+						onClick={() => {
+							void copyText(`{{${trimmed}}}`);
+							toast.info(`Copied {{${trimmed}}}`);
+						}}
+						className="flex cursor-pointer items-center gap-1.5 rounded-full border border-subtle bg-surface px-2 py-0.5 font-mono text-[11px] text-ink-muted transition-colors duration-150 hover:border-accent/40 hover:text-accent"
+					>
+						<Copy className="size-3" />
+						{`{{${trimmed}}}`}
+					</button>
+					<span>— change the name above to change it.</span>
+				</div>
+			) : null}
 
 			<Field label="Label" htmlFor="new-input-label" hint="The question shown above the input.">
 				<Input

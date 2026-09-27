@@ -22,7 +22,7 @@ import { formatFieldsFor, labelsByDivision } from "@/lib/formats";
 import { renderTitleTemplate, titleTemplates } from "@/lib/formatTitles";
 import { controlFieldClass } from "@/lib/styles";
 import { cn } from "@/lib/utils";
-import type { CatalogueInput } from "@/lib/inputDefinitions";
+import { normaliseInput, type CatalogueInput } from "@/lib/inputDefinitions";
 import type { DeputyData, FormatData, FormatFieldPick, divisionsType } from "@/types";
 
 const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD as string | undefined;
@@ -254,6 +254,23 @@ const AdminPage = () => {
 		setStore(next);
 		setDirty(true);
 		toast.success(`Field {{${input.name}}} created — press Save formats to keep it.`);
+	};
+
+	/**
+	 * Keeps a token that was renamed in a format's body answering to a field. An
+	 * existing field is used as it stands; a genuinely new name is added to the
+	 * catalogue carrying the wording of the field it replaced, so a body never
+	 * goes on asking for something nothing can fill.
+	 */
+	const renameInput = (from: string, to: string) => {
+		if (catalogueInputFor(to)) return;
+		const source = catalogueInputFor(from);
+		const replacement = normaliseInput(source ? { ...source, name: to } : { name: to, type: "text", label: to });
+		if (!replacement) {
+			toast.error(`“${to}” is not a usable field name.`);
+			return;
+		}
+		createInput(replacement);
 	};
 
 	/**
@@ -620,9 +637,10 @@ const AdminPage = () => {
 										}
 										defaultDeputy={EMPTY_DEPUTY}
 										initialPicks={format.picks}
-										onCreate={createInput}
-										onDeleteField={deleteInput}
-										deleteGuard={deleteGuardFor}
+									onCreate={createInput}
+									onDeleteField={deleteInput}
+									onRenameField={renameInput}
+									deleteGuard={deleteGuardFor}
 										defaultTopicTitle={format.defaultTopicTitle}
 										onSave={(fields, opts) =>
 											format.custom

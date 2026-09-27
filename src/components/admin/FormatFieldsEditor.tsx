@@ -1,4 +1,5 @@
-import { ArrowDown, ArrowUp, Trash2, TriangleAlert } from "lucide-react";
+import { useState } from "react";
+import { ArrowDown, ArrowUp, Check, Pencil, Trash2, TriangleAlert, X } from "lucide-react";
 import { copyText } from "@/hooks/useCopy";
 import { toast } from "react-toastify";
 
@@ -6,7 +7,7 @@ import { FieldPicker } from "@/components/admin/FieldPicker";
 import { Button } from "@/components/ui/button";
 import { Field, Input } from "@/components/ui/input";
 import { catalogueInputFor, isCatalogueField } from "@/data/inputCatalogue";
-import { TYPE_LABELS } from "@/lib/inputDefinitions";
+import { isValidTokenName, TYPE_LABELS } from "@/lib/inputDefinitions";
 import { bodyTokens, profileTokens } from "@/lib/formatTemplates";
 import type { CatalogueInput } from "@/lib/inputDefinitions";
 import type { FormatFieldPick } from "@/types";
@@ -29,6 +30,12 @@ interface FormatFieldsEditorProps {
 	deleteGuard?: (name: string) => { ok: boolean; reason?: string };
 	/** Takes a field's `{{token}}` back out of the body (token-driven rows only). */
 	onRemoveFromBody?: (name: string) => void;
+	/**
+	 * Renames a `{{token}}` in the body being edited (token-driven rows only).
+	 * The caller rewrites the body and makes sure a field answers to the new
+	 * name, so the token never points at nothing.
+	 */
+	onRenameField?: (from: string, to: string) => void;
 }
 
 /** Replaces (or adds) the wording override for one catalogue field. */
@@ -59,10 +66,13 @@ const withWording = (
  * a brand-new field is created.
  *
  * A format with a body of its own needs no choice at all — its `{{tokens}}` are
- * the fields, so this only edits their wording.
+ * the fields, so this edits their wording and their token names: a row's pencil
+ * retypes the `{{token}}` itself, in every place the body uses it.
  */
-export function FormatFieldsEditor({ tokenDriven, body, picks, onChange, onCreate, onDelete, deleteGuard, onRemoveFromBody }: FormatFieldsEditorProps) {
+export function FormatFieldsEditor({ tokenDriven, body, picks, onChange, onCreate, onDelete, deleteGuard, onRemoveFromBody, onRenameField }: FormatFieldsEditorProps) {
 	const tokens = tokenDriven ? [...new Set(bodyTokens(body))] : [];
+	// The token currently being retyped, and what has been typed into it.
+	const [renaming, setRenaming] = useState<{ from: string; value: string } | null>(null);
 	const unknown = tokenDriven
 		? tokens.filter((token) => !PROFILE_TOKENS.has(token) && !isCatalogueField(token))
 		: [];
@@ -89,6 +99,22 @@ export function FormatFieldsEditor({ tokenDriven, body, picks, onChange, onCreat
 
 	const removeField = (name: string) => onChange(picks.filter((pick) => pick.name !== name));
 
+	/** The name a pending rename would commit to, or null when it cannot. */
+	const renameTarget = (pending: { from: string; value: string }): string | null => {
+		const next = pending.value.trim();
+		if (!next || next === pending.from || !isValidTokenName(next)) return null;
+		if (tokens.includes(next)) return null;
+		return next;
+	};
+
+	const commitRename = () => {
+		if (!renaming) return;
+		const next = renameTarget(renaming);
+		if (!next) return;
+		onRenameField?.(renaming.from, next);
+		setRenaming(null);
+	};
+
 	const move = (name: string, direction: -1 | 1) => {
 		const index = picks.findIndex((pick) => pick.name === name);
 		const target = index + direction;
@@ -106,8 +132,9 @@ export function FormatFieldsEditor({ tokenDriven, body, picks, onChange, onCreat
 					{tokenDriven ? (
 						<>
 							This format has its own body, so its fields are the ones that body asks for — {names.length}{" "}
-							of them. Add one from the body editor above; the trash on a row takes it back out
-							again. Edit a label or hint to word a field differently for this format.
+							of them. Add one from the body editor above, rename its <code className="font-mono">{'{{token}}'}</code>{" "}
+							with the pencil, or take it back out with the trash. Edit a label or hint to word a
+							field differently for this format.
 						</>
 					) : (
 						<>
@@ -146,18 +173,69 @@ export function FormatFieldsEditor({ tokenDriven, body, picks, onChange, onCreat
 									<span className="shrink-0 rounded-full border border-subtle bg-surface-2 px-2 py-0.5 text-[11px] text-ink-muted">
 										{TYPE_LABELS[definition.type]}
 									</span>
-									<button
-										type="button"
-										title={`The body fills this in as {{${name}}} — click to copy`}
-										aria-label={`Copy token ${name}`}
-										onClick={() => {
-											void copyText(`{{${name}}}`);
-											toast.info(`Copied {{${name}}} — paste it anywhere in the body`);
-										}}
-										className="shrink-0 cursor-pointer rounded-full border border-subtle bg-surface px-1.5 py-0.5 font-mono text-[10.5px] text-ink-muted transition-colors duration-150 hover:border-accent/40 hover:text-accent"
-									>
-										{`{{${name}}}`}
-									</button>
+									{renaming?.from === name ? (
+										<>
+											<Input
+												autoFocus
+												value={renaming.value}
+												aria-label={`Rename the {{${name}}} token`}
+												onChange={(event) => setRenaming({ from: name, value: event.target.value })}
+												onKeyDown={(event) => {
+													if (event.key === "Enter") {
+														event.preventDefault();
+														commitRename();
+													}
+													if (event.key === "Escape") setRenaming(null);
+												}}
+												className="h-7 w-40 font-mono text-[11.5px]"
+											/>
+											<Button
+												size="icon-sm"
+												variant="ghost"
+												title={`Rename to {{${renaming.value.trim()}}}`}
+												aria-label={`Rename ${name} to ${renaming.value.trim() || "…"}`}
+												disabled={!renameTarget(renaming)}
+												onClick={commitRename}
+											>
+												<Check />
+											</Button>
+											<Button
+												size="icon-sm"
+												variant="ghost"
+												title="Cancel"
+												aria-label={`Stop renaming ${name}`}
+												onClick={() => setRenaming(null)}
+											>
+												<X />
+											</Button>
+										</>
+									) : (
+										<>
+											<button
+												type="button"
+												title={`The body fills this in as {{${name}}} — click to copy`}
+												aria-label={`Copy token ${name}`}
+												onClick={() => {
+													void copyText(`{{${name}}}`);
+													toast.info(`Copied {{${name}}} — paste it anywhere in the body`);
+												}}
+												className="shrink-0 cursor-pointer rounded-full border border-subtle bg-surface px-1.5 py-0.5 font-mono text-[10.5px] text-ink-muted transition-colors duration-150 hover:border-accent/40 hover:text-accent"
+											>
+												{`{{${name}}}`}
+											</button>
+											{onRenameField ? (
+												<Button
+													size="icon-sm"
+													variant="ghost"
+													title={`Rename the {{${name}}} token — every place the body uses it follows`}
+													aria-label={`Rename the ${name} token`}
+													onClick={() => setRenaming({ from: name, value: name })}
+												>
+													<Pencil />
+												</Button>
+											) : null}
+										</>
+									)}
 								{rowKeys.filter((key) => key === rowKeys[position]).length > 1 ? (
 									<span
 										className="flex min-w-0 flex-1 items-center gap-1 text-[11px] text-warning"

@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Field, Input, Textarea } from "@/components/ui/input";
 import { catalogueInputFor } from "@/data/inputCatalogue";
 import { autoTokenizeBody } from "@/lib/autoTokenize";
-import { insertTokenAtCaret, removeTokenFromBody } from "@/lib/bodyInsert";
+import { insertTokenAtCaret, removeTokenFromBody, renameTokenInBody } from "@/lib/bodyInsert";
 import { formatsForDivision } from "@/lib/formats";
 import { cn } from "@/lib/utils";
 import type { AdminFormatFields } from "@/formats/adminTypes";
@@ -48,6 +48,8 @@ interface FormatEditorProps {
 	onDeleteField?: (input: CatalogueInput) => void;
 	/** Which fields are deletable, with the reason shown on hover when not. */
 	deleteGuard?: (name: string) => { ok: boolean; reason?: string };
+	/** Makes sure a body token renamed here answers to a field. */
+	onRenameField?: (from: string, to: string) => void;
 	onSave: (fields: AdminFormatFields, opts?: { skipRemount?: boolean }) => void;
 	onReset: () => void;
 	onDelete: () => void;
@@ -67,6 +69,7 @@ export function FormatEditor({
 	onCreate,
 	onDeleteField,
 	deleteGuard,
+	onRenameField,
 	onSave,
 	onReset,
 	onDelete,
@@ -207,6 +210,29 @@ export function FormatEditor({
 				{ skipRemount: true },
 			);
 		}, 0);
+	};
+
+	/**
+	 * Renames a `{{token}}` in this format's body. The body is what names a
+	 * field, so rewriting it is the whole edit; the page is told about the new
+	 * name first, so something answers to it before anything re-renders.
+	 */
+	const renameTokenAndPersist = (from: string, to: string) => {
+		const nextBody = renameTokenInBody(bodyValueRef.current, from, to);
+		setBody(nextBody);
+		setBodyEdited(true);
+		onRenameField?.(from, to);
+		onSave(
+			{
+				title,
+				topicTitle,
+				body: nextBody,
+				govLink,
+				category,
+				fields: ownBody ? picksRef.current.filter((pick) => pick.label || pick.hint) : picksRef.current,
+			},
+			{ skipRemount: true },
+		);
 	};
 
 	// Rewrites the output this format already prints so each value it copies
@@ -450,6 +476,7 @@ export function FormatEditor({
 								onDelete={deleteAndPersist}
 								deleteGuard={deleteGuard}
 								onRemoveFromBody={removeTokenAndPersist}
+								onRenameField={renameTokenAndPersist}
 							/>
 				</div>
 			) : null}

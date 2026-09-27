@@ -17,6 +17,14 @@ export const removeTokenFromBody = (body: string, token: string): string =>
 	body.split(tokenSnippet(token)).join("");
 
 /**
+ * The body with one `{{token}}` renamed. The body is what names a field, so
+ * this is how a token is changed after it was dropped in: every occurrence is
+ * rewritten and the field it asks for follows the name.
+ */
+export const renameTokenInBody = (body: string, from: string, to: string): string =>
+	from === to ? body : body.split(tokenSnippet(from)).join(tokenSnippet(to));
+
+/**
  * The body with `{{token}}` dropped in at the textarea's caret, replacing any
  * selection. Returns the next value and moves the caret after the insertion.
  */
