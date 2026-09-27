@@ -196,9 +196,9 @@ export function FormatEditor({
 						wide
 						hint={
 							<>
-								The post title used on the government website. Anything you put in square brackets is a
+								The post title used on the government website. Anything you put in curly braces is a
 								reminder to the person filling the format in to replace that part — for example
-								“Promotion notice [deputy name]”.
+								“Promotion notice {'{deputy name}'}”.
 								{defaultTopicTitle
 									? ` Left empty, this format keeps its built-in title: “${defaultTopicTitle}”.`
 									: " Left empty, this format asks for no title."}
@@ -212,7 +212,7 @@ export function FormatEditor({
 							placeholder={
 								defaultTopicTitle
 									? "Leave empty to keep the built-in title"
-									: "e.g. Promotion notice [deputy name]"
+									: "e.g. Promotion notice {deputy name}"
 							}
 						/>
 					</Field>

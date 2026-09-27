@@ -20,7 +20,7 @@ export function FormatPreview({ text, formatLabel, title, titleEdited }: FormatP
 	const { copy, isCopied } = useCopy();
 	const copied = isCopied("preview");
 	const titleCopied = isCopied("preview-title");
-	// Parts the title still asks the person to replace, e.g. "[deputy name]".
+	// Parts the title still asks the person to replace, e.g. "{deputy name}".
 	const titlePromptsLeft = useMemo(() => titlePrompts(title ?? ""), [title]);
 
 	// Templates render empty fields as the string "undefined", so call that out.
