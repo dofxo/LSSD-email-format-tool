@@ -2,14 +2,31 @@ import { useMemo, useRef, useState } from "react";
 import { ChevronDown, RotateCcw, Save, Trash2 } from "lucide-react";
 
 import { BodyVariables } from "@/components/admin/BodyVariables";
+import { FormatFieldsEditor } from "@/components/admin/FormatFieldsEditor";
 import { Button } from "@/components/ui/button";
 import { Field, Input, Textarea } from "@/components/ui/input";
+import { catalogueInputFor } from "@/data/inputCatalogue";
 import { autoTokenizeBody } from "@/lib/autoTokenize";
 import { insertTokenAtCaret } from "@/lib/bodyInsert";
 import { formatsForDivision } from "@/lib/formats";
 import { cn } from "@/lib/utils";
 import type { AdminFormatFields } from "@/formats/adminTypes";
-import type { DeputyData, FormatData, FormatInputField, divisionsType } from "@/types";
+import type { CatalogueInput } from "@/lib/inputDefinitions";
+import type { DeputyData, FormatData, FormatFieldPick, FormatInputField, divisionsType } from "@/types";
+
+/** Turns a pick into the field a form renders, using the catalogue for everything but wording. */
+const resolvePick = (pick: FormatFieldPick): FormatInputField | null => {
+	const definition = catalogueInputFor(pick.name);
+	if (!definition) return null;
+	const { label, ...rest } = definition;
+	return {
+		name: pick.name,
+		label: pick.label?.trim() || label,
+		hint: pick.hint?.trim() || definition.hint,
+		formats: [],
+		...rest,
+	};
+};
 
 interface FormatEditorProps {
 	division: divisionsType;
@@ -23,10 +40,10 @@ interface FormatEditorProps {
 	renderBody: (formatData: FormatData, deputyData: DeputyData) => string;
 	/** The blank profile the format's output is rendered with in this editor. */
 	defaultDeputy: DeputyData;
-	/** Every input field in the division, so the body editor can offer its variables. */
-	divisionFields: FormatInputField[];
-	/** Adds an input bound to this format, straight from the body editor. */
-	onCreateField: (field: FormatInputField) => void;
+	/** The inputs this format asks for: catalogue names plus any wording overrides. */
+	initialPicks: FormatFieldPick[];
+	/** Creates a brand-new catalogue input, available to every format. */
+	onCreate: (input: CatalogueInput) => void;
 	onSave: (fields: AdminFormatFields) => void;
 	onReset: () => void;
 	onDelete: () => void;
@@ -42,8 +59,8 @@ export function FormatEditor({
 	defaultTopicTitle = "",
 	renderBody,
 	defaultDeputy,
-	divisionFields,
-	onCreateField,
+	initialPicks,
+	onCreate,
 	onSave,
 	onReset,
 	onDelete,
@@ -53,6 +70,7 @@ export function FormatEditor({
 	const [category, setCategory] = useState(fields.category);
 	const [govLink, setGovLink] = useState(fields.govLink);
 	const [body, setBody] = useState(fields.body);
+	const [picks, setPicks] = useState<FormatFieldPick[]>(initialPicks);
 	const bodyRef = useRef<HTMLTextAreaElement | null>(null);
 	const [bodyOpen, setBodyOpen] = useState(fields.body.trim().length > 0);
 	const [bodyEdited, setBodyEdited] = useState(false);
@@ -61,15 +79,17 @@ export function FormatEditor({
 	const [open, setOpen] = useState(() => custom && fields.body.trim().length === 0);
 
 	const hasOverride = fields.body.trim().length > 0;
-	// Only a title typed into the field above counts for the badge; a format
-	// left empty keeps its built-in title without advertising one here.
-	const savedTopicTitle = topicTitle.trim();
+	// A format with a body of its own takes its inputs from that body's tokens; the
+	// rest still run a built-in generator, so their inputs are picked explicitly.
+	const ownBody = hasOverride;
+	const picksChanged = JSON.stringify(picks) !== JSON.stringify(initialPicks);
 	const dirty =
 		title !== fields.title ||
 		topicTitle.trim() !== fields.topicTitle.trim() ||
 		category !== fields.category ||
 		govLink !== fields.govLink ||
-		bodyEdited;
+		bodyEdited ||
+		picksChanged;
 	const fieldId = `${division}-${formatId}`;
 
 	// Headings already used in this division, so categories stay consistent.
@@ -109,9 +129,12 @@ export function FormatEditor({
 	// Rewrites the output this format already prints so each value it copies
 	// verbatim becomes that input's variable. Refuses anything it cannot prove.
 	const matchOutputToInputs = () => {
+		const localFields = picks
+			.map(resolvePick)
+			.filter((field): field is FormatInputField => field !== null);
 		const result = autoTokenizeBody({
 			base: generated,
-			fields: divisionFields.filter((field) => field.formats.includes(formatId)),
+			fields: localFields,
 			render: renderBody,
 			deputy: defaultDeputy,
 			division,
@@ -155,34 +178,23 @@ export function FormatEditor({
 					>
 						{title.trim() || "Untitled format"}
 					</span>
-					{savedTopicTitle ? (
-						<span
-							title={savedTopicTitle}
-							className="hidden shrink-0 rounded-md border border-accent/25 bg-accent/10 px-1.5 py-0.5 text-[10.5px] font-medium text-accent sm:inline"
-						>
-							post title
-						</span>
-					) : null}
-					{category.trim() ? (
-						<span className="hidden shrink-0 rounded-md border border-subtle bg-surface px-1.5 py-0.5 text-[10.5px] font-medium text-ink-muted lg:inline">
-							{category.trim()}
-						</span>
-					) : null}
-					{dirty ? (
-						<span className="shrink-0 text-[12px] font-medium text-warning">Unsaved changes</span>
-					) : hasOverride ? (
-						<span className="hidden shrink-0 text-[11.5px] text-ink-faint xl:inline">edited body</span>
-					) : null}
 				</button>
 
 				<div className="ml-auto flex shrink-0 items-center gap-2">
 					{dirty ? (
 						<Button
 							size="sm"
-							variant="primary"
-							onClick={() =>
-								onSave({ title, topicTitle, body: bodyEdited ? body : fields.body, govLink, category })
-							}
+							variant="primary"								onClick={() =>
+									onSave({
+										title,
+										topicTitle,
+										body: bodyEdited ? body : fields.body,
+										govLink,
+										category,
+										// A body-driven format only needs to keep its wording overrides.
+										fields: ownBody ? picks.filter((pick) => pick.label || pick.hint) : picks,
+									})
+								}
 							aria-label={`Save ${title || formatId}`}
 						>
 							<Save />
@@ -305,13 +317,6 @@ export function FormatEditor({
 								className={cn("size-4 transition-transform duration-200", bodyOpen && "rotate-180")}
 							/>
 							{bodyOpen ? "Hide body" : "Show body"}
-							<span className="font-normal text-ink-faint">
-								{hasOverride || bodyEdited
-									? "edited body saved"
-									: custom
-										? "nothing saved yet"
-										: "loads what the format generates today"}
-							</span>
 						</button>
 
 						{bodyOpen ? (
@@ -342,18 +347,22 @@ export function FormatEditor({
 								<p className="text-[11.5px] text-ink-faint">{body.length} characters</p>
 
 								<BodyVariables
-									formatId={formatId}
-									divisionFields={divisionFields}
 									body={body}
 									onInsert={insertToken}
-									onCreateField={onCreateField}
+									onCreate={onCreate}
 									onAutoTokenize={
 										body === generated && generated.trim() ? matchOutputToInputs : undefined
 									}
 								/>
 							</div>
 						) : null}
-					</div>
+					</div>						<FormatFieldsEditor
+							tokenDriven={ownBody}
+							body={body}
+							picks={picks}
+							onChange={setPicks}
+							onCreate={onCreate}
+						/>
 				</div>
 			) : null}
 		</div>

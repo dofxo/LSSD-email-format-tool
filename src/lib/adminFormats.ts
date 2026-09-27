@@ -1,8 +1,24 @@
 import { adminFormatStore } from "@/formats/admin";
 import type { AdminFormatOverride, AdminFormatStore } from "@/formats/adminTypes";
-import type { FormatInputField, divisionsType } from "@/types";
+import { getCustomInputs, registerCustomInputs } from "@/data/inputCatalogue";
+import type { CatalogueInput } from "@/lib/inputDefinitions";
+import type { FormatFieldPick, divisionsType } from "@/types";
 
 const ENDPOINT = "/api/admin/formats";
+
+/**
+ * Feeds the admin-created inputs from a store into the live catalogue. Called
+ * whenever a store arrives (initial bundle, dev-server fetch) so `{{tokens}}`
+ * the store defines resolve immediately.
+ */
+export const applyStoreInputs = (store: AdminFormatStore): void => {
+	registerCustomInputs(Array.isArray(store.inputs) ? store.inputs : []);
+};
+
+applyStoreInputs(adminFormatStore);
+
+/** The admin-created catalogue inputs as currently loaded. */
+export const customInputsFor = (): CatalogueInput[] => getCustomInputs();
 
 /** Store key for a built-in format: "DIVISION/formatId". */
 export const overrideKey = (division: divisionsType, formatId: string) => `${division}/${formatId}`;
@@ -37,12 +53,15 @@ export const adminGovLinkFor = (division: divisionsType, formatId: string): stri
 };
 
 /**
- * A division's input fields replaced at /admin, or null when it should keep
- * using the built-in list from src/data/formatInputs.ts.
+ * The inputs a format was given at /admin, or null when it should keep the
+ * defaults (the generated field list, or the tokens its own body names). An
+ * empty array is a real answer: the format deliberately asks for nothing.
  */
-export const adminInputsFor = (division: divisionsType): FormatInputField[] | null => {
-	const stored = adminFormatStore.inputs?.[division];
-	return Array.isArray(stored) ? stored : null;
+export const adminPicksFor = (division: divisionsType, formatId: string): FormatFieldPick[] | null => {
+	const custom = customFormatFor(division, formatId);
+	if (custom) return custom.fields ?? null;
+	const override = overrideFor(division, formatId);
+	return override?.fields ?? null;
 };
 
 /**

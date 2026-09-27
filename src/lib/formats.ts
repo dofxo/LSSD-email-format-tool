@@ -6,10 +6,18 @@ import { ATDLabels } from "@/formats/divisions/ATD";
 import { TSDLabels } from "@/formats/divisions/TSD";
 import { FTBLabels } from "@/formats/divisions/FTB";
 import { SEBLabels } from "@/formats/divisions/SEB";
-import { adminInputsFor, adminLabelFor, customFormatsFor, overrideFor } from "@/lib/adminFormats";
+import {
+	adminBodyFor,
+	adminLabelFor,
+	adminPicksFor,
+	customFormatsFor,
+	overrideFor,
+} from "@/lib/adminFormats";
+import { bodyTokens } from "@/lib/formatTemplates";
 import { inputsByDivision } from "@/data/formatInputs";
+import { catalogueInputFor } from "@/data/inputCatalogue";
 import { formatCategories } from "@/formats/formatCategories";
-import type { FormatInputField } from "@/types";
+import type { FormatFieldPick, FormatInputField } from "@/types";
 
 export const labelsByDivision: Record<divisionsType, Record<string, string>> = {
 	RED: REDLabels,
@@ -88,48 +96,72 @@ export const formatLabelFor = (division: divisionsType, formatId: string): strin
 	adminLabelFor(division, formatId) ?? labelsByDivision[division][formatId] ?? "";
 
 /**
- * Every input field defined for a division: the list replaced at /admin when
- * one is saved, otherwise the built-in fields from src/data/formatInputs.ts.
+ * The inputs a format falls back to before it has any /admin picks: the built-in
+ * field table's entries ticked for it, in that table's order. This is only the
+ * default the format editor loads — there is no division-level list any more.
  */
-export const inputsForDivision = (division: divisionsType): FormatInputField[] =>
-	adminInputsFor(division) ?? inputsByDivision[division] ?? [];
-
-/** The dynamic form fields a specific format requires. */
-export const formatFieldsFor = (division: divisionsType, formatId: string): FormatInputField[] =>
-	formatId ? inputsForDivision(division).filter((field) => field.formats.includes(formatId)) : [];
-
-/**
- * Dev-time integrity check: every field's `formats` ids must exist in its
- * division's labels (or in the formats added at /admin), otherwise that field
- * can never render (the id points at a format that is not selectable). Runs
- * once per session; silently no-ops in production builds.
- */
-const checkInputsConsistency = () => {
-	if (import.meta.env.PROD) return;
-	const problems: string[] = [];
-	for (const division of Object.keys(inputsByDivision) as divisionsType[]) {
-		const known = new Set([
-			...Object.keys(labelsByDivision[division]),
-			...customFormatsFor(division).map((entry) => entry.id),
-		]);
-		for (const field of inputsForDivision(division)) {
-			for (const id of field.formats) {
-				if (!known.has(id)) {
-					problems.push(`${division}: field "${field.name}" points at unknown format id "${id}"`);
-				}
-			}
-			if (field.type === "select" && !field.options?.length) {
-				problems.push(`${division}: select field "${field.name}" has no options`);
-			}
-			if (field.type === "check" && !field.items?.length) {
-				problems.push(`${division}: check field "${field.name}" has no items`);
-			}
-		}
+export const defaultFieldNamesFor = (division: divisionsType, formatId: string): string[] => {
+	const names: string[] = [];
+	for (const field of inputsByDivision[division] ?? []) {
+		if (field.formats.includes(formatId) && !names.includes(field.name)) names.push(field.name);
 	}
-	if (problems.length) console.warn(`[formats] ${problems.length} input problem(s):\n${problems.join("\n")}`);
+	return names;
 };
 
-checkInputsConsistency();
+/** Turns a catalogue token into the field a form renders, with any format wording applied. */
+const resolveField = (name: string, pick?: FormatFieldPick): FormatInputField | null => {
+	const definition = catalogueInputFor(name);
+	if (!definition) return null;
+	const { label, ...rest } = definition;
+	return {
+		name,
+		label: pick?.label?.trim() || label,
+		hint: pick?.hint?.trim() || definition.hint,
+		// Nothing needs the legacy per-format ticks any more; the body or the pick decides.
+		formats: [],
+		...rest,
+	};
+};
+
+/**
+ * Whether a format prints its own body written at /admin, rather than the output
+ * of its built-in generator.
+ */
+export const usesOwnBody = (division: divisionsType, formatId: string): boolean =>
+	adminBodyFor(division, formatId) !== null;
+
+/** The `{{tokens}}` a format's own body names; empty when it has no body of its own. */
+export const bodyTokensFor = (division: divisionsType, formatId: string): string[] => {
+	const body = adminBodyFor(division, formatId);
+	return body === null ? [] : bodyTokens(body);
+};
+
+/**
+ * The dynamic form fields a specific format asks for.
+ *
+ * A format with a body of its own says this itself: the inputs its `{{tokens}}`
+ * name are the ones its form shows, so nothing has to be ticked for it. A format
+ * still running its built-in generator has no template to read, so it uses the
+ * inputs picked for it at /admin — falling back to the built-in defaults ticked
+ * for it until those picks are made.
+ *
+ * Either way the shared catalogue supplies each field's type, options and
+ * default wording, and a per-format pick overrides just the label and hint.
+ */
+export const formatFieldsFor = (division: divisionsType, formatId: string): FormatInputField[] => {
+	if (!formatId) return [];
+
+	const picks = adminPicksFor(division, formatId);
+	const pickByName = new Map((picks ?? []).map((pick) => [pick.name, pick]));
+
+	const names = usesOwnBody(division, formatId)
+		? bodyTokensFor(division, formatId)
+		: (picks?.map((pick) => pick.name) ?? defaultFieldNamesFor(division, formatId));
+
+	return names
+		.map((name) => resolveField(name, pickByName.get(name)))
+		.filter((field): field is FormatInputField => field !== null);
+};
 
 /** Whether a value counts as "filled in" for progress purposes. */
 export const isFilled = (value: unknown): boolean => {

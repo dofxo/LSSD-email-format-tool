@@ -1,10 +1,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ChevronDown, ListChecks, Lock, Moon, Plus, Save, Sun } from "lucide-react";
+import { ChevronDown, Lock, Moon, Plus, Save, Sun } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
 
 import { BodyVariables } from "@/components/admin/BodyVariables";
 import { FormatEditor } from "@/components/admin/FormatEditor";
-import { InputFieldsEditor } from "@/components/admin/InputFieldsEditor";
 import { PasswordGate } from "@/components/admin/PasswordGate";
 import { Button } from "@/components/ui/button";
 import { Field, Input, Textarea } from "@/components/ui/input";
@@ -14,14 +13,16 @@ import { adminFormatStore } from "@/formats/admin";
 import type { AdminFormatFields, AdminFormatStore } from "@/formats/adminTypes";
 import { formatCategories } from "@/formats/formatCategories";
 import { useTheme } from "@/hooks/useTheme";
-import { fetchAdminFormats, overrideKey, saveAdminFormats } from "@/lib/adminFormats";
+import { applyStoreInputs, fetchAdminFormats, overrideKey, saveAdminFormats } from "@/lib/adminFormats";
+import { catalogueInputFor } from "@/data/inputCatalogue";
 import { insertTokenAtCaret } from "@/lib/bodyInsert";
 import { divisions } from "@/lib/divisions";
-import { formatsForDivision, inputsForDivision, labelsByDivision } from "@/lib/formats";
+import { formatFieldsFor, labelsByDivision } from "@/lib/formats";
 import { renderTitleTemplate, titleTemplates } from "@/lib/formatTitles";
 import { controlFieldClass } from "@/lib/styles";
 import { cn } from "@/lib/utils";
-import type { DeputyData, FormatData, FormatInputField, divisionsType } from "@/types";
+import type { CatalogueInput } from "@/lib/inputDefinitions";
+import type { DeputyData, FormatData, FormatFieldPick, divisionsType } from "@/types";
 
 const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD as string | undefined;
 // Persisted in localStorage (like the supervisory unlock on the main page), so
@@ -47,12 +48,7 @@ const loadUnlocked = () => {
 const cloneStore = (store: AdminFormatStore): AdminFormatStore => ({
 	overrides: { ...store.overrides },
 	custom: store.custom.map((entry) => ({ ...entry })),
-	inputs: Object.fromEntries(
-		Object.entries(store.inputs ?? {}).map(([division, fields]) => [
-			division,
-			(fields ?? []).map((field) => ({ ...field })),
-		]),
-	) as AdminFormatStore["inputs"],
+	inputs: [...(store.inputs ?? [])],
 });
 
 /**
@@ -65,6 +61,10 @@ const builtInTitlePreview = (division: divisionsType, formatId: string): string 
 		deputyData: EMPTY_DEPUTY,
 		division,
 	});
+
+/** The inputs a format asks for before /admin gives it any: its built-in defaults. */
+const defaultPicks = (division: divisionsType, formatId: string): FormatFieldPick[] =>
+	formatFieldsFor(division, formatId).map((field) => ({ name: field.name }));
 
 /** Next free numeric id in a division, so added formats never clash. */
 const nextCustomId = (division: divisionsType, store: AdminFormatStore): string => {
@@ -89,8 +89,6 @@ const AdminPage = () => {
 	const [dirty, setDirty] = useState(false);
 	const [saving, setSaving] = useState(false);
 	const [openDivisions, setOpenDivisions] = useState<Record<string, boolean>>({});
-	const [openInputs, setOpenInputs] = useState<Record<string, boolean>>({});
-	const [inputsOpen, setInputsOpen] = useState(true);
 
 	const [newDivision, setNewDivision] = useState<divisionsType>("RED");
 	const [newTitle, setNewTitle] = useState("");
@@ -100,16 +98,12 @@ const AdminPage = () => {
 	const [newBody, setNewBody] = useState("");
 	const newBodyRef = useRef<HTMLTextAreaElement | null>(null);
 
-	// The id the next added format will take, so its body editor can offer the
-	// same variables (and tick any new input) before the format exists.
-	const pendingFormatId = nextCustomId(newDivision, store);
-	const pendingFields = store.inputs[newDivision] ?? inputsForDivision(newDivision);
-
 	useEffect(() => {
-		let active = true;
-		void fetchAdminFormats().then((next) => {
-			if (active) setStore(cloneStore(next));
-		});
+		let active = true;			void fetchAdminFormats().then((next) => {
+				if (!active) return;
+				applyStoreInputs(next);
+				setStore(cloneStore(next));
+			});
 		return () => {
 			active = false;
 		};
@@ -122,24 +116,6 @@ const AdminPage = () => {
 
 	const toggleDivision = (division: divisionsType) =>
 		setOpenDivisions((prev) => ({ ...prev, [division]: !prev[division] }));
-
-	const toggleInputs = (division: divisionsType) =>
-		setOpenInputs((prev) => ({ ...prev, [division]: !prev[division] }));
-
-	/** Replace a division's whole field list; the built-in one is the fallback. */
-	const saveDivisionInputs = (division: divisionsType, fields: FormatInputField[]) => {
-		setStore((prev) => ({ ...prev, inputs: { ...prev.inputs, [division]: fields } }));
-		markDirty();
-	};
-
-	const resetDivisionInputs = (division: divisionsType) => {
-		setStore((prev) => {
-			const inputs = { ...prev.inputs };
-			delete inputs[division];
-			return { ...prev, inputs };
-		});
-		markDirty();
-	};
 
 	const unlock = (password: string) => {
 		if (!ADMIN_PASSWORD || password !== ADMIN_PASSWORD) return false;
@@ -212,13 +188,28 @@ const AdminPage = () => {
 		markDirty();
 	};
 
-	/** Adds one input field to a division, straight from a body editor. */
-	const addInputField = (division: divisionsType, field: FormatInputField) => {
-		setStore((prev) => {
-			const current = prev.inputs[division] ?? inputsForDivision(division);
-			return { ...prev, inputs: { ...prev.inputs, [division]: [...current, field] } };
-		});
-		markDirty();
+	/**
+	 * Adds a brand-new field to the shared catalogue. Deliberately does not bump
+	 * the remount version, so a format being edited keeps its unsaved state; the
+	 * pickers re-render from the live catalogue instead.
+	 *
+	 * A name that already exists is never duplicated: when a clash is confirmed
+	 * the picker hands back the existing definition, and this just uses it.
+	 */
+	const createInput = (input: CatalogueInput) => {
+		if (catalogueInputFor(input.name)) {
+			toast.info(`A field named {{${input.name}}} already exists — using that one.`);
+			return;
+		}
+		// The live catalogue has to know about the new field *before* React
+		// re-renders, or the pickers render a token with no definition. The
+		// registry is therefore updated here, not inside the state updater — a
+		// side effect there would also run twice under StrictMode.
+		const next: AdminFormatStore = { ...store, inputs: [...(store.inputs ?? []), input] };
+		applyStoreInputs(next);
+		setStore(next);
+		setDirty(true);
+		toast.success(`Field {{${input.name}}} created — press Save formats to keep it.`);
 	};
 
 	/** Inserts a token into the new-format body at the caret. */
@@ -232,6 +223,9 @@ const AdminPage = () => {
 			body: newBody,
 			govLink: newGovLink.trim(),
 			category: newCategory.trim(),
+			// A format with a body takes its inputs from that body's tokens, so only
+			// wording overrides would ever live here.
+			fields: [],
 		});
 		setNewTitle("");
 		setNewTopicTitle("");
@@ -259,10 +253,11 @@ const AdminPage = () => {
 				const formats = [
 					...Object.entries(labelsByDivision[division.id]).map(([id, label]) => {
 						const override = store.overrides[overrideKey(division.id, id)];
+						const picks = override?.fields ?? defaultPicks(division.id, id);
 						return {
 							id,
 							custom: false,
-							hasOverride: Boolean(override),
+							picks,
 							fields: {
 								title: override?.title ?? label,
 								// Only the /admin override is edited here; empty keeps the built-in.
@@ -270,32 +265,33 @@ const AdminPage = () => {
 								body: override?.body ?? "",
 								govLink: override?.govLink ?? "",
 								category: override?.category ?? formatCategories[division.id]?.[id] ?? "",
+								fields: picks,
 							},
 							defaultTopicTitle: builtInTitlePreview(division.id, id),
 						};
 					}),
 					...store.custom
 						.filter((entry) => entry.division === division.id)
-						.map((entry) => ({
-							id: entry.id,
-							custom: true,
-							hasOverride: true,
-							fields: {
-								title: entry.title,
-								topicTitle: entry.topicTitle ?? "",
-								body: entry.body,
-								govLink: entry.govLink,
-								category: entry.category ?? "",
-							},
-							defaultTopicTitle: "",
-						})),
+						.map((entry) => {
+							const picks = entry.fields ?? [];
+							return {
+								id: entry.id,
+								custom: true,
+								picks,
+								fields: {
+									title: entry.title,
+									topicTitle: entry.topicTitle ?? "",
+									body: entry.body,
+									govLink: entry.govLink,
+									category: entry.category ?? "",
+									fields: picks,
+								},
+								defaultTopicTitle: "",
+							};
+						}),
 				];
 
-				return {
-					division,
-					formats,
-					editedCount: formats.filter((format) => format.custom || format.hasOverride).length,
-				};
+				return { division, formats };
 			}),
 		[store],
 	);
@@ -444,7 +440,7 @@ const AdminPage = () => {
 								<Field
 									label="Body (phpBBcode)"
 									htmlFor="new-format-body"
-									hint="The body this format posts to the government website. Wrap any part in double braces to fill it from an input."
+									hint="The body this format posts to the government website. Wrap any part in double braces to fill it from a field."
 									wide
 								>
 									<Textarea
@@ -458,11 +454,9 @@ const AdminPage = () => {
 								</Field>
 
 								<BodyVariables
-									formatId={pendingFormatId}
-									divisionFields={pendingFields}
 									body={newBody}
 									onInsert={insertNewBodyToken}
-									onCreateField={(field) => addInputField(newDivision, field)}
+									onCreate={createInput}
 								/>
 
 								<div>
@@ -474,104 +468,7 @@ const AdminPage = () => {
 							</PanelBody>
 						</Panel>
 
-						<Panel className="overflow-hidden border-accent/25 bg-accent/5">
-							<header className="flex items-center gap-3 px-5 py-4 sm:px-6">
-								<span
-									aria-hidden
-									className="flex size-7 shrink-0 items-center justify-center rounded-[10px] bg-accent/12 text-accent ring-1 ring-inset ring-accent/20"
-								>
-									<ListChecks className="size-4" />
-								</span>
-								<div className="min-w-0 flex-1">
-									<h2 className="text-[15px] leading-6 font-semibold text-ink">Input fields</h2>
-									<p className="text-[12.5px] leading-relaxed text-ink-muted">
-										Control which inputs each format asks for and how each one behaves. Saving a
-										division replaces its built-in fields.
-									</p>
-								</div>
-								<Button
-									variant="ghost"
-									size="icon-sm"
-									onClick={() => setInputsOpen((value) => !value)}
-									aria-expanded={inputsOpen}
-									aria-controls="input-fields-body"
-									title={inputsOpen ? "Collapse input fields" : "Expand input fields"}
-									aria-label={inputsOpen ? "Collapse input fields" : "Expand input fields"}
-								>
-									<ChevronDown
-										className={cn("size-4 transition-transform duration-200", inputsOpen && "rotate-180")}
-									/>
-								</Button>
-							</header>
-
-							{inputsOpen ? (
-								<PanelBody id="input-fields-body" className="flex flex-col gap-3">
-									{divisions.map((division) => {
-										const customised = Boolean(store.inputs[division.id]);
-										const fields = customised ? store.inputs[division.id]! : inputsForDivision(division.id);
-										const Icon = division.icon;
-										const open = Boolean(openInputs[division.id]);
-
-										return (
-											<Panel key={division.id} className="overflow-hidden">
-												<h2>
-													<button
-														type="button"
-														onClick={() => toggleInputs(division.id)}
-														aria-expanded={open}
-														aria-controls={`inputs-${division.id}`}
-														className="flex w-full items-center gap-3 px-5 py-4 text-left transition-colors duration-150 hover:bg-surface-2 sm:px-6"
-													>
-														<span className="flex size-7 shrink-0 items-center justify-center rounded-[10px] bg-accent/12 text-accent ring-1 ring-inset ring-accent/20">
-															<Icon className="size-4" />
-														</span>
-														<span className="min-w-0 flex-1">
-															<span className="block truncate text-[15px] leading-6 font-semibold text-ink">
-																{division.name}
-															</span>
-															<span className="block truncate text-[12.5px] text-ink-muted">
-																{division.blurb}
-															</span>
-														</span>
-														{customised ? (
-															<span className="shrink-0 rounded-full border border-accent/25 bg-accent/12 px-2 py-0.5 text-[11.5px] font-medium text-accent">
-																replaced
-															</span>
-														) : null}
-														<span className="shrink-0 rounded-full border border-subtle bg-surface-2 px-2 py-0.5 text-[11.5px] text-ink-muted">
-															{fields.length}
-														</span>
-														<ChevronDown
-															className={cn(
-																"size-4 shrink-0 text-ink-faint transition-transform duration-200",
-																open && "rotate-180",
-															)}
-														/>
-													</button>
-												</h2>
-
-												{open ? (
-													<div id={`inputs-${division.id}`}>
-														<PanelBody className="flex flex-col gap-3 border-t border-subtle">
-															<InputFieldsEditor
-																division={division.id}
-																fields={fields}
-																formatOptions={formatsForDivision(division.id)}
-																customised={customised}
-																onChange={(next) => saveDivisionInputs(division.id, next)}
-																onReset={() => resetDivisionInputs(division.id)}
-															/>
-														</PanelBody>
-													</div>
-												) : null}
-											</Panel>
-										);
-									})}
-								</PanelBody>
-							) : null}
-						</Panel>
-
-						{groups.map(({ division, formats, editedCount }) => {
+						{groups.map(({ division, formats }) => {
 							const Icon = division.icon;
 							const open = Boolean(openDivisions[division.id]);
 
@@ -594,14 +491,9 @@ const AdminPage = () => {
 												</span>
 												<span className="block truncate text-[12.5px] text-ink-muted">{division.blurb}</span>
 											</span>
-											{editedCount > 0 ? (
-												<span className="shrink-0 rounded-full border border-accent/25 bg-accent/12 px-2 py-0.5 text-[11.5px] font-medium text-accent">
-													{editedCount} edited
-												</span>
-											) : null}
-											<span className="shrink-0 rounded-full border border-subtle bg-surface-2 px-2 py-0.5 text-[11.5px] text-ink-muted">
-												{formats.length}
-											</span>
+										<span className="shrink-0 rounded-full border border-subtle bg-surface-2 px-2 py-0.5 text-[11.5px] text-ink-muted">
+											{formats.length}
+										</span>
 											<ChevronDown
 												className={cn(
 													"size-4 shrink-0 text-ink-faint transition-transform duration-200",
@@ -629,8 +521,8 @@ const AdminPage = () => {
 											}).format
 										}
 										defaultDeputy={EMPTY_DEPUTY}
-										divisionFields={store.inputs[division.id] ?? inputsForDivision(division.id)}
-										onCreateField={(field) => addInputField(division.id, field)}
+										initialPicks={format.picks}
+										onCreate={createInput}
 										defaultTopicTitle={format.defaultTopicTitle}
 										onSave={(fields) =>
 											format.custom
