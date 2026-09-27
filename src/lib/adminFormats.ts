@@ -46,6 +46,17 @@ export const adminInputsFor = (division: divisionsType): FormatInputField[] | nu
 };
 
 /**
+ * The /admin topic title template for a format. `undefined` means /admin has no
+ * say (fall back to the built-in title table), a string means that is the
+ * template to use, and `""` means the format explicitly has no topic title.
+ */
+export const adminTopicTitleFor = (division: divisionsType, formatId: string): string | undefined => {
+	const custom = customFormatFor(division, formatId);
+	if (custom) return custom.topicTitle ?? "";
+	return overrideFor(division, formatId)?.topicTitle;
+};
+
+/**
  * The /admin body template for a format, or null when the format should keep
  * using its built-in generator.
  */

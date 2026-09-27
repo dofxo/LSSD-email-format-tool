@@ -16,11 +16,14 @@ import { useTheme } from "@/hooks/useTheme";
 import { fetchAdminFormats, overrideKey, saveAdminFormats } from "@/lib/adminFormats";
 import { divisions } from "@/lib/divisions";
 import { formatsForDivision, inputsForDivision, labelsByDivision } from "@/lib/formats";
+import { renderTitleTemplate, titleTemplates } from "@/lib/formatTitles";
 import { controlFieldClass } from "@/lib/styles";
 import { cn } from "@/lib/utils";
 import type { DeputyData, FormatInputField, divisionsType } from "@/types";
 
 const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD as string | undefined;
+// Persisted in localStorage (like the supervisory unlock on the main page), so
+// the password only has to be entered once per device.
 const GATE_KEY = "adminUnlocked";
 
 /** An empty profile, so the built-in output shows its own placeholders. */
@@ -33,7 +36,7 @@ const EMPTY_DEPUTY: DeputyData = {
 
 const loadUnlocked = () => {
 	try {
-		return sessionStorage.getItem(GATE_KEY) === "true";
+		return localStorage.getItem(GATE_KEY) === "true";
 	} catch {
 		return false;
 	}
@@ -49,6 +52,17 @@ const cloneStore = (store: AdminFormatStore): AdminFormatStore => ({
 		]),
 	) as AdminFormatStore["inputs"],
 });
+
+/**
+ * A readable preview of a format's built-in topic title, with the blanks left by
+ * its unfilled fields (so no placeholder syntax ever reaches the /admin UI).
+ */
+const builtInTitlePreview = (division: divisionsType, formatId: string): string =>
+	renderTitleTemplate(titleTemplates[division]?.[formatId] ?? "", {
+		formatData: {},
+		deputyData: EMPTY_DEPUTY,
+		division,
+	});
 
 /** Next free numeric id in a division, so added formats never clash. */
 const nextCustomId = (division: divisionsType, store: AdminFormatStore): string => {
@@ -78,6 +92,7 @@ const AdminPage = () => {
 
 	const [newDivision, setNewDivision] = useState<divisionsType>("RED");
 	const [newTitle, setNewTitle] = useState("");
+	const [newTopicTitle, setNewTopicTitle] = useState("");
 	const [newCategory, setNewCategory] = useState("");
 	const [newGovLink, setNewGovLink] = useState("");
 	const [newBody, setNewBody] = useState("");
@@ -122,7 +137,7 @@ const AdminPage = () => {
 		if (!ADMIN_PASSWORD || password !== ADMIN_PASSWORD) return false;
 		setUnlocked(true);
 		try {
-			sessionStorage.setItem(GATE_KEY, "true");
+			localStorage.setItem(GATE_KEY, "true");
 		} catch {
 			/* not fatal: the page stays unlocked for this view */
 		}
@@ -134,16 +149,22 @@ const AdminPage = () => {
 		setUnlocked(false);
 		setGateOpen(true);
 		try {
-			sessionStorage.removeItem(GATE_KEY);
+			localStorage.removeItem(GATE_KEY);
 		} catch {
 			/* ignore */
 		}
 	};
 
 	const saveOverride = (division: divisionsType, formatId: string, fields: AdminFormatFields) => {
+		// An empty title means "keep the built-in one", so it is left out of the
+		// override entirely rather than written as an empty string.
+		const { topicTitle, ...rest } = fields;
 		setStore((prev) => ({
 			...prev,
-			overrides: { ...prev.overrides, [overrideKey(division, formatId)]: { ...fields } },
+			overrides: {
+				...prev.overrides,
+				[overrideKey(division, formatId)]: topicTitle.trim() ? { ...rest, topicTitle } : rest,
+			},
 		}));
 		markDirty();
 	};
@@ -186,11 +207,13 @@ const AdminPage = () => {
 	const handleAddFormat = () => {
 		addCustom(newDivision, {
 			title: newTitle.trim() || "New format",
+			topicTitle: newTopicTitle.trim(),
 			body: newBody,
 			govLink: newGovLink.trim(),
 			category: newCategory.trim(),
 		});
 		setNewTitle("");
+		setNewTopicTitle("");
 		setNewCategory("");
 		setNewGovLink("");
 		setNewBody("");
@@ -221,10 +244,13 @@ const AdminPage = () => {
 							hasOverride: Boolean(override),
 							fields: {
 								title: override?.title ?? label,
+								// Only the /admin override is edited here; empty keeps the built-in.
+								topicTitle: override?.topicTitle ?? "",
 								body: override?.body ?? "",
 								govLink: override?.govLink ?? "",
 								category: override?.category ?? formatCategories[division.id]?.[id] ?? "",
 							},
+							defaultTopicTitle: builtInTitlePreview(division.id, id),
 						};
 					}),
 					...store.custom
@@ -235,10 +261,12 @@ const AdminPage = () => {
 							hasOverride: true,
 							fields: {
 								title: entry.title,
+								topicTitle: entry.topicTitle ?? "",
 								body: entry.body,
 								govLink: entry.govLink,
 								category: entry.category ?? "",
 							},
+							defaultTopicTitle: "",
 						})),
 				];
 
@@ -361,6 +389,19 @@ const AdminPage = () => {
 									/>
 								</Field>
 
+								<Field
+									label="Government website title"
+									htmlFor="new-format-topic-title"
+									hint="The post title used on the government website. Anything in square brackets is a reminder to the person filling the format in to replace that part, e.g. “Promotion notice [deputy name]”."
+								>
+									<Input
+										id="new-format-topic-title"
+										value={newTopicTitle}
+										onChange={(event) => setNewTopicTitle(event.target.value)}
+										placeholder="e.g. Promotion notice [deputy name]"
+									/>
+								</Field>
+
 								<Field label="Category" htmlFor="new-format-category">
 									<Input
 										id="new-format-category"
@@ -382,7 +423,7 @@ const AdminPage = () => {
 								<Field
 									label="Body (phpBBcode)"
 									htmlFor="new-format-body"
-									hint="Use {{tokens}} to pull in form values."
+									hint="The body this format posts to the government website."
 									wide
 								>
 									<Textarea
@@ -556,12 +597,12 @@ const AdminPage = () => {
 												formatId: format.id,
 												division: division.id,
 											}).format
-										}
+										}										defaultTopicTitle={format.defaultTopicTitle}
 										onSave={(fields) =>
 											format.custom
 												? saveCustom(division.id, format.id, fields)
 												: saveOverride(division.id, format.id, fields)
-											}
+										}
 										onReset={() => resetOverride(division.id, format.id)}
 										onDelete={() => deleteCustom(division.id, format.id)}
 									/>

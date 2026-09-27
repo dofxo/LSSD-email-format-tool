@@ -96,6 +96,7 @@ const sanitize = (input: unknown): AdminFormatStore => {
 			const entry = value as AdminFormatOverride;
 			const clean: AdminFormatOverride = {};
 			if (typeof entry.title === "string") clean.title = entry.title;
+			if (typeof entry.topicTitle === "string") clean.topicTitle = entry.topicTitle;
 			if (typeof entry.body === "string") clean.body = entry.body;
 			if (typeof entry.govLink === "string") clean.govLink = entry.govLink;
 			if (typeof entry.category === "string") clean.category = entry.category;
@@ -114,6 +115,7 @@ const sanitize = (input: unknown): AdminFormatStore => {
 				id,
 				division,
 				title: asString(entry.title),
+				topicTitle: asString(entry.topicTitle),
 				body: asString(entry.body),
 				govLink: asString(entry.govLink),
 				category: asString(entry.category),

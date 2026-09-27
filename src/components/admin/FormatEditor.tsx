@@ -14,6 +14,8 @@ interface FormatEditorProps {
 	/** Added formats can be deleted; built-in ones can be reset to default. */
 	custom: boolean;
 	fields: AdminFormatFields;
+	/** Readable preview of the title this format uses when none is set here. */
+	defaultTopicTitle?: string;
 	/** Builds the format's current output, used to seed the body editor. */
 	getDefaultBody: () => string;
 	onSave: (fields: AdminFormatFields) => void;
@@ -28,12 +30,14 @@ export function FormatEditor({
 	formatId,
 	custom,
 	fields,
+	defaultTopicTitle = "",
 	getDefaultBody,
 	onSave,
 	onReset,
 	onDelete,
 }: FormatEditorProps) {
 	const [title, setTitle] = useState(fields.title);
+	const [topicTitle, setTopicTitle] = useState(fields.topicTitle);
 	const [category, setCategory] = useState(fields.category);
 	const [govLink, setGovLink] = useState(fields.govLink);
 	const [body, setBody] = useState(fields.body);
@@ -44,8 +48,15 @@ export function FormatEditor({
 	const [open, setOpen] = useState(() => custom && fields.body.trim().length === 0);
 
 	const hasOverride = fields.body.trim().length > 0;
+	// Only a title typed into the field above counts for the badge; a format
+	// left empty keeps its built-in title without advertising one here.
+	const savedTopicTitle = topicTitle.trim();
 	const dirty =
-		title !== fields.title || category !== fields.category || govLink !== fields.govLink || bodyEdited;
+		title !== fields.title ||
+		topicTitle.trim() !== fields.topicTitle.trim() ||
+		category !== fields.category ||
+		govLink !== fields.govLink ||
+		bodyEdited;
 	const fieldId = `${division}-${formatId}`;
 
 	// Headings already used in this division, so categories stay consistent.
@@ -96,6 +107,14 @@ export function FormatEditor({
 					>
 						{title.trim() || "Untitled format"}
 					</span>
+					{savedTopicTitle ? (
+						<span
+							title={savedTopicTitle}
+							className="hidden shrink-0 rounded-md border border-accent/25 bg-accent/10 px-1.5 py-0.5 text-[10.5px] font-medium text-accent sm:inline"
+						>
+							post title
+						</span>
+					) : null}
 					{category.trim() ? (
 						<span className="hidden shrink-0 rounded-md border border-subtle bg-surface px-1.5 py-0.5 text-[10.5px] font-medium text-ink-muted lg:inline">
 							{category.trim()}
@@ -113,7 +132,9 @@ export function FormatEditor({
 						<Button
 							size="sm"
 							variant="primary"
-							onClick={() => onSave({ title, body: bodyEdited ? body : fields.body, govLink, category })}
+							onClick={() =>
+								onSave({ title, topicTitle, body: bodyEdited ? body : fields.body, govLink, category })
+							}
 							aria-label={`Save ${title || formatId}`}
 						>
 							<Save />
@@ -166,6 +187,33 @@ export function FormatEditor({
 							value={title}
 							onChange={(event) => setTitle(event.target.value)}
 							placeholder="Shown in the format picker"
+						/>
+					</Field>
+
+					<Field
+						label="Government website title"
+						htmlFor={`topic-title-${fieldId}`}
+						wide
+						hint={
+							<>
+								The post title used on the government website. Anything you put in square brackets is a
+								reminder to the person filling the format in to replace that part — for example
+								“Promotion notice [deputy name]”.
+								{defaultTopicTitle
+									? ` Left empty, this format keeps its built-in title: “${defaultTopicTitle}”.`
+									: " Left empty, this format asks for no title."}
+							</>
+						}
+					>
+						<Input
+							id={`topic-title-${fieldId}`}
+							value={topicTitle}
+							onChange={(event) => setTopicTitle(event.target.value)}
+							placeholder={
+								defaultTopicTitle
+									? "Leave empty to keep the built-in title"
+									: "e.g. Promotion notice [deputy name]"
+							}
 						/>
 					</Field>
 
@@ -227,21 +275,17 @@ export function FormatEditor({
 										setBody(event.target.value);
 										setBodyEdited(true);
 									}}
-									placeholder="[divbox=white]… hello {{name}} …[/divbox]"
+									placeholder="[divbox=white]…[/divbox]"
 									className="min-h-[220px] font-mono text-[12.5px]"
 								/>
 
 								<p className="text-[12px] leading-relaxed text-ink-faint">
 									{hasOverride || bodyEdited ? (
-										<>
-											Saving replaces what this format normally generates. Keep{" "}
-											<code className="font-mono">{"{{tokens}}"}</code> where form values belong.
-										</>
+										<>Saving replaces what this format normally generates.</>
 									) : (
 										<>
-											This is the format's current output. Editing it freezes this text as the body — swap
-											blanks for <code className="font-mono">{"{{tokens}}"}</code> to keep form values filling
-											in, or reset to go back to the generated version.
+											This is the format's current output. Editing it freezes this text as the
+											body, or reset to go back to the generated version.
 										</>
 									)}
 								</p>

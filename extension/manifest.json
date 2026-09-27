@@ -1,0 +1,37 @@
+{
+	"manifest_version": 3,
+	"name": "LSSD Format Tool",
+	"version": "1.0.0",
+	"description": "Fills the topic title and post body on the LSSD government website when a post is opened from the LSSD Format Tool.",
+	"key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAm4VnD0N6AvczVYSmqV3kY4qJloZgHTOiTDJQnXD8GtZ+fLVFuKYcfhyVa1pC+vSWdm1T2LVW/g4zb9qGuWPPI6xtISiRiwJbiDT8Up0sA28spo6blbPt0WDl8IIkx9hSISlbGWe2V2qBk2agrROoL2awajRMkZwJU6QiTLI95erWbGGmEtTM9poMMJdkGa3S7I7kmiYbNLACXYLA60N2oay5NvDxEej9NuHFV2S7dPQU5uHRZOFK4LEbZykFrxY/KTg/7cpnrQ6ey1nqTPbAiK2Crc0An4WnhgtS9agiz9CcbzV2tmB3ELv3SIR9IsUzWVRUtuLVymdXdEndtmc5iwIDAQAB",
+	"host_permissions": ["https://gov.eclipse-rp.net/*"],
+	"icons": {
+		"16": "icons/icon16.png",
+		"32": "icons/icon32.png",
+		"48": "icons/icon48.png",
+		"128": "icons/icon128.png"
+	},
+	"action": {
+		"default_title": "LSSD Format Tool",
+		"default_icon": {
+			"16": "icons/icon16.png",
+			"32": "icons/icon32.png",
+			"48": "icons/icon48.png",
+			"128": "icons/icon128.png"
+		}
+	},
+	"background": {
+		"service_worker": "background.js"
+	},
+	"externally_connectable": {
+		"matches": ["<all_urls>"]
+	},
+	"content_scripts": [
+		{
+			"matches": ["https://gov.eclipse-rp.net/*"],
+			"js": ["common.js", "content.js"],
+			"run_at": "document_idle",
+			"all_frames": false
+		}
+	]
+}

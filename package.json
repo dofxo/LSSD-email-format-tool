@@ -4,7 +4,10 @@
 	"version": "3.0.0",
 	"type": "module",
 	"scripts": {
+		"ext:build": "node scripts/buildExtension.mjs",
+		"predev": "npm run ext:build",
 		"dev": "vite",
+		"prebuild": "npm run ext:build",
 		"build": "tsc -b && vite build",
 		"lint": "eslint .",
 		"preview": "vite preview"
