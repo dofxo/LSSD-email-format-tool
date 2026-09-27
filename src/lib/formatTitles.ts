@@ -123,6 +123,11 @@ export const suggestedTitleFor = ({
 	return renderTitleTemplate(template, { formatData, deputyData, division });
 };
 
-/** The title actually used: the deputy's edit when present, else the suggestion. */
+/**
+ * The title actually used: the deputy's own title once they have edited the
+ * field, else the suggestion. Only `undefined` means "not edited" — an empty
+ * string is a title the deputy deliberately cleared, so the suggestion must not
+ * come back and overwrite it.
+ */
 export const resolveTitle = (edited: string | undefined, suggested: string): string =>
-	edited && edited.trim() ? edited.trim() : suggested;
+	edited === undefined ? suggested : edited.trim();

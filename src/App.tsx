@@ -315,7 +315,9 @@ const App = () => {
 												setFormatData((prev) => ({ ...prev, topicTitle: value }))
 											}
 											onReset={() =>
-												setFormatData((prev) => ({ ...prev, topicTitle: "" }))
+												// Undefined hands the field back to the format's suggestion; ""
+												// would mean a title the deputy cleared on purpose.
+												setFormatData((prev) => ({ ...prev, topicTitle: undefined }))
 											}
 										/>
 									</div>
@@ -422,6 +424,7 @@ const App = () => {
 							text={generatedText}
 							formatLabel={formatId ? formatLabelFor(division, formatId) : ""}
 							title={hasTitle ? topicTitle : undefined}
+							titleEdited={hasTitle && formatData.topicTitle !== undefined}
 						/>
 						<DeputyDetails details={details} setDetails={setDetails} division={division} />
 					</aside>

@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 interface TopicTitleFieldProps {
 	/** The title as the format defines it, before any edit here. */
 	suggested: string;
-	/** The deputy's own title, when they typed one. */
+	/** The deputy's own title, once they have touched the field. */
 	edited?: string;
 	onChange: (value: string) => void;
 	onReset: () => void;
@@ -22,11 +22,14 @@ interface TopicTitleFieldProps {
  * listed until they are gone, and the title is only considered ready after that.
  */
 export function TopicTitleField({ suggested, edited, onChange, onReset }: TopicTitleFieldProps) {
-	const trimmedEdit = edited?.trim() ?? "";
-	const isEdited = trimmedEdit.length > 0;
-	const value = isEdited ? trimmedEdit : suggested;
+	// Undefined means the deputy has not touched the field yet, so the suggestion
+	// stands. Anything else — including an empty string — is theirs, and must not
+	// be replaced by the suggestion the moment they clear the box.
+	const isEdited = edited !== undefined;
+	const value = isEdited ? edited : suggested;
 	const prompts = titlePrompts(value);
 	const needsReplacing = prompts.length > 0;
+	const cleared = isEdited && !value.trim();
 
 	return (
 		<Field
@@ -39,6 +42,8 @@ export function TopicTitleField({ suggested, edited, onChange, onReset }: TopicT
 					<span className="font-medium text-warning">
 						{prompts.length} to replace
 					</span>
+				) : cleared ? (
+					<span className="font-medium text-warning">Cleared — no title will be posted</span>
 				) : value.trim() ? (
 					<span className="flex items-center gap-1.5">
 						<Check className="size-3.5 text-success" />
