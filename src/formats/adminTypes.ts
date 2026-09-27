@@ -4,6 +4,12 @@ import type { FormatInputField, divisionsType } from "@/types";
 export interface AdminFormatFields {
 	/** Name shown in the format picker. */
 	title: string;
+	/**
+	 * Topic title used on the government website, written as plain text. Empty
+	 * means "keep the format's built-in title" (built-in formats), or no title at
+	 * all (formats added here, which have none of their own).
+	 */
+	topicTitle: string;
 	/** phpBBcode body. `{{token}}` placeholders are filled from the form data. */
 	body: string;
 	/** Government website section this format is pasted into. */
@@ -22,6 +28,8 @@ export interface AdminCustomFormat extends AdminFormatFields {
 /** Edited values for a built-in format. Absent keys fall back to the default. */
 export interface AdminFormatOverride {
 	title?: string;
+	/** Plain-text topic title replacing the format's built-in one, when set. */
+	topicTitle?: string;
 	body?: string;
 	govLink?: string;
 	/** Set to `""` to drop the format out of its default category. */

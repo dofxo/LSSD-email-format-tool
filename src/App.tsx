@@ -4,9 +4,11 @@ import { ToastContainer, toast } from "react-toastify";
 
 import { AppHeader } from "@/components/AppHeader";
 import { DivisionSwitcher } from "@/components/DivisionSwitcher";
+import { ExtensionBanner, ExtensionDialog } from "@/components/ExtensionPrompt";
 import { FormatFields } from "@/components/FormatFields";
 import { FormatPicker } from "@/components/FormatPicker";
 import { FormatPreview } from "@/components/FormatPreview";
+import { TopicTitleField } from "@/components/TopicTitleField";
 import { UnlockDialog } from "@/components/UnlockDialog";
 import { DeputyDetails } from "@/components/deputyDetails/DeputyDetails";
 import { Badge } from "@/components/ui/badge";
@@ -14,10 +16,13 @@ import { Button } from "@/components/ui/button";
 import { Panel, PanelBody, PanelFooter, PanelHeader, PanelHeading } from "@/components/ui/panel";
 import { Progress } from "@/components/ui/progress";
 import { useCopy } from "@/hooks/useCopy";
+import { useExtensionInstalled } from "@/hooks/useExtensionInstalled";
 import { useFormatData } from "@/hooks/useFormatData";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { useTheme } from "@/hooks/useTheme";
 import { getDivision } from "@/lib/divisions";
+import { hasTitleFor, resolveTitle, suggestedTitleFor } from "@/lib/formatTitles";
+import { withGovPayload } from "@/lib/govPayload";
 import { govLinkFor } from "@/lib/govLinks";
 import { formatFieldsFor, formatsForDivision, formatLabelFor, isFilled } from "@/lib/formats";
 import { listIssues, profileIssues } from "@/lib/profile";
@@ -58,9 +63,19 @@ const loadUnlocked = () => {
 	}
 };
 
+const loadExtensionDismissed = () => {
+	try {
+		return localStorage.getItem("extensionSuggestionDismissed") === "true";
+	} catch {
+		return false;
+	}
+};
+
 const App = () => {
 	const { theme, toggleTheme } = useTheme();
 	const isMobile = useMediaQuery("(max-width: 639px)");
+	// Once the extension is installed there is nothing left to suggest.
+	const extensionInstalled = useExtensionInstalled();
 	const { copy, isCopied } = useCopy();
 	const formatCopied = isCopied("format");
 
@@ -76,6 +91,9 @@ const App = () => {
 	const [details, setDetails] = useState<DeputyData>(loadDetails);
 
 	const [pickerOpen, setPickerOpen] = useState(false);
+	const [extensionOpen, setExtensionOpen] = useState(false);
+	const [extensionHint, setExtensionHint] = useState(false);
+	const [extensionDismissed, setExtensionDismissed] = useState(loadExtensionDismissed);
 	const [unlocked, setUnlocked] = useState(loadUnlocked);
 	const [pendingDivision, setPendingDivision] = useState<divisionsType | null>(null);
 	const [unlockOpen, setUnlockOpen] = useState(false);
@@ -87,6 +105,14 @@ const App = () => {
 		() => (formatId ? getFormat({ formatData, deputyData: details, formatId, division }).format : ""),
 		[formatData, details, formatId, division]
 	);
+
+	// Formats that post to the government website also generate a topic title.
+	const hasTitle = Boolean(formatId) && hasTitleFor(division, formatId);
+	const suggestedTitle = useMemo(
+		() => suggestedTitleFor({ formatData, deputyData: details, formatId, division }),
+		[formatData, details, formatId, division]
+	);
+	const topicTitle = resolveTitle(formatData.topicTitle, suggestedTitle);
 
 	const filledCount = useMemo(
 		() => fields.filter((field) => isFilled(formatData[field.name as keyof FormatData])).length,
@@ -152,22 +178,38 @@ const App = () => {
 		toast.info("Supervisory formats locked");
 	};
 
+	// Opens the government section with the title and body travelling in the
+	// link itself, so the extension can fill the posting form on load.
 	const handleOpenGovLink = useCallback(() => {
 		if (!formatId) return;
+		setExtensionHint(true);
 		const url = govLinkFor(division, formatId);
-		if (url) {
-			window.open(url, "_blank", "noopener,noreferrer");
-		} else {
+		if (!url) {
 			toast.info(`No government website link is set up for "${formatLabelFor(division, formatId)}" yet.`);
+			return;
 		}
-	}, [division, formatId]);
+
+		window.open(withGovPayload(url, topicTitle, generatedText), "_blank", "noopener,noreferrer");
+		toast.info("Opening the government website — the extension fills the title and post for you.");
+	}, [division, formatId, generatedText, topicTitle]);
 
 	const handleCopyFormat = useCallback(async () => {
 		if (!formatId) return;
 		const copied = await copy(generatedText, "format");
-		if (copied) toast.success(`${formatLabelFor(division, formatId)} copied to clipboard`);
-		else toast.error("Clipboard unavailable. Copy the body from the preview panel instead.");
+		if (copied) {
+			setExtensionHint(true);
+			toast.success(`${formatLabelFor(division, formatId)} copied to clipboard`);
+		} else toast.error("Clipboard unavailable. Copy the body from the preview panel instead.");
 	}, [copy, division, formatId, generatedText]);
+
+	const handleDismissExtension = useCallback(() => {
+		setExtensionDismissed(true);
+		try {
+			localStorage.setItem("extensionSuggestionDismissed", "true");
+		} catch {
+			/* not fatal: it just comes back next session */
+		}
+	}, []);
 
 	useEffect(() => {
 		const onKeyDown = (event: KeyboardEvent) => {
@@ -196,6 +238,7 @@ const App = () => {
 				onToggleTheme={toggleTheme}
 				unlocked={unlocked}
 				onLock={handleLock}
+				onOpenExtension={extensionInstalled ? undefined : () => setExtensionOpen(true)}
 			/>
 
 			<main className="mx-auto flex w-full max-w-[1680px] flex-1 flex-col gap-6 px-4 pt-6 pb-14 sm:px-6 lg:px-8 2xl:px-12">
@@ -207,6 +250,13 @@ const App = () => {
 						{divisionMeta.blurb}
 					</p>
 				</div>
+
+				{extensionHint && !extensionDismissed && !extensionInstalled ? (
+					<ExtensionBanner
+						onOpen={() => setExtensionOpen(true)}
+						onDismiss={handleDismissExtension}
+					/>
+				) : null}
 
 				<div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(380px,1fr)] xl:gap-7">
 					<div className="flex min-w-0 flex-col gap-6">
@@ -256,6 +306,21 @@ const App = () => {
 							</PanelHeader>
 
 							<PanelBody>
+								{hasTitle ? (
+									<div className="mb-5 border-b border-subtle pb-5">
+										<TopicTitleField
+											suggested={suggestedTitle}
+											edited={formatData.topicTitle}
+											onChange={(value) =>
+												setFormatData((prev) => ({ ...prev, topicTitle: value }))
+											}
+											onReset={() =>
+												setFormatData((prev) => ({ ...prev, topicTitle: "" }))
+											}
+										/>
+									</div>
+								) : null}
+
 								<FormatFields
 									formatId={formatId}
 									fields={fields}
@@ -341,9 +406,10 @@ const App = () => {
 											size="sm"
 											onClick={() => void handleCopyFormat()}
 											className="flex-1 sm:min-w-[140px] sm:flex-none"
+											title="Copy the generated body on its own"
 										>
 											{formatCopied ? <Check /> : <Copy />}
-											{formatCopied ? "Copied" : "Copy format"}
+											{formatCopied ? "Copied" : "Copy body"}
 										</Button>
 									) : null}
 								</div>
@@ -355,6 +421,7 @@ const App = () => {
 						<FormatPreview
 							text={generatedText}
 							formatLabel={formatId ? formatLabelFor(division, formatId) : ""}
+							title={hasTitle ? topicTitle : undefined}
 						/>
 						<DeputyDetails details={details} setDetails={setDetails} division={division} />
 					</aside>
@@ -394,6 +461,8 @@ const App = () => {
 					if (!open) setPendingDivision(null);
 				}}
 			/>
+
+			<ExtensionDialog open={extensionOpen} onOpenChange={setExtensionOpen} />
 		</div>
 	);
 };

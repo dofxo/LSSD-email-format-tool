@@ -7,7 +7,15 @@
 import type { AdminFormatStore } from "./adminTypes";
 
 export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
-	"overrides": {},
+	"overrides": {
+		"General/1": {
+			"title": "Personal Email",
+			"topicTitle": "[Title]",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose",
+			"category": "Correspondence"
+		}
+	},
 	"custom": [],
 	"inputs": {
 		"Supervisory": [

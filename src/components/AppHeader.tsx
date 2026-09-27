@@ -1,4 +1,4 @@
-import { Lock, Moon, ShieldCheck, Sun } from "lucide-react";
+import { Lock, Moon, Puzzle, ShieldCheck, Sun } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import type { Theme } from "@/hooks/useTheme";
@@ -8,11 +8,14 @@ export function AppHeader({
 	onToggleTheme,
 	unlocked,
 	onLock,
+	onOpenExtension,
 }: {
 	theme: Theme;
 	onToggleTheme: () => void;
 	unlocked: boolean;
 	onLock: () => void;
+	/** Omitted once the extension is installed, since there is nothing to suggest. */
+	onOpenExtension?: () => void;
 }) {
 	return (
 		<header className="sticky top-0 z-40 border-b border-subtle bg-canvas/80 backdrop-blur-xl backdrop-saturate-150">
@@ -41,6 +44,18 @@ export function AppHeader({
 							aria-label="Lock supervisory formats"
 						>
 							<Lock />
+						</Button>
+					) : null}
+
+					{onOpenExtension ? (
+						<Button
+							variant="secondary"
+							size="icon-sm"
+							onClick={onOpenExtension}
+							title="Fill government posts automatically with the browser extension"
+							aria-label="Fill government posts automatically with the browser extension"
+						>
+							<Puzzle />
 						</Button>
 					) : null}
 

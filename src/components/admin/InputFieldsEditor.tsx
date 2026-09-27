@@ -310,7 +310,7 @@ export function InputFieldsEditor({
 									) : null}
 
 									<div className="grid gap-4 sm:grid-cols-2">
-										<Field label="Field name (token)" htmlFor={`in-name-${division}-${index}`}>
+										<Field label="Field name" htmlFor={`in-name-${division}-${index}`}>
 											<Input
 												id={`in-name-${division}-${index}`}
 												value={field.name}
