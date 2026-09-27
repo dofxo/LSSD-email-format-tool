@@ -15,6 +15,21 @@ export interface DeputyData {
 
 export type divisionsType = "RED" | "ATD" | "TSD" | "General" | "Supervisory" | "FTB" | "SEB";
 
+/**
+ * One input a format asks for, picked from the shared catalogue in
+ * src/data/inputCatalogue.ts. A format stores only the names it uses (in the
+ * order its form renders them); the type, options and default wording come from
+ * the catalogue, and `label` / `hint` here override just that format.
+ */
+export interface FormatFieldPick {
+	/** Catalogue token, e.g. `date`. */
+	name: string;
+	/** Wording shown above the input, when this format words it differently. */
+	label?: string;
+	/** Helper text under the input, when this format needs its own. */
+	hint?: string;
+}
+
 /** A single dynamic field rendered for a response format. */
 export interface FormatInputField {
 	name: string;

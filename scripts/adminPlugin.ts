@@ -16,7 +16,8 @@ import type {
 	AdminFormatOverride,
 	AdminFormatStore,
 } from "../src/formats/adminTypes";
-import type { FormatInputField } from "../src/types";
+import { normaliseInput } from "../src/lib/inputDefinitions";
+import type { FormatFieldPick } from "../src/types";
 
 const ENDPOINT = "/api/admin/formats";
 const STORE_FILE = path.join("src", "formats", "admin.ts");
@@ -26,62 +27,31 @@ const END = "/* /ADMIN_DATA */";
 const DIVISIONS = ["RED", "TSD", "ATD", "General", "Supervisory", "FTB", "SEB"] as const;
 type DivisionId = (typeof DIVISIONS)[number];
 
-const FIELD_TYPES: FormatInputField["type"][] = [
-	"text",
-	"number",
-	"date",
-	"time",
-	"select",
-	"textarea",
-	"check",
-	"list",
-];
-const DATE_STYLES: NonNullable<FormatInputField["dateStyle"]>[] = ["full", "short", "shortYear"];
-
-const emptyStore = (): AdminFormatStore => ({ overrides: {}, custom: [], inputs: {} });
+const emptyStore = (): AdminFormatStore => ({ overrides: {}, custom: [], inputs: [] });
 
 const asString = (value: unknown) => (typeof value === "string" ? value : "");
 
-/** Keeps a single input field well-formed, or drops it when it cannot be used. */
-const sanitizeField = (input: unknown): FormatInputField | null => {
-	if (!input || typeof input !== "object") return null;
-	const raw = input as Partial<FormatInputField>;
-	const name = asString(raw.name).trim();
-	const type = FIELD_TYPES.includes(raw.type as FormatInputField["type"])
-		? (raw.type as FormatInputField["type"])
-		: null;
-	if (!name || !type) return null;
-
-	const clean: FormatInputField = {
-		name,
-		label: asString(raw.label),
-		type,
-		formats: Array.isArray(raw.formats) ? raw.formats.map(asString).filter(Boolean) : [],
-	};
-
-	const hint = asString(raw.hint);
-	if (hint) clean.hint = hint;
-
-	if (type === "select" && Array.isArray(raw.options)) {
-		clean.options = raw.options
-			.filter((option): option is { value: string; label: string } => !!option && typeof option === "object")
-			.map((option) => ({ value: asString(option.value), label: asString(option.label) }))
-			.filter((option) => option.value);
+/**
+ * Keeps a format's input picks well-formed: a catalogue name plus optional
+ * wording. Returns undefined when the value is not an array at all, so an
+ * override that never touched its inputs keeps falling back to the defaults.
+ */
+const sanitizePicks = (input: unknown): FormatFieldPick[] | undefined => {
+	if (!Array.isArray(input)) return undefined;
+	const picks: FormatFieldPick[] = [];
+	for (const value of input) {
+		if (!value || typeof value !== "object") continue;
+		const raw = value as Partial<FormatFieldPick>;
+		const name = asString(raw.name).trim();
+		if (!name) continue;
+		const pick: FormatFieldPick = { name };
+		const label = asString(raw.label);
+		if (label) pick.label = label;
+		const hint = asString(raw.hint);
+		if (hint) pick.hint = hint;
+		picks.push(pick);
 	}
-
-	if (type === "check" && Array.isArray(raw.items)) {
-		clean.items = raw.items.map(asString).filter(Boolean);
-	}
-
-	if (type === "list" && typeof raw.itemPlaceholder === "string" && raw.itemPlaceholder) {
-		clean.itemPlaceholder = raw.itemPlaceholder;
-	}
-
-	if (type === "date" && DATE_STYLES.includes(raw.dateStyle as NonNullable<FormatInputField["dateStyle"]>)) {
-		clean.dateStyle = raw.dateStyle;
-	}
-
-	return clean;
+	return picks;
 };
 
 /** Keeps only well-formed entries, so a bad request can never corrupt the file. */
@@ -100,6 +70,8 @@ const sanitize = (input: unknown): AdminFormatStore => {
 			if (typeof entry.body === "string") clean.body = entry.body;
 			if (typeof entry.govLink === "string") clean.govLink = entry.govLink;
 			if (typeof entry.category === "string") clean.category = entry.category;
+			const picks = sanitizePicks(entry.fields);
+			if (picks) clean.fields = picks;
 			if (Object.keys(clean).length > 0) store.overrides[key] = clean;
 		}
 	}
@@ -119,15 +91,15 @@ const sanitize = (input: unknown): AdminFormatStore => {
 				body: asString(entry.body),
 				govLink: asString(entry.govLink),
 				category: asString(entry.category),
+				fields: sanitizePicks(entry.fields) ?? [],
 			});
 		}
 	}
 
-	if (raw.inputs && typeof raw.inputs === "object") {
-		for (const [division, fields] of Object.entries(raw.inputs)) {
-			if (!DIVISIONS.includes(division as DivisionId) || !Array.isArray(fields)) continue;
-			const clean = fields.map(sanitizeField).filter((field): field is FormatInputField => field !== null);
-			store.inputs[division as DivisionId] = clean;
+	if (Array.isArray(raw.inputs)) {
+		for (const value of raw.inputs) {
+			const clean = normaliseInput(value);
+			if (clean) store.inputs.push(clean);
 		}
 	}
 

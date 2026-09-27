@@ -1,6 +1,7 @@
-import type { FormatInputField, divisionsType } from "@/types";
+import type { CatalogueInput } from "@/lib/inputDefinitions";
+import type { FormatFieldPick, divisionsType } from "@/types";
 
-/** The four things the /admin page lets you edit on any format. */
+/** The things the /admin page lets you edit on any format. */
 export interface AdminFormatFields {
 	/** Name shown in the format picker. */
 	title: string;
@@ -16,6 +17,13 @@ export interface AdminFormatFields {
 	govLink: string;
 	/** Heading the format is grouped under in the picker. `""` falls back to the default. */
 	category: string;
+	/**
+	 * The inputs this format asks for, in form order, picked from the shared
+	 * catalogue. An empty list means the format asks for nothing; a format whose
+	 * body names its own tokens uses them for the field set and this list only for
+	 * its wording overrides.
+	 */
+	fields: FormatFieldPick[];
 }
 
 /** A format added from /admin, collected alongside the built-in ones. */
@@ -34,20 +42,15 @@ export interface AdminFormatOverride {
 	govLink?: string;
 	/** Set to `""` to drop the format out of its default category. */
 	category?: string;
+	/** Replaces the format's built-in input list (name, order and wording). */
+	fields?: FormatFieldPick[];
 }
-
-/**
- * A division's input fields fully replaced from /admin. The list is saved whole
- * so fields can be reordered, renamed, added or removed; a division with no
- * entry keeps using the built-in list from src/data/formatInputs.ts.
- */
-export type AdminInputsByDivision = Partial<Record<divisionsType, FormatInputField[]>>;
 
 /** Everything /admin writes back into src/formats/admin.ts. */
 export interface AdminFormatStore {
 	/** Keyed "DIVISION/formatId", e.g. "FTB/1". */
 	overrides: Record<string, AdminFormatOverride>;
 	custom: AdminCustomFormat[];
-	/** Input-field lists that replace a division's built-in fields, keyed by division. */
-	inputs: AdminInputsByDivision;
+	/** Inputs created at /admin, added to the shared catalogue for every division. */
+	inputs: CatalogueInput[];
 }
