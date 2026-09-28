@@ -34,6 +34,7 @@ const SUPERVISORY_PASSWORD = import.meta.env.VITE_SUPERVISORY_PASSWORD as string
 
 const emptyDetails: DeputyData = {
 	name: "",
+	badgeNumber: "",
 	signature: "",
 	dRank: "",
 	divisionRanks: { RED: "", TSD: "", ATD: "", General: "", Supervisory: "", FTB: "", SEB: "" },

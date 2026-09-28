@@ -38,6 +38,7 @@ const GATE_KEY = "adminUnlocked";
 /** An empty profile, so the built-in output shows its own placeholders. */
 const EMPTY_DEPUTY: DeputyData = {
 	name: "",
+	badgeNumber: "",
 	signature: "",
 	dRank: "",
 	divisionRanks: { RED: "", TSD: "", ATD: "", General: "", Supervisory: "", FTB: "", SEB: "" },

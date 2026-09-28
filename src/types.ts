@@ -1,5 +1,7 @@
 export interface DeputyData {
 	name: string;
+	/** Department badge number, e.g. "#10913"; fills {{badgeNumber}} in a body. */
+	badgeNumber: string;
 	signature: string;
 	dRank: string;
 	divisionRanks: {

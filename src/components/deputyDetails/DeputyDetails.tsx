@@ -97,6 +97,17 @@ export function DeputyDetails({ details, setDetails, division }: DeputyDetailsPr
 						/>
 					</Field>
 
+					<Field label="Badge number" htmlFor="deputy-badge" wide>
+						<Input
+							id="deputy-badge"
+							name="badgeNumber"
+							value={details.badgeNumber}
+							placeholder="e.g. #10913"
+							spellCheck={false}
+							onChange={(event) => setDetails((prev) => ({ ...prev, badgeNumber: event.target.value }))}
+						/>
+					</Field>
+
 					<Field label="Deputy rank" htmlFor="deputy-rank" wide>
 						<Combobox
 							id="deputy-rank"
