@@ -3,7 +3,7 @@ import { Check, Sparkles, TriangleAlert } from "lucide-react";
 
 import { FieldPicker } from "@/components/admin/FieldPicker";
 import { Button } from "@/components/ui/button";
-import { catalogueInputFor, catalogueRevision, getCustomInputs } from "@/data/inputCatalogue";
+import { catalogueInputFor } from "@/data/inputCatalogue";
 import { bodyTokens, profileTokens } from "@/lib/formatTemplates";
 import type { CatalogueInput } from "@/lib/inputDefinitions";
 import { plainLabel } from "@/lib/labelText";
@@ -12,6 +12,12 @@ import { cn } from "@/lib/utils";
 interface BodyVariablesProps {
 	/** The body being edited, scanned for `{{tokens}}`. */
 	body: string;
+	/**
+	 * The fields this format has, in the order its form asks for them. The chips
+	 * offered are these alone — the picker below is how every other field is
+	 * reached — and a label here is the wording this format shows for it.
+	 */
+	fields?: { name: string; label?: string }[];
 	/** Drops `{{token}}` in at the caret, replacing whatever is selected. */
 	onInsert: (token: string) => void;
 	/** Creates a brand-new catalogue field and inserts its token. */
@@ -34,6 +40,9 @@ interface BodyVariablesProps {
 		refused?: boolean;
 	} | null;
 }
+
+/** Profile values, which have a list of their own and so never a chip in this one. */
+const PROFILE_TOKEN_NAMES = new Set(profileTokens.map((token) => token.token));
 
 /** The chip a token is clicked by; keeps the caret in the body. */
 const chipClass =
@@ -68,7 +77,7 @@ function TokenChip({
 			className={cn(chipClass, inUse && "border-accent/40 bg-accent-soft")}
 		>
 			<span className="font-mono">{`{{${token}}}`}</span>
-			<span className="max-w-[14rem] truncate text-ink-faint">{label}</span>
+			{label ? <span className="max-w-[14rem] truncate text-ink-faint">{label}</span> : null}
 			{inUse ? <Check className="size-3 shrink-0 text-success" /> : null}
 		</button>
 	);
@@ -86,6 +95,7 @@ function TokenChip({
  */
 export function BodyVariables({
 	body,
+	fields,
 	onInsert,
 	onCreate,
 	onDelete,
@@ -102,21 +112,23 @@ export function BodyVariables({
 
 	const used = useMemo(() => bodyTokens(body), [body]);
 	const usedNames = new Set(used);
-	const fromProfile = new Set(profileTokens.map((token) => token.token));
 
-	// The fields created at /admin, offered as chips like the profile values. The
-	// catalogue is a live registry rather than React state, so the revision is
-	// what tells this list to rebuild: a field made in the picker below shows up
-	// here at once, without this panel knowing how the catalogue is stored.
-	const revision = catalogueRevision();
-	const ownFields = useMemo(
-		() => getCustomInputs().map((input) => ({ name: input.name, label: plainLabel(input.label) })),
-		// eslint-disable-next-line react-hooks/exhaustive-deps -- the revision is the catalogue's identity
-		[revision],
-	);
+	// This format's own fields, and nothing else: a chip is here because the
+	// format asks for that field, not because the field exists somewhere in the
+	// catalogue. Where the format states its own wording, that is what the chip
+	// shows; otherwise it falls back to the catalogue's label.
+	const ownFields = (fields ?? [])
+		.filter((field) => !PROFILE_TOKEN_NAMES.has(field.name))
+		.map((field) => {
+			const definition = catalogueInputFor(field.name);
+			return {
+				name: field.name,
+				label: field.label?.trim() || (definition ? plainLabel(definition.label) : ""),
+			};
+		});
 
 	// A token nothing can fill: neither a catalogue field nor a profile value.
-	const unknown = used.filter((token) => !fromProfile.has(token) && !catalogueInputFor(token));
+	const unknown = used.filter((token) => !PROFILE_TOKEN_NAMES.has(token) && !catalogueInputFor(token));
 
 	return (
 		<div className="flex flex-col gap-3.5 rounded-2xl border border-subtle bg-surface-2/40 p-3.5">
@@ -194,7 +206,7 @@ export function BodyVariables({
 				/>
 			</div>
 
-			{/* The fields made at /admin, beside the profile values: the two are the
+			{/* This format's own fields, beside the profile values: the two are the
 			    same gesture, so they look and behave the same way. */}
 			{ownFields.length ? (
 				<div className="flex flex-col gap-1.5">
