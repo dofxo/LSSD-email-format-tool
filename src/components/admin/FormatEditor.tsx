@@ -10,6 +10,7 @@ import { catalogueInputFor } from "@/data/inputCatalogue";
 import { autoTokenizeBody } from "@/lib/autoTokenize";
 import { insertTokenAtCaret, removeTokenFromBody, renameTokenInBody } from "@/lib/bodyInsert";
 import { formatsForDivision } from "@/lib/formats";
+import { bodyTokens } from "@/lib/formatTemplates";
 import { cn } from "@/lib/utils";
 import type { AdminFormatDraft, AdminFormatFields } from "@/formats/adminTypes";
 import type { CatalogueInput, FieldType } from "@/lib/inputDefinitions";
@@ -179,6 +180,18 @@ export function FormatEditor({
 			return "";
 		}
 	}, [renderBody, defaultDeputy]);
+
+	// The chips the body editor offers: the fields this format asks for, in the
+	// order it asks for them, plus anything its body prints that the field list
+	// has not caught up with. Nothing from the rest of the catalogue is here —
+	// the picker is what reaches those.
+	const fieldChips = useMemo(() => {
+		const listed = picks.map((pick) => ({ name: pick.name, label: pick.label }));
+		const printed = bodyTokens(body)
+			.filter((token) => !picks.some((pick) => pick.name === token))
+			.map((token) => ({ name: token }));
+		return [...listed, ...printed];
+	}, [picks, body]);
 
 	const toggleBody = () => {
 		// First open of an untouched built-in format loads what it generates
@@ -549,6 +562,7 @@ export function FormatEditor({
 
 								<BodyVariables
 									body={body}
+									fields={fieldChips}
 									onInsert={insertToken}
 									onCreate={createAndPersist}
 									onDelete={deleteAndPersist}

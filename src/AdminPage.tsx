@@ -705,6 +705,9 @@ const AdminPage = () => {
 
 								<BodyVariables
 									body={newBody}
+									// A format being written takes its fields from its own body, so the
+									// chips are that body's tokens and nobody else's.
+									fields={bodyTokens(newBody).map((name) => ({ name }))}
 									onInsert={insertNewBodyToken}
 									onCreate={createInput}
 									onDelete={deleteInput}
