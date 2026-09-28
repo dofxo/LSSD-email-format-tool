@@ -314,7 +314,7 @@ export function FormatFields({ formatId, fields, formatData, setFormatData, rese
 					);
 				}
 
-				if (field.type === "check") {
+				if (field.type === "check" || field.type === "checkbox") {
 					const selected = Array.isArray(rawValue) ? (rawValue as string[]) : [];
 					return (
 						<Field

@@ -43,7 +43,7 @@ export interface FormatFieldPick {
 export interface FormatInputField {
 	name: string;
 	label: string;
-	type: "text" | "number" | "date" | "time" | "select" | "textarea" | "check" | "list";
+	type: "text" | "number" | "date" | "time" | "select" | "textarea" | "check" | "checkbox" | "list";
 	/** Format ids (as strings) that require this field. */
 	formats: string[];
 	hint?: string;
@@ -52,7 +52,7 @@ export interface FormatInputField {
 	dateStyle?: DateStyle;
 	/** Placeholder for "list" fields' add-input. */
 	itemPlaceholder?: string;
-	/** Toggleable items for "check" fields; stored as "<fieldName>:<index>" keys. */
+	/** Toggleable items for "check" fields; stored as "<fieldName>:<index>" keys. The choices of a "checkbox" field: its body token prints one [cb] line per choice, [cbc] for the ticked ones. */
 	items?: string[];
 }
 

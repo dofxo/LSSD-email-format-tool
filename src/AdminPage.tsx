@@ -362,7 +362,7 @@ const AdminPage = () => {
 	 * asks for the field at once; built-ins are not touched this way, since their
 	 * definitions live in the source tree.
 	 */
-	const updateInput = (input: CatalogueInput) => {
+	const updateInput = (input: CatalogueInput, message?: string) => {
 		const index = (store.inputs ?? []).findIndex((entry) => entry.name === input.name);
 		if (index === -1) {
 			toast.error(`{{${input.name}}} ships with the tool — its definition cannot be changed here.`);
@@ -381,7 +381,21 @@ const AdminPage = () => {
 		setStore(next);
 		setDirty(true);
 		toast.success(
-			`{{${normalised.name}}} is now a ${TYPE_LABELS[normalised.type]} — press Save formats to keep it.`,
+			message ??
+				`{{${normalised.name}}} is now a ${TYPE_LABELS[normalised.type]} — press Save formats to keep it.`,
+		);
+	};
+
+	/** Rewrites one checkbox field's choices, leaving the rest of its definition alone. */
+	const updateInputItems = (name: string, items: string[]) => {
+		const entry = (store.inputs ?? []).find((input) => input.name === name);
+		if (!entry) {
+			toast.error(`{{${name}}} ships with the tool — its checkboxes cannot be changed here.`);
+			return;
+		}
+		updateInput(
+			{ ...entry, items },
+			`Checkboxes for {{${name}}} updated — press Save formats to keep them.`,
 		);
 	};
 
@@ -398,6 +412,9 @@ const AdminPage = () => {
 		}
 		if (type === "check" && !entry.items?.length) {
 			toast.info("A checklist needs items — add them with the field's edit pencil.");
+		}
+		if (type === "checkbox" && !entry.items?.length) {
+			toast.info("A checkbox needs its choices — add them with the field's edit pencil.");
 		}
 	};
 
@@ -786,6 +803,7 @@ const AdminPage = () => {
 									onDirty={noteDirty}
 									onUpdateField={updateInput}
 									onUpdateFieldType={updateInputType}
+									onUpdateFieldItems={updateInputItems}
 									deleteGuard={deleteGuardFor}
 									fieldGuard={editGuardFor}
 										defaultTopicTitle={format.defaultTopicTitle}

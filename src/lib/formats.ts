@@ -13,6 +13,7 @@ import {
 	customFormatsFor,
 	overrideFor,
 } from "@/lib/adminFormats";
+import { bodyHasRunFor } from "@/lib/checkboxLines";
 import { bodyTokens } from "@/lib/formatTemplates";
 import { inputsByDivision } from "@/data/formatInputs";
 import { catalogueInputFor } from "@/data/inputCatalogue";
@@ -151,13 +152,34 @@ export const orderTokensByFields = (tokens: string[], fields: FormatFieldPick[] 
 };
 
 /**
+ * The checkbox fields a body-driven format asks for without a `{{token}}`: a
+ * checkbox's choices name a block of `[cb]` lines already in the body, and its
+ * ticks flip those lines in place. One whose choices match no block is left out
+ * of the form — nothing in the body would change if it were ticked.
+ */
+const checkboxPicksFor = (body: string, picks: FormatFieldPick[] | null): string[] =>
+	(picks ?? [])
+		.filter((pick) => {
+			const definition = catalogueInputFor(pick.name);
+			return (
+				definition?.type === "checkbox" &&
+				!!definition.items?.length &&
+				bodyHasRunFor(body, definition.items)
+			);
+		})
+		.map((pick) => pick.name);
+
+/**
  * The dynamic form fields a specific format asks for.
  *
  * A format with a body of its own says this itself: the inputs its `{{tokens}}`
  * name are the ones its form shows, so nothing has to be ticked for it, and the
- * format's field list orders them. A format still running its built-in generator
- * has no template to read, so it uses the inputs picked for it at /admin —
- * falling back to the built-in defaults ticked for it until those picks are made.
+ * format's field list orders them. A checkbox field can also be asked for
+ * without a token at all — its choices name the body's own `[cb]` lines, which
+ * is how a list of checkboxes is placed. A format still running its built-in
+ * generator has no template to read, so it uses the inputs picked for it at
+ * /admin — falling back to the built-in defaults ticked for it until those picks
+ * are made.
  *
  * Either way the shared catalogue supplies each field's type, options and
  * default wording, and a per-format pick overrides just the label and hint.
@@ -168,9 +190,15 @@ export const formatFieldsFor = (division: divisionsType, formatId: string): Form
 	const picks = adminPicksFor(division, formatId);
 	const pickByName = new Map((picks ?? []).map((pick) => [pick.name, pick]));
 
-	const names = usesOwnBody(division, formatId)
-		? orderTokensByFields(bodyTokensFor(division, formatId), picks)
-		: (picks?.map((pick) => pick.name) ?? defaultFieldNamesFor(division, formatId));
+	const body = adminBodyFor(division, formatId);
+	const tokenNames = body === null ? [] : bodyTokens(body);
+	const names =
+		body !== null
+			? [
+					...orderTokensByFields(tokenNames, picks),
+					...checkboxPicksFor(body, picks).filter((name) => !tokenNames.includes(name)),
+				]
+			: (picks?.map((pick) => pick.name) ?? defaultFieldNamesFor(division, formatId));
 
 	return names
 		.map((name) => resolveField(name, pickByName.get(name)))
