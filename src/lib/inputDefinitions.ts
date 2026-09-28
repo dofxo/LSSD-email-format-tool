@@ -12,6 +12,7 @@ export const FIELD_TYPES = [
 	"select",
 	"textarea",
 	"check",
+	"checkbox",
 	"list",
 ] as const;
 export type FieldType = (typeof FIELD_TYPES)[number];
@@ -28,6 +29,7 @@ export const TYPE_LABELS: Record<FieldType, string> = {
 	select: "Dropdown",
 	textarea: "Paragraph",
 	check: "Checklist",
+	checkbox: "Checkbox",
 	list: "Repeating list",
 };
 
@@ -96,6 +98,11 @@ export const normaliseInput = (input: unknown): CatalogueInput | null => {
 	}
 
 	if (type === "check" && Array.isArray(raw.items)) {
+		const items = raw.items.map((item) => String(item ?? "")).filter(Boolean);
+		if (items.length) definition.items = items;
+	}
+
+	if (type === "checkbox" && Array.isArray(raw.items)) {
 		const items = raw.items.map((item) => String(item ?? "")).filter(Boolean);
 		if (items.length) definition.items = items;
 	}

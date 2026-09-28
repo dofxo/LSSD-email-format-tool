@@ -379,6 +379,182 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 					"name": "notesForFurther"
 				}
 			]
+		},
+		{
+			"id": "7",
+			"division": "General",
+			"title": "Impound Report",
+			"topicTitle": "",
+			"body": "[img]https://i.ibb.co/Vc5jwQNN/MOJn-M5B.png[/img]\n[divbox=white]\n[list=none][b][size=115]DEPUTY DETAILS[/size][/b]\n[list=none]\n[b]Full Name:[/b] {{name}}\n[b]Badge Number:[/b] {{badgeNumber}}\n[b]Callsign:[/b] {{callSign}}\n[/list]\n\n[b][size=115]VEHICLE DETAILS[/size][/b]\n[list=none]\n[b]Vehicle Model:[/b] {{vehicleModel}}\n[b]Vehicle Color:[/b] {{vehicleColor}}\n[b]License Plate:[/b] {{licensePlate}}\n[b]Vehicle Owner:[/b] {{vehicleOwner}}\n[b]Miscelleanous Details:[/b] {{miscelleanousDetails}}\n[/list]\n\n[b][size=115]IMPOUND DETAILS[/size][/b]\n[list=none]\n[b]Date and Time:[/b] {{impoundDate}}, {{impoundTime}} ((/time)).\n[b]Location:[/b] {{location}}\n[b]Brief Statement of Impounding Reason:[/b] {{briefStatementOfImpoundingReason}}\n[b]Deputies Involved:[/b] {{deputiesInvolved}}\n[b]Documented Evidence:[/b]\n[img]{{documentedEvidence}}[/img]\n[/list][/list]\n\n[hr][/hr][/divbox][LSSDfooter][/LSSDfooter]",
+			"govLink": "https://gov.eclipse-rp.net/viewtopic.php?t=70282",
+			"category": "Vehicle Related Reports",
+			"fields": [
+				{
+					"name": "callSign"
+				},
+				{
+					"name": "vehicleModel"
+				},
+				{
+					"name": "vehicleColor"
+				},
+				{
+					"name": "licensePlate"
+				},
+				{
+					"name": "vehicleOwner"
+				},
+				{
+					"name": "miscelleanousDetails"
+				},
+				{
+					"name": "impoundDate"
+				},
+				{
+					"name": "impoundTime"
+				},
+				{
+					"name": "location"
+				},
+				{
+					"name": "briefStatementOfImpoundingReason"
+				},
+				{
+					"name": "deputiesInvolved"
+				},
+				{
+					"name": "documentedEvidence"
+				}
+			]
+		},
+		{
+			"id": "8",
+			"division": "General",
+			"title": "Impound Release Report",
+			"topicTitle": "",
+			"body": "[img]https://i.imgur.com/b2urDtz.png[/img] \n[divbox=white] [size=115]IMPOUND RELEASE REPORT[/size] \n[list=none][b][size=115]DEPUTY DETAILS[/size][/b] \n[list=none] \n[b]Full Name:[/b] {{name}}\n[b]Badge Number:[/b] {{badgeNumber}}\n[b]Callsign:[/b] {{callSign}}\n[/list]  \n[b][size=115]VEHICLE DETAILS[/size][/b] \n[list=none] \n[b]Vehicle Model:[/b] {{vehicleModel}}\n[b]Vehicle Color:[/b] {{vehicleColor}}\n[b]License Plate:[/b] {{licensePlate}}\n[b]Vehicle Owner:[/b] {{vehicleOwner}}\n[/list]  \n[b][size=115]IMPOUND & PAYMENT DETAILS[/size][/b] \n[list=none] [b]Date of Impound:[/b] {{impounddate}}\n[b]Person Responsible of Impound:[/b] {{personResponsibleOfImpound}} \n[b]Fees Paid by Vehicle Owner:[/b] [color=#008000]${{feesPaidByVehicleOwner}}[/color] \n[/list][/list]  \n[hr][/hr] \n[/divbox]\n[img]https://i.imgur.com/PTqp5LP.png[/img]",
+			"govLink": "https://gov.eclipse-rp.net/viewtopic.php?t=22348",
+			"category": "Vehicle Related Reports",
+			"fields": [
+				{
+					"name": "callSign"
+				},
+				{
+					"name": "vehicleModel"
+				},
+				{
+					"name": "vehicleColor"
+				},
+				{
+					"name": "licensePlate"
+				},
+				{
+					"name": "vehicleOwner"
+				},
+				{
+					"name": "impounddate"
+				},
+				{
+					"name": "personResponsibleOfImpound"
+				},
+				{
+					"name": "feesPaidByVehicleOwner"
+				}
+			]
+		},
+		{
+			"id": "9",
+			"division": "General",
+			"title": "Traffic Stop Report",
+			"topicTitle": "",
+			"body": "[LSSDfooter][/LSSDfooter][divbox=white]\n[img]https://i.imgur.com/nbsW4gJ.png[/img][aligntable=right,0,0,0,0,0,0][right][font=Arial][b]\n[size=150]Los Santos County Sheriff's Department[/size][/b]\n[size=140]\"[i]A TRADITION OF SERVICE[/i]\"[/size][/font][/right][/aligntable]\n[hr]\n[list=none][b][size=115]TRAFFIC STOP DETAILS[/size][/b]\n[list=none]\n[b]Location[/b]: {{location}}\n[b]Reason for Stop[/b]: {{reasonForStop}}\n[b]Approx. Time and Date[/b]: {{trafficStopDate}} {{trafficStopTime}}\n[b]Traffic Stop Outcome:[/b] {{trafficStopOutcome}}\n[/list]\n\n[hr]\n\n[b][size=115]VEHICLE DETAILS[/size][/b]\n[list=none]\n[b]Vehicle Driver:[/b] {{vehicleDriver}}\n[b]Vehicle Owner[/b]: {{vehicleOwner}}\n[b]License Plate[/b]: {{licensePlate}}\n[b]Vehicle VIN[/b]: {{vehicelVin}}\n[b]Vehicle Model[/b]: {{vehicleModel}}\n[b]Vehicle Color[/b]: {{vehicleColor}}\n[b]Occupants (If Applicable)[/b]: {{occupants}}\n[/list]\n\n[/divbox]\n[lssdfooter][/lssdfooter]",
+			"govLink": "https://gov.eclipse-rp.net/viewtopic.php?t=70409",
+			"category": "Vehicle Related Reports",
+			"fields": [
+				{
+					"name": "location"
+				},
+				{
+					"name": "reasonForStop"
+				},
+				{
+					"name": "trafficStopDate"
+				},
+				{
+					"name": "trafficStopTime"
+				},
+				{
+					"name": "trafficStopOutcome"
+				},
+				{
+					"name": "vehicleDriver"
+				},
+				{
+					"name": "vehicleOwner"
+				},
+				{
+					"name": "licensePlate"
+				},
+				{
+					"name": "vehicleModel"
+				},
+				{
+					"name": "vehicelVin"
+				},
+				{
+					"name": "vehicleColor"
+				},
+				{
+					"name": "occupants"
+				}
+			]
+		},
+		{
+			"id": "10",
+			"division": "General",
+			"title": "Department Traffic Collison Reports (DTC-R)",
+			"topicTitle": "",
+			"body": "[img]https://i.imgur.com/UkZivDh.png[/img]\n[divbox=white]\n[size=115]DEPARTMENT TRAFFIC COLLISION REPORT (DTC-R)[/size]\n\n[b][size=115]INCIDENT DETAILS[/size][/b]\n[list=none]\n[b]Deputy Name[/b]: {{name}}\n[b]Location of Incident[/b]: {{locationofincident}}\n[b]Date and Time[/b]: {{incidentTime}} | {{incidentdate}}\n[/list]\n\n[b][size=115]COLLISION DETAILS[/size][/b]\n[size=85][i]Please add a \"X\" all relevant areas[/i]. [/size]\n[list=none]\n[aligntable=left,0,0,0,0,0,0]\n[b]Driving Code[/b]:[color=white]-------------------------------------------[/color]\n{{drivingCode}}\n[/aligntable]\n\n\n[aligntable=left,0,0,0,0,0,0]\n[b]Injuries sustained[/b]:[color=white]------------[/color] \n{{injuries}}\n[color=white]-[/color] \n[/aligntable]\n[hr]\n\n[aligntable=left,0,0,0,0,0,0]\n[b]Damage to Department Vehicle[/b]:[color=white]-----------[/color] \n{{vehicleDamage}}\n[/aligntable]\n\n[aligntable=left,0,0,0,0,0,0]\n[b]Damage to Secondary Vehicle[/b]:[color=white]------------[/color] \n{{secondaryDamage}}\n[color=white]-[/color]\n[/aligntable]\n[color=white]-[/color][hr]\n[/list]\n\n[b][size=115]STATEMENTS[/size][/b]\n[list=none]\n[b]Deputies Statment[/b]: \n[divbox=white]\n[i] {{deputiesStatment}}[/i]\n[/divbox]\n\n[color=white]-[/color][hr]\n[b]Secondary Vehicles Statement[/b]:\n[divbox=white]\n[i] {{secondaryVehiclesStatement}} [/i]\n[/divbox]\n[/list]\n\n[b][size=115]PHOTOGRAPHS OF THE INCIDENT[/size][/b]\n[list=none]\n[spoil]\n[img]{{photoOfIncident}}[/img]\n[/spoil]\n[/list]\n[/divbox]\n[lssdfooter][/lssdfooter]",
+			"govLink": "https://gov.eclipse-rp.net/viewtopic.php?t=189535",
+			"category": "Vehicle Related Reports",
+			"fields": [
+				{
+					"name": "locationofincident",
+					"label": "Location Of Incident"
+				},
+				{
+					"name": "incidentdate",
+					"label": "Incident Date"
+				},
+				{
+					"name": "incidentTime"
+				},
+				{
+					"name": "drivingCode",
+					"label": "Driving Code"
+				},
+				{
+					"name": "injuries",
+					"label": "Injuries Sustained"
+				},
+				{
+					"name": "vehicleDamage",
+					"label": "Damage to Department Vehicle"
+				},
+				{
+					"name": "secondaryDamage",
+					"label": "Damage to Secondary Vehicle"
+				},
+				{
+					"name": "deputiesStatment"
+				},
+				{
+					"name": "secondaryVehiclesStatement"
+				},
+				{
+					"name": "photoOfIncident"
+				}
+			]
 		}
 	],
 	"inputs": [
@@ -673,6 +849,189 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 			"name": "notesForFurther",
 			"type": "textarea",
 			"label": "Notes for further ride-along sessions"
+		},
+		{
+			"name": "callSign",
+			"type": "text",
+			"label": "Your Callsign"
+		},
+		{
+			"name": "vehicleModel",
+			"type": "text",
+			"label": "Vehicle Model"
+		},
+		{
+			"name": "vehicleColor",
+			"type": "text",
+			"label": "Vehicle Color"
+		},
+		{
+			"name": "licensePlate",
+			"type": "text",
+			"label": "License Plate"
+		},
+		{
+			"name": "vehicleOwner",
+			"type": "text",
+			"label": "Vehicle Owner"
+		},
+		{
+			"name": "miscelleanousDetails",
+			"type": "text",
+			"label": "Miscelleanous Details"
+		},
+		{
+			"name": "impoundDate",
+			"type": "date",
+			"label": "Date",
+			"dateStyle": "shortYear"
+		},
+		{
+			"name": "impoundTime",
+			"type": "time",
+			"label": "Impound Time"
+		},
+		{
+			"name": "briefStatementOfImpoundingReason",
+			"type": "textarea",
+			"label": "Brief Statement of Impounding Reason"
+		},
+		{
+			"name": "deputiesInvolved",
+			"type": "textarea",
+			"label": "Deputies Involved",
+			"hint": "Separate via ,"
+		},
+		{
+			"name": "documentedEvidence",
+			"type": "text",
+			"label": "Documented Evidence",
+			"hint": "Put your img url"
+		},
+		{
+			"name": "impounddate",
+			"type": "date",
+			"label": "impoundDate"
+		},
+		{
+			"name": "personResponsibleOfImpound",
+			"type": "text",
+			"label": "Person Responsible of Impound"
+		},
+		{
+			"name": "feesPaidByVehicleOwner",
+			"type": "text",
+			"label": "Fees Paid by Vehicle Owner"
+		},
+		{
+			"name": "reasonForStop",
+			"type": "textarea",
+			"label": "Reason for Stop"
+		},
+		{
+			"name": "trafficStopDate",
+			"type": "date",
+			"label": "Traffic Stop Date"
+		},
+		{
+			"name": "trafficStopTime",
+			"type": "time",
+			"label": "Traffic Stop Time"
+		},
+		{
+			"name": "trafficStopOutcome",
+			"type": "textarea",
+			"label": "Traffic Stop Outcome"
+		},
+		{
+			"name": "vehicleDriver",
+			"type": "text",
+			"label": "Vehicle Driver"
+		},
+		{
+			"name": "vehicelVin",
+			"type": "text",
+			"label": "Vehicel VIN"
+		},
+		{
+			"name": "occupants",
+			"type": "text",
+			"label": "Occupants"
+		},
+		{
+			"name": "locationofincident",
+			"type": "text",
+			"label": "LocationOfIncident"
+		},
+		{
+			"name": "incidentdate",
+			"type": "date",
+			"label": "IncidentDate"
+		},
+		{
+			"name": "incidentTime",
+			"type": "time",
+			"label": "Incident Time"
+		},
+		{
+			"name": "drivingCode",
+			"type": "checkbox",
+			"label": "Driving Code",
+			"items": [
+				"Code 4 (no lights or sirens)",
+				"Code 2 (lights)",
+				"Code 3 (Lights, Sirens, Mid pursuit)"
+			]
+		},
+		{
+			"name": "injuries",
+			"type": "checkbox",
+			"label": "Injuries Sustained",
+			"items": [
+				"None",
+				"Civilian",
+				"Deputy",
+				"Deputy and Civilian"
+			]
+		},
+		{
+			"name": "vehicleDamage",
+			"type": "checkbox",
+			"label": "Damage to Department Vehicle",
+			"items": [
+				"Minor",
+				"Moderate",
+				"Severe",
+				"Totaled (required tow)",
+				"Destroyed"
+			]
+		},
+		{
+			"name": "secondaryDamage",
+			"type": "checkbox",
+			"label": "Damage to Secondary Vehicle",
+			"items": [
+				"Minor",
+				"Moderate",
+				"Severe",
+				"Totaled (required tow)",
+				"Destroyed"
+			]
+		},
+		{
+			"name": "deputiesStatment",
+			"type": "textarea",
+			"label": "Deputies Statment"
+		},
+		{
+			"name": "secondaryVehiclesStatement",
+			"type": "textarea",
+			"label": "Secondary Vehicles Statement"
+		},
+		{
+			"name": "photoOfIncident",
+			"type": "text",
+			"label": "Photo of incident"
 		}
 	]
 } /* /ADMIN_DATA */;

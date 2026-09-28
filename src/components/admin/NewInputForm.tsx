@@ -267,9 +267,11 @@ export function NewInputForm({ existingNames, initialType, initial, onCreate, on
 				</div>
 			) : null}
 
-			{type === "check" ? (
+			{type === "check" || type === "checkbox" ? (
 				<div className="flex flex-col gap-1.5">
-					<span className="text-[11.5px] font-medium text-ink-muted">Checklist items</span>
+					<span className="text-[11.5px] font-medium text-ink-muted">
+						{type === "checkbox" ? "Checkbox choices" : "Checklist items"}
+					</span>
 					{items.map((item, index) => (
 						<div key={index} className="flex items-center gap-2">
 							<Input

@@ -6,7 +6,8 @@ import { SupervisoryFormats } from "./divisions/Supervisory";
 import { FTBFormats } from "./divisions/FTB";
 import { SEBFormats } from "./divisions/SEB";
 import { adminBodyFor } from "@/lib/adminFormats";
-import { renderFormatTemplate } from "@/lib/formatTemplates";
+import { formatFieldsFor } from "@/lib/formats";
+import { renderFormatTemplate, type CheckboxFieldSpec } from "@/lib/formatTemplates";
 import type { DeputyData, divisionsType, FormatData } from "@/types";
 
 export const registry = {
@@ -18,6 +19,16 @@ export const registry = {
 	FTB: FTBFormats,
 	SEB: SEBFormats,
 } as const;
+
+/**
+ * The format's checkbox fields, in the order its form asks for them, so the
+ * renderer ticks the `[cb]` lines each one answers for. They are the same fields
+ * the form shows, which is what keeps the two in step when one is moved.
+ */
+const checkboxFieldsFor = (division: divisionsType, formatId: string): CheckboxFieldSpec[] =>
+	formatFieldsFor(division, formatId)
+		.filter((field) => field.type === "checkbox" && field.items?.length)
+		.map((field) => ({ name: field.name, items: field.items as string[] }));
 
 export const getFormat = ({
 	formatData,
@@ -35,7 +46,12 @@ export const getFormat = ({
 	const adminBody = adminBodyFor(division, formatId);
 	if (adminBody !== null) {
 		return {
-			format: renderFormatTemplate(adminBody, { formatData, deputyData, division }),
+			format: renderFormatTemplate(adminBody, {
+				formatData,
+				deputyData,
+				division,
+				checkboxFields: checkboxFieldsFor(division, formatId),
+			}),
 			formats: {},
 		};
 	}

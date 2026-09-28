@@ -71,6 +71,8 @@ interface FormatEditorProps {
 	onUpdateField?: (input: CatalogueInput) => void;
 	/** Switches one field's type, everywhere it is used. */
 	onUpdateFieldType?: (name: string, type: FieldType) => void;
+	/** Rewrites a checkbox field's choices, everywhere it is used. */
+	onUpdateFieldItems?: (name: string, items: string[]) => void;
 	/** Which fields may have their definition changed; built-ins keep a plain badge. */
 	fieldGuard?: (name: string) => { ok: boolean; reason?: string };
 	onSave: (fields: AdminFormatFields, opts?: { skipRemount?: boolean }) => void;
@@ -97,6 +99,7 @@ export function FormatEditor({
 	onRenameField,
 	onUpdateField,
 	onUpdateFieldType,
+	onUpdateFieldItems,
 	fieldGuard,
 	onSave,
 	onReset,
@@ -585,9 +588,9 @@ export function FormatEditor({
 									deleteGuard={deleteGuard}
 									onRemoveFromBody={removeTokenAndPersist}
 									onPutInBody={restoreTokenAndPersist}
-									onRenameField={renameTokenAndPersist}
-								onChangeType={onUpdateFieldType}
-								fieldGuard={fieldGuard}
+									onRenameField={renameTokenAndPersist}									onChangeType={onUpdateFieldType}
+									onChangeItems={onUpdateFieldItems}
+									fieldGuard={fieldGuard}
 								onEditField={onUpdateField}
 							/>
 				</div>

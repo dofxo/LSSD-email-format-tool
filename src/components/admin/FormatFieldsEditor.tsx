@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowDown, ArrowUp, Check, CornerDownLeft, Pencil, Trash2, TriangleAlert, X } from "lucide-react";
+import { ArrowDown, ArrowUp, Check, CornerDownLeft, Pencil, Plus, Trash2, TriangleAlert, X } from "lucide-react";
 import { copyText } from "@/hooks/useCopy";
 import { toast } from "react-toastify";
 
@@ -7,6 +7,7 @@ import { FieldPicker } from "@/components/admin/FieldPicker";
 import { Button } from "@/components/ui/button";
 import { Field, Input, LabelContent, Textarea } from "@/components/ui/input";
 import { catalogueInputFor, isCatalogueField } from "@/data/inputCatalogue";
+import { bodyHasRunFor } from "@/lib/checkboxLines";
 import { FIELD_TYPES, isValidTokenName, TYPE_LABELS, type FieldType } from "@/lib/inputDefinitions";
 import { bodyTokens, profileTokens } from "@/lib/formatTemplates";
 import { orderTokensByFields } from "@/lib/formats";
@@ -49,6 +50,12 @@ interface FormatFieldsEditorProps {
 	 * asking for it changes with it.
 	 */
 	onChangeType?: (name: string, type: FieldType) => void;
+	/**
+	 * Rewrites a checkbox field's choices. They belong to the shared catalogue,
+	 * like the type, so every format asking for the field ticks the same list —
+	 * and it is the body's own `[cb]` lines the choices name.
+	 */
+	onChangeItems?: (name: string, items: string[]) => void;
 	/** Which fields may have their own definition changed; the rest keep a plain badge. */
 	fieldGuard?: (name: string) => { ok: boolean; reason?: string };
 	/** Opens an admin-created field for editing (the picker's pencil uses it). */
@@ -87,7 +94,7 @@ const withWording = (
  * form asks for them in: a row's pencil retypes the `{{token}}` itself, in every
  * place the body uses it, and the arrows order it without touching the body.
  */export function FormatFieldsEditor({ tokenDriven, body, picks, onChange, onCreate, onDelete, deleteGuard,
-onRemoveFromBody, onPutInBody, onRenameField, onChangeType, fieldGuard, onEditField }: FormatFieldsEditorProps) {
+onRemoveFromBody, onPutInBody, onRenameField, onChangeType, onChangeItems, fieldGuard, onEditField }: FormatFieldsEditorProps) {
 	const tokens = tokenDriven ? [...new Set(bodyTokens(body))] : [];
 	// The token currently being retyped, and what has been typed into it.
 	const [renaming, setRenaming] = useState<{ from: string; value: string } | null>(null);
@@ -237,6 +244,13 @@ onRemoveFromBody, onPutInBody, onRenameField, onChangeType, fieldGuard, onEditFi
 					// The wording in force here, which the label box edits in place and the
 					// picture below it is drawn from.
 					const label = pick?.label ?? definition.label;
+					// A checkbox can print without a token: its choices name a block of the
+					// body's own `[cb]` lines, and its ticks flip those lines in place.
+					const choices = definition.items ?? [];
+					const bindsRun =
+						definition.type === "checkbox" && choices.length > 0
+							? bodyHasRunFor(body, choices)
+							: false;
 					return (							<div key={name} className="rounded-xl border border-subtle bg-surface/60 p-2.5">
 								<div className="flex items-center gap-2">
 									{onChangeType && typeVerdict.ok ? (
@@ -328,7 +342,15 @@ onRemoveFromBody, onPutInBody, onRenameField, onChangeType, fieldGuard, onEditFi
 											) : null}
 										</>
 									)}
-								{!printed ? (
+								{!printed && bindsRun ? (
+									<span
+										className="flex min-w-0 flex-1 items-center gap-1 text-[11px] text-success"
+										title="This field ticks the body's own [cb] lines, so it needs no token"
+									>
+										<Check className="size-3.5 shrink-0" />
+										<span className="truncate">Ticks the checkbox lines in the body</span>
+									</span>
+								) : !printed ? (
 									<span
 										className="flex min-w-0 flex-1 items-center gap-1.5 text-[11px] text-warning"
 										title={`The body does not print {{${name}}} any more, so what is typed in here stays out of the output. The field is kept on this format — put its token back to use it again.`}
@@ -441,6 +463,67 @@ onRemoveFromBody, onPutInBody, onRenameField, onChangeType, fieldGuard, onEditFi
 										onChange={(event) => setWording(name, { label: pick?.label, hint: event.target.value })}
 									/>
 								</Field>
+
+								{definition.type === "checkbox" && onChangeItems && typeVerdict.ok ? (
+									<Field
+										label="Checkboxes"
+										htmlFor={`pick-items-${name}`}
+										wide
+										hint={
+											<>
+												One line per box. Where <code className="font-mono">{`{{${name}}}`}</code> is in the body these lines print
+												there, a ticked one as [cbc]; with no token in the body, the body's own [cb]
+												lines the choices name are ticked in place instead.
+											</>
+										}
+									>
+										<div className="flex flex-col gap-1.5">
+											{choices.map((item, index) => (
+												<div key={index} className="flex items-center gap-2">
+													<Input
+														id={index === 0 ? `pick-items-${name}` : undefined}
+														value={item}
+														placeholder={`Line ${index + 1} — e.g. Minor`}
+														aria-label={`${name} line ${index + 1}`}
+														onChange={(event) =>
+															onChangeItems(
+																name,
+																choices.map((entry, at) => (at === index ? event.target.value : entry)),
+															)
+														}
+													/>
+													<Button
+														size="icon-sm"
+														variant="ghost"
+														title="Remove this line"
+														aria-label={`Remove ${name} line ${index + 1}`}
+														onClick={() => onChangeItems(name, choices.filter((_, at) => at !== index))}
+													>
+														<Trash2 />
+													</Button>
+												</div>
+											))}
+											<Button
+												size="sm"
+												variant="secondary"
+												className="self-start"
+												onClick={() => onChangeItems(name, [...choices, ""])}
+											>
+												<Plus />
+												Add line
+											</Button>
+											{choices.length > 0 && !bindsRun ? (
+												<span className="flex items-start gap-1.5 text-[11px] leading-relaxed text-warning">
+													<TriangleAlert className="mt-px size-3.5 shrink-0" />
+													<span>
+														No run of [cb] lines in the body matches these yet — copy them in the same
+														order the body lists them, or put the token in first.
+													</span>
+												</span>
+											) : null}
+										</div>
+									</Field>
+								) : null}
 							</div>
 						</div>
 					);
