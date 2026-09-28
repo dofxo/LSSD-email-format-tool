@@ -155,10 +155,6 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 			"category": "Certification Application",
 			"fields": [
 				{
-					"name": "badgeNumber",
-					"label": "Your badge number"
-				},
-				{
 					"name": "sebJoinDate",
 					"label": "SEB Join date"
 				},
@@ -188,15 +184,19 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 					"label": "SEB Join Date"
 				}
 			]
+		},
+		{
+			"id": "38",
+			"division": "SEB",
+			"title": "Advanced Aerial Unit Certification",
+			"topicTitle": "[AAU Certification] Operator {FName LName}",
+			"body": "[img]https://i.imgur.com/NUbXkVL.png[/img]\n[lssdsubtitle]Section 1 - Personal Information[/lssdsubtitle]\n[divbox=white]\n[b]Full Name:[/b] [i]INSERT ANSWER HERE[/i]\n[b]Rank:[/b] [i]INSERT ANSWER HERE[/i]\n[b]Badge Number:[/b] [i]INSERT ANSWER HERE[/i]\n[b]SEB Since:[/b] [i]INSERT ANSWER HERE[/i]\n[/divbox]\n[lssdsubtitle]Section 2 - General Questions[/lssdsubtitle]\n[divbox=white]\n[b]Why are you applying for the Advanced Aerial Unit Certification, and how would you be an asset to the Bureau by receiving it?[/b]\n[i]INSERT ANSWER HERE[/i]\n[b]What are the responsibilities of an Advanced Aerial Unit Pilot?[/b]\n[i]INSERT ANSWER HERE[/i]\n[b]Do you feel comfortable putting yourself under extreme high risk situations? And are you capable of operating under extreme stress? State a few examples or experiences you have faced. [/b]\n[i]INSERT ANSWER HERE[/i]\n[/divbox]\n[lssdsubtitle]Section 3 - Theoretical Scenario Questions[/lssdsubtitle]\n[divbox=white]\n[center][size=200]Scenario 1[/size][/center]\n[b]SAAA comes in over the department radio, wherein they state that their towers see an aircraft that won't respond to them. How do you approach the aircraft and resolve the situation? [/b]\n[i]INSERT ANSWER HERE[/i]\n[center][size=200]Scenario 2[/size][/center]\n[b]You are piloting the 2-D-8 Annihilator Gunship, and you are called to a large-scale gang situation in order to perform an aerial assault with a full team of operators on board, however, your aircraft comes under large-scale direct gunfire from the hostiles mentioned previous. What do you do?[/b]\n[i]INSERT ANSWER HERE[/i]\n[center][size=200]Scenario 3[/size][/center]\n[b]During a bank robbery, the suspects take a hostage and in turn negotiate for a helicopter to escape with. Knowing that the individuals on board the helicopter are armed, prone to firing upon law enforcement, and volatile, how do you approach the situation?[/b]\n[i]INSERT ANSWER HERE[/i]\n[/divbox]",
+			"govLink": "https://gov.eclipse-rp.net/posting.php?mode=post&f=4145",
+			"category": "Certification Application",
+			"fields": []
 		}
 	],
 	"inputs": [
-		{
-			"name": "badgeNumber",
-			"type": "text",
-			"label": "your badge number",
-			"hint": "#10913"
-		},
 		{
 			"name": "sebSince",
 			"type": "date",
