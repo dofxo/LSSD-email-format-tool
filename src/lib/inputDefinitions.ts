@@ -1,3 +1,4 @@
+import { plainLabel } from "@/lib/labelText";
 import type { FormatInputField } from "@/types";
 
 /** Every input type /admin can pick, in menu order. */
@@ -47,7 +48,9 @@ export const isValidTokenName = (name: string): boolean => /^[\w.]+$/.test(name)
  * becomes `noteOptional`. Empty when the label holds nothing usable.
  */
 export const suggestTokenName = (label: string): string => {
-	const words = label
+	// Any picture the wording asks for is left out first: a name worked out from
+	// `{img=https://…}` would be the URL read aloud, not the question.
+	const words = plainLabel(label)
 		.replace(/[^\w\s.-]/g, " ")
 		.split(/[\s._-]+/)
 		.filter(Boolean);

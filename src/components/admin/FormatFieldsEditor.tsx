@@ -5,11 +5,12 @@ import { toast } from "react-toastify";
 
 import { FieldPicker } from "@/components/admin/FieldPicker";
 import { Button } from "@/components/ui/button";
-import { Field, Input, Textarea } from "@/components/ui/input";
+import { Field, Input, LabelContent, Textarea } from "@/components/ui/input";
 import { catalogueInputFor, isCatalogueField } from "@/data/inputCatalogue";
 import { FIELD_TYPES, isValidTokenName, TYPE_LABELS, type FieldType } from "@/lib/inputDefinitions";
 import { bodyTokens, profileTokens } from "@/lib/formatTemplates";
 import { orderTokensByFields } from "@/lib/formats";
+import { labelHasImage } from "@/lib/labelText";
 import type { CatalogueInput } from "@/lib/inputDefinitions";
 import type { FormatFieldPick } from "@/types";
 
@@ -233,6 +234,9 @@ onRemoveFromBody, onPutInBody, onRenameField, onChangeType, fieldGuard, onEditFi
 					// A field the body no longer prints: kept by the format, doing nothing
 					// in the output until its token is put back.
 					const printed = !tokenDriven || tokens.includes(name);
+					// The wording in force here, which the label box edits in place and the
+					// picture below it is drawn from.
+					const label = pick?.label ?? definition.label;
 					return (							<div key={name} className="rounded-xl border border-subtle bg-surface/60 p-2.5">
 								<div className="flex items-center gap-2">
 									{onChangeType && typeVerdict.ok ? (
@@ -336,11 +340,11 @@ onRemoveFromBody, onPutInBody, onRenameField, onChangeType, fieldGuard, onEditFi
 												type="button"
 												onClick={() => onPutInBody(name)}
 												title={`Insert {{${name}}} into the body at the caret`}
-												aria-label={`Put ${name} back in the body`}
+												aria-label={`Put ${name} in the body`}
 												className="flex shrink-0 cursor-pointer items-center gap-1 rounded-full border border-warning/35 bg-warning/10 px-1.5 py-0.5 transition-colors duration-150 hover:bg-warning/20"
 											>
 												<CornerDownLeft className="size-3 shrink-0" />
-												Put it back
+												Put in the body
 											</button>
 										) : null}
 									</span>
@@ -407,17 +411,27 @@ onRemoveFromBody, onPutInBody, onRenameField, onChangeType, fieldGuard, onEditFi
 									label="Label"
 									htmlFor={`pick-label-${name}`}
 									wide
-									hint="The question shown above the input. Press Enter for a second line when the question needs one."
+									hint="The question shown above the input. Press Enter for a second line when the question needs one, or write {img=https://…} in it to show that picture with the question."
 								>
 									<Textarea
 										id={`pick-label-${name}`}
 										// The wording this format actually shows, so it can be edited in
 										// place; the catalogue's own text stands in until it is changed.
-										value={pick?.label ?? definition.label}
+										value={label}
 										rows={2}
 										className="min-h-[62px] text-[13px]"
 										onChange={(event) => setWording(name, { label: event.target.value, hint: pick?.hint })}
 									/>
+									{labelHasImage(label) ? (
+										<div className="flex flex-col gap-1">
+											<span className="text-[10.5px] font-semibold tracking-[0.08em] text-ink-faint uppercase">
+												Picture
+											</span>
+											<div className="rounded-xl border border-subtle bg-surface/60 px-3 py-2 text-[13px]">
+												<LabelContent text={label} />
+											</div>
+										</div>
+									) : null}
 								</Field>
 								<Field label="Hint" htmlFor={`pick-hint-${name}`} hint="Optional helper text under the input.">
 									<Input

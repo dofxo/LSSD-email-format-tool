@@ -3,7 +3,7 @@ import { Copy, Plus, Save, Trash2, Wand2 } from "lucide-react";
 import { toast } from "react-toastify";
 
 import { Button } from "@/components/ui/button";
-import { Field, Input, Textarea } from "@/components/ui/input";
+import { Field, Input, LabelContent, Textarea } from "@/components/ui/input";
 import { catalogueInputFor } from "@/data/inputCatalogue";
 import { copyText } from "@/hooks/useCopy";
 import {
@@ -15,6 +15,7 @@ import {
 	type CatalogueInput,
 	type FieldType,
 } from "@/lib/inputDefinitions";
+import { labelHasImage } from "@/lib/labelText";
 import { controlFieldClass } from "@/lib/styles";
 import { cn } from "@/lib/utils";
 
@@ -190,7 +191,7 @@ export function NewInputForm({ existingNames, initialType, initial, onCreate, on
 				label="Label"
 				htmlFor="new-input-label"
 				wide
-				hint="The question shown above the input. Press Enter for a second line when the question needs one."
+				hint="The question shown above the input. Press Enter for a second line when the question needs one, or write {img=https://…} in it to show that picture with the question."
 			>
 				<Textarea
 					id="new-input-label"
@@ -200,6 +201,16 @@ export function NewInputForm({ existingNames, initialType, initial, onCreate, on
 					onChange={(event) => setLabel(event.target.value)}
 					placeholder="e.g. Note about the session"
 				/>
+				{labelHasImage(label) ? (
+					<div className="flex flex-col gap-1">
+						<span className="text-[10.5px] font-semibold tracking-[0.08em] text-ink-faint uppercase">
+							Picture
+						</span>
+						<div className="rounded-xl border border-subtle bg-surface/60 px-3 py-2 text-[13px]">
+							<LabelContent text={label} />
+						</div>
+					</div>
+				) : null}
 			</Field>
 
 			<Field label="Hint" htmlFor="new-input-hint" hint="Optional helper text under the input.">
