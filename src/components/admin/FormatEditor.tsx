@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ChevronDown, RotateCcw, Save, Trash2 } from "lucide-react";
+import { ChevronDown, RotateCcw, Tag, Trash2 } from "lucide-react";
 
 import { BodyVariables } from "@/components/admin/BodyVariables";
 import { FormatFieldsEditor } from "@/components/admin/FormatFieldsEditor";
@@ -10,8 +10,8 @@ import { autoTokenizeBody } from "@/lib/autoTokenize";
 import { insertTokenAtCaret, removeTokenFromBody, renameTokenInBody } from "@/lib/bodyInsert";
 import { formatsForDivision } from "@/lib/formats";
 import { cn } from "@/lib/utils";
-import type { AdminFormatFields } from "@/formats/adminTypes";
-import type { CatalogueInput } from "@/lib/inputDefinitions";
+import type { AdminFormatDraft, AdminFormatFields } from "@/formats/adminTypes";
+import type { CatalogueInput, FieldType } from "@/lib/inputDefinitions";
 import type { DeputyData, FormatData, FormatFieldPick, FormatInputField, divisionsType } from "@/types";
 
 /** Turns a pick into the field a form renders, using the catalogue for everything but wording. */
@@ -48,8 +48,29 @@ interface FormatEditorProps {
 	onDeleteField?: (input: CatalogueInput) => void;
 	/** Which fields are deletable, with the reason shown on hover when not. */
 	deleteGuard?: (name: string) => { ok: boolean; reason?: string };
+	/**
+	 * Offers this card's on-screen values to the page, which folds them into the
+	 * store when the one Save formats button writes the file. Returning the
+	 * unregister function lets a collapsed card drop out again.
+	 */
+	registerDraft?: (
+		key: string,
+		read: () => AdminFormatDraft | null,
+	) => () => void;
+	/**
+	 * Called once when this card starts holding edits, so the page's Save formats
+	 * button lights up — it is the only way to save now, and a card has no button
+	 * of its own to announce itself with.
+	 */
+	onDirty?: () => void;
 	/** Makes sure a body token renamed here answers to a field. */
 	onRenameField?: (from: string, to: string) => void;
+	/** Rewrites an admin-created field's own definition (type, wording, choices). */
+	onUpdateField?: (input: CatalogueInput) => void;
+	/** Switches one field's type, everywhere it is used. */
+	onUpdateFieldType?: (name: string, type: FieldType) => void;
+	/** Which fields may have their definition changed; built-ins keep a plain badge. */
+	fieldGuard?: (name: string) => { ok: boolean; reason?: string };
 	onSave: (fields: AdminFormatFields, opts?: { skipRemount?: boolean }) => void;
 	onReset: () => void;
 	onDelete: () => void;
@@ -69,7 +90,12 @@ export function FormatEditor({
 	onCreate,
 	onDeleteField,
 	deleteGuard,
+	registerDraft,
+	onDirty,
 	onRenameField,
+	onUpdateField,
+	onUpdateFieldType,
+	fieldGuard,
 	onSave,
 	onReset,
 	onDelete,
@@ -92,13 +118,46 @@ export function FormatEditor({
 	// rest still run a built-in generator, so their inputs are picked explicitly.
 	const ownBody = hasOverride;
 	const picksChanged = JSON.stringify(picks) !== JSON.stringify(initialPicks);
+	const bodyChanged = body !== fields.body;
 	const dirty =
 		title !== fields.title ||
 		topicTitle.trim() !== fields.topicTitle.trim() ||
 		category !== fields.category ||
 		govLink !== fields.govLink ||
-		bodyEdited ||
+		bodyChanged ||
 		picksChanged;
+
+	/**
+	 * What this card would hand the save. Held in a ref so the registration below
+	 * happens once rather than on every keystroke, and undefined while the card
+	 * matches the store — an untouched card asks for nothing, so opening a
+	 * division never turns its formats into overrides.
+	 */
+	const draftRef = useRef<AdminFormatDraft | null>(null);
+	draftRef.current = dirty
+		? {
+				division,
+				formatId,
+				fields: {
+					title,
+					topicTitle,
+					body: bodyEdited ? body : fields.body,
+					govLink,
+					category,
+					// Every field is kept, wording or not: the list is what orders a
+					// body-driven format's form.
+					fields: picks,
+				},
+			}
+		: null;
+	useEffect(() => {
+		if (!registerDraft) return;
+		return registerDraft(`${division}/${formatId}`, () => draftRef.current);
+	}, [registerDraft, division, formatId]);
+
+	useEffect(() => {
+		if (dirty) onDirty?.();
+	}, [dirty, onDirty]);
 	const fieldId = `${division}-${formatId}`;
 
 	// Headings already used in this division, so categories stay consistent.
@@ -150,7 +209,7 @@ export function FormatEditor({
 				body: nextBody,
 				govLink,
 				category,
-				fields: ownBody ? picksRef.current.filter((pick) => pick.label || pick.hint) : picksRef.current,
+				fields: picksRef.current,
 			},
 			{ skipRemount: true },
 		);
@@ -184,7 +243,7 @@ export function FormatEditor({
 					body: bodyValueRef.current,
 					govLink,
 					category,
-					fields: ownBody ? picksRef.current.filter((pick) => pick.label || pick.hint) : picksRef.current,
+					fields: picksRef.current,
 				},
 				// No remount: the card's local state already matches what was saved,
 				// and remounting would throw away the open picker mid-use.
@@ -205,7 +264,7 @@ export function FormatEditor({
 					body: bodyValueRef.current,
 					govLink,
 					category,
-					fields: ownBody ? picksRef.current.filter((pick) => pick.label || pick.hint) : picksRef.current,
+					fields: picksRef.current,
 				},
 				{ skipRemount: true },
 			);
@@ -229,7 +288,7 @@ export function FormatEditor({
 				body: nextBody,
 				govLink,
 				category,
-				fields: ownBody ? picksRef.current.filter((pick) => pick.label || pick.hint) : picksRef.current,
+				fields: picksRef.current,
 			},
 			{ skipRemount: true },
 		);
@@ -277,38 +336,37 @@ export function FormatEditor({
 					</span>
 					<span className="shrink-0 rounded-md border border-subtle bg-surface px-1.5 py-0.5 font-mono text-[11px] text-ink-muted">
 						{formatId}
-					</span>
-					<span
-						title={title || formatId}
-						className={cn(
-							"min-w-0 truncate text-[13px]",
-							title.trim() ? "font-medium text-ink" : "font-normal text-ink-faint",
-						)}
-					>
-						{title.trim() || "Untitled format"}
-					</span>
-				</button>
-
-				<div className="ml-auto flex shrink-0 items-center gap-2">
-					{dirty ? (
-						<Button
-							size="sm"
-							variant="primary"								onClick={() =>
-									onSave({
-										title,
-										topicTitle,
-										body: bodyEdited ? body : fields.body,
-										govLink,
-										category,
-										// A body-driven format only needs to keep its wording overrides.
-										fields: ownBody ? picks.filter((pick) => pick.label || pick.hint) : picks,
-									})
-								}
-							aria-label={`Save ${title || formatId}`}
+					</span>						<span
+							title={title || formatId}
+							className={cn(
+								"min-w-0 truncate text-[13px]",
+								title.trim() ? "font-medium text-ink" : "font-normal text-ink-faint",
+							)}
 						>
-							<Save />
-							Save
-						</Button>
+							{title.trim() || "Untitled format"}
+						</span>
+						{/* The heading this format is filed under, so a collapsed row still says
+						    where the format lives in the picker. */}
+						{category.trim() ? (
+							<span
+								title={`Filed under “${category.trim()}” in the format picker`}
+								className="flex shrink-0 items-center gap-1 rounded-full border border-subtle bg-surface-2 px-2 py-0.5 text-[11px] text-ink-muted"
+							>
+								<Tag className="size-3 shrink-0 text-ink-faint" />
+								<span className="max-w-[9rem] truncate">{category.trim()}</span>
+							</span>
+						) : null}
+					</button>				<div className="ml-auto flex shrink-0 items-center gap-2">
+					{dirty ? (
+						// No save button here on purpose: the page's one Save formats button
+						// writes every card's live values, so this only says the card is
+						// holding edits that have not reached the file yet.
+						<span
+							title="These edits go in with Save formats, at the top of the page"
+							className="shrink-0 rounded-full border border-warning/35 bg-warning/10 px-2 py-0.5 text-[11px] text-warning"
+						>
+							Unsaved
+						</span>
 					) : null}
 
 					{confirming ? (
@@ -461,6 +519,8 @@ export function FormatEditor({
 									onCreate={createAndPersist}
 									onDelete={deleteAndPersist}
 									deleteGuard={deleteGuard}
+									onEditField={onUpdateField}
+									fieldGuard={fieldGuard}
 									onAutoTokenize={
 										body === generated && generated.trim() ? matchOutputToInputs : undefined
 									}
@@ -477,6 +537,9 @@ export function FormatEditor({
 								deleteGuard={deleteGuard}
 								onRemoveFromBody={removeTokenAndPersist}
 								onRenameField={renameTokenAndPersist}
+								onChangeType={onUpdateFieldType}
+								fieldGuard={fieldGuard}
+								onEditField={onUpdateField}
 							/>
 				</div>
 			) : null}

@@ -19,6 +19,10 @@ interface BodyVariablesProps {
 	onDelete?: (input: CatalogueInput) => void;
 	/** Which fields are deletable, with the reason shown on hover when not. */
 	deleteGuard?: (name: string) => { ok: boolean; reason?: string };
+	/** Rewrites an admin-created field's own definition, from the picker's pencil. */
+	onEditField?: (input: CatalogueInput) => void;
+	/** Which fields may have their definition changed; built-ins show a muted pencil. */
+	fieldGuard?: (name: string) => { ok: boolean; reason?: string };
 	/**
 	 * Turns a loaded (generated) body into variables; leave out when there is no
 	 * generated output to match against, such as a brand-new format.
@@ -44,7 +48,16 @@ const chipClass =
  * body is turned into a template: select a name in the text, then add the field
  * that should supply it.
  */
-export function BodyVariables({ body, onInsert, onCreate, onDelete, deleteGuard, onAutoTokenize }: BodyVariablesProps) {
+export function BodyVariables({
+	body,
+	onInsert,
+	onCreate,
+	onDelete,
+	deleteGuard,
+	onEditField,
+	fieldGuard,
+	onAutoTokenize,
+}: BodyVariablesProps) {
 	const [summary, setSummary] = useState<{
 		tokenized: string[];
 		skipped: string[];
@@ -121,7 +134,15 @@ export function BodyVariables({ body, onInsert, onCreate, onDelete, deleteGuard,
 				<span className="text-[10.5px] font-semibold tracking-[0.08em] text-ink-faint uppercase">
 					Add a field
 				</span>
-				<FieldPicker used={used} onPick={onInsert} onCreate={onCreate} onDelete={onDelete} deleteGuard={deleteGuard} />
+				<FieldPicker
+					used={used}
+					onPick={onInsert}
+					onCreate={onCreate}
+					onDelete={onDelete}
+					deleteGuard={deleteGuard}
+					onEdit={onEditField}
+					editGuard={fieldGuard}
+				/>
 			</div>
 
 			<div className="flex flex-col gap-1.5">

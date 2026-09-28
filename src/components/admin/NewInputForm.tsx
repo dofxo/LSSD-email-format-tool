@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { Copy, Plus, Trash2, Wand2 } from "lucide-react";
+import { Copy, Plus, Save, Trash2, Wand2 } from "lucide-react";
 import { toast } from "react-toastify";
 
 import { Button } from "@/components/ui/button";
-import { Field, Input } from "@/components/ui/input";
+import { Field, Input, Textarea } from "@/components/ui/input";
 import { catalogueInputFor } from "@/data/inputCatalogue";
 import { copyText } from "@/hooks/useCopy";
 import {
@@ -24,11 +24,19 @@ interface NewInputFormProps {
 	/** The field type this form was opened for. */
 	initialType?: FieldType;
 	/**
+	 * The field being edited, when this form was opened on an existing one. Its
+	 * token name is fixed — every body and format already asks for the field by
+	 * that name — but its type, wording and choices can change.
+	 */
+	initial?: CatalogueInput;
+	/**
 	 * Called with the normalised input when the form validates. A name already in
 	 * the catalogue is handed back unchanged, so the caller reuses that field
 	 * instead of creating a duplicate.
 	 */
 	onCreate: (input: CatalogueInput) => void;
+	/** Called with the rewritten definition when editing an existing field. */
+	onSave?: (input: CatalogueInput) => void;
 	onCancel: () => void;
 }
 
@@ -36,50 +44,81 @@ interface NewInputFormProps {
  * The create-new-input form: token name, type and wording, plus the extras a
  * type needs (dropdown options, checklist items). Validation mirrors the plugin
  * sanitiser, so whatever passes here survives a save.
+ *
+ * Opened on an existing field it edits that field instead: same boxes, prefilled
+ * from the field it is changing, with the token name locked.
  */
-export function NewInputForm({ existingNames, initialType, onCreate, onCancel }: NewInputFormProps) {
-	const [name, setName] = useState("");
-	const [type, setType] = useState<FieldType>(initialType ?? "text");
-	const [label, setLabel] = useState("");
-	const [hint, setHint] = useState("");
-	const [options, setOptions] = useState<{ value: string; label: string }[]>([]);
-	const [items, setItems] = useState<string[]>([]);
+export function NewInputForm({ existingNames, initialType, initial, onCreate, onSave, onCancel }: NewInputFormProps) {
+	const editing = Boolean(initial);
+	const [name, setName] = useState(initial?.name ?? "");
+	const [type, setType] = useState<FieldType>(initial?.type ?? initialType ?? "text");
+	const [label, setLabel] = useState(initial?.label ?? "");
+	const [hint, setHint] = useState(initial?.hint ?? "");
+	const [options, setOptions] = useState<{ value: string; label: string }[]>(
+		initial?.options?.map((option) => ({ ...option })) ?? [],
+	);
+	const [items, setItems] = useState<string[]>(initial?.items ? [...initial.items] : []);
 
 	const trimmed = name.trim();
 	const nameValid = isValidTokenName(trimmed);
-	const taken = existingNames.has(trimmed);
+	// An edit keeps its own name, so it is not a clash with itself.
+	const taken = !editing && existingNames.has(trimmed);
 	// What the label suggests as a token name, offered when the box is still empty.
 	const suggestion = suggestTokenName(label);
 	// The field this name already belongs to, so a clash can point at it rather
-	// than silently adding a second field with the same name.
+	// than silently adding a second field with the same name — and so it can say
+	// whether the type matches too, which is the difference between "that is
+	// already the field you want" and "that token is taken by something else".
 	const existing = taken ? catalogueInputFor(trimmed) : undefined;
-	const valid = nameValid && !taken && label.trim().length > 0;
+	const sameType = Boolean(existing) && existing?.type === type;
+	const valid = editing ? label.trim().length > 0 : nameValid && !taken && label.trim().length > 0;
 
 	const submit = () => {
 		if (!valid) return;
-		const input = normaliseInput({ name: trimmed, type, label, hint, options, items });
+		// Everything the form does not show (a date's style, a list's placeholder)
+		// is carried through from the field being edited rather than dropped.
+		const input = normaliseInput(
+			editing && initial ? { ...initial, type, label, hint, options, items } : { name: trimmed, type, label, hint, options, items },
+		);
 		if (!input) return;
-		onCreate(input);
+		if (editing) onSave?.(input);
+		else onCreate(input);
 	};
 
 	return (
 		<div className="flex flex-col gap-2.5 border-t border-subtle px-3 pb-3 pt-3">
-			<span className="text-[11.5px] font-medium text-ink">New field</span>
+			<span className="text-[11.5px] font-medium text-ink">
+				{editing ? (
+					<>
+						Editing <code className="font-mono">{`{{${name}}}`}</code>
+					</>
+				) : (
+					"New field"
+				)}
+			</span>
 
 			<div className="grid grid-cols-[1fr_auto] gap-2">
 				<Field
 					label="Name"
 					htmlFor="new-input-name"
 					hint={
-						<>
-							The <code className="font-mono">{'{{token}}'}</code> the body uses to fill this in — type it
-							here, and change it any time before you create the field.
-						</>
+						editing ? (
+							<>
+								Wording and type can change; the token name stays, because bodies already
+								ask for the field by it. Rename it from a format's field row instead.
+							</>
+						) : (
+							<>
+								The <code className="font-mono">{'{{token}}'}</code> the body uses to fill this in — type it
+								here, and change it any time before you create the field.
+							</>
+						)
 					}
 				>
 					<Input
 						id="new-input-name"
 						value={name}
+						disabled={editing}
 						onChange={(event) => setName(event.target.value)}
 						placeholder="e.g. fts4Notes"
 						className="font-mono text-[12.5px]"
@@ -89,8 +128,11 @@ export function NewInputForm({ existingNames, initialType, onCreate, onCancel }:
 					) : null}
 					{trimmed && nameValid && taken ? (
 						<span className="text-[11.5px] text-warning">
-							Already a field here
-							{existing ? ` — the ${TYPE_LABELS[existing.type]} “${existing.label}”` : ""}.
+							{existing
+								? sameType
+									? `Same name and type as the ${TYPE_LABELS[existing.type]} “${existing.label}” already in the catalogue — use that field instead of a second one.`
+									: `Already the ${TYPE_LABELS[existing.type]} “${existing.label}”. A token can only be one type, so use that field or rename this one.`
+								: "Already a field here."}
 						</span>
 					) : null}
 
@@ -112,7 +154,7 @@ export function NewInputForm({ existingNames, initialType, onCreate, onCancel }:
 				</Field>
 			</div>
 
-			{!trimmed && suggestion ? (
+			{!editing && !trimmed && suggestion ? (
 				<button
 					type="button"
 					onClick={() => setName(suggestion)}
@@ -124,7 +166,7 @@ export function NewInputForm({ existingNames, initialType, onCreate, onCancel }:
 				</button>
 			) : null}
 
-			{trimmed && nameValid && !taken ? (
+			{!editing && trimmed && nameValid && !taken ? (
 				<div className="flex flex-wrap items-center gap-1.5 text-[11.5px] text-ink-faint">
 					<span>In the body:</span>
 					<button
@@ -144,10 +186,17 @@ export function NewInputForm({ existingNames, initialType, onCreate, onCancel }:
 				</div>
 			) : null}
 
-			<Field label="Label" htmlFor="new-input-label" hint="The question shown above the input.">
-				<Input
+			<Field
+				label="Label"
+				htmlFor="new-input-label"
+				wide
+				hint="The question shown above the input. Press Enter for a second line when the question needs one."
+			>
+				<Textarea
 					id="new-input-label"
 					value={label}
+					rows={2}
+					className="min-h-[62px] text-[13px]"
 					onChange={(event) => setLabel(event.target.value)}
 					placeholder="e.g. Note about the session"
 				/>
@@ -240,8 +289,8 @@ export function NewInputForm({ existingNames, initialType, onCreate, onCancel }:
 
 			<div className="flex items-center gap-2">
 				<Button size="sm" variant="primary" disabled={!valid} onClick={submit}>
-					<Plus />
-					Create field
+					{editing ? <Save /> : <Plus />}
+					{editing ? "Save field" : "Create field"}
 				</Button>
 				{taken && existing ? (
 					<Button size="sm" variant="secondary" onClick={() => onCreate({ name: trimmed, ...existing })}>

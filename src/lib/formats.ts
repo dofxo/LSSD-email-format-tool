@@ -137,13 +137,27 @@ export const bodyTokensFor = (division: divisionsType, formatId: string): string
 };
 
 /**
+ * A body's tokens in the order the format's field list asks for them.
+ *
+ * A format with a body of its own is ordered the same way every other format is
+ * — by its field list — so moving a field at /admin sticks instead of falling
+ * back to wherever the body happens to print that token. Tokens the list does
+ * not mention keep their body order, after the ones it does.
+ */
+export const orderTokensByFields = (tokens: string[], fields: FormatFieldPick[] | null): string[] => {
+	if (!fields?.length) return tokens;
+	const listed = [...new Set(fields.map((field) => field.name))].filter((name) => tokens.includes(name));
+	return [...listed, ...tokens.filter((name) => !listed.includes(name))];
+};
+
+/**
  * The dynamic form fields a specific format asks for.
  *
  * A format with a body of its own says this itself: the inputs its `{{tokens}}`
- * name are the ones its form shows, so nothing has to be ticked for it. A format
- * still running its built-in generator has no template to read, so it uses the
- * inputs picked for it at /admin — falling back to the built-in defaults ticked
- * for it until those picks are made.
+ * name are the ones its form shows, so nothing has to be ticked for it, and the
+ * format's field list orders them. A format still running its built-in generator
+ * has no template to read, so it uses the inputs picked for it at /admin —
+ * falling back to the built-in defaults ticked for it until those picks are made.
  *
  * Either way the shared catalogue supplies each field's type, options and
  * default wording, and a per-format pick overrides just the label and hint.
@@ -155,7 +169,7 @@ export const formatFieldsFor = (division: divisionsType, formatId: string): Form
 	const pickByName = new Map((picks ?? []).map((pick) => [pick.name, pick]));
 
 	const names = usesOwnBody(division, formatId)
-		? bodyTokensFor(division, formatId)
+		? orderTokensByFields(bodyTokensFor(division, formatId), picks)
 		: (picks?.map((pick) => pick.name) ?? defaultFieldNamesFor(division, formatId));
 
 	return names
