@@ -223,6 +223,29 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 					"label": "Do you feel comfortable putting yourself under extreme high risk situations? And are you capable of operating under extreme stress? State a few examples or experiences you have faced."
 				}
 			]
+		},
+		{
+			"id": "39",
+			"division": "SEB",
+			"title": "EOD Technician Certification",
+			"topicTitle": "[EOD Certification] Operator {FName LName}",
+			"body": "[img]https://i.imgur.com/1qJrDRr.png[/img]\n[lssdsubtitle]Section 1 - Personal Information[/lssdsubtitle]\n[divbox=white]\n[b]Full Name:[/b] [i]{{name}}[/i]\n[b]Rank:[/b] [i]{{dRank}}[/i]\n[b]Badge Number:[/b] [i]{{badgeNumber}}[/i]\n[b]SEB Since:[/b] [i]{{sebSince}}[/i]\n[/divbox]\n[lssdsubtitle]Section 2 - General Questions[/lssdsubtitle]\n[divbox=white]\n[b]Why are you applying for EOD, and how would you be an asset by getting the certification?[/b]\n[i]{{egq1}}[/i]\n[b]What are the responsibilities of an EOD operator?[/b]\n[i]{{egq2}}[/i]\n[b]Do you feel comfortable putting yourself under extreme high risk situations? And are you capable of operating under extreme stress? State few examples or experiences you have faced. [/b]\n[i]{{egq3}}[/i]\n[/divbox]\n[lssdsubtitle]Section 3 - Theoretical Scenario Questions[/lssdsubtitle]\n[divbox=white]\n[center][size=200]Scenario 1[/size][/center]\n[b]You have been called to paleto station, where a deputy found on top of the front desk what looked to him as an explosive device of some sort. How would you go by to assess and identify the device? And how would you handle it? Give a detailed explanation, Image attached below of what the device looks like. [/b]\n[img]https://i.ibb.co/FbjTZ24J/rx-N9x5n.jpg[/img]\n[i]INSERT ANSWER HERE[/i]\n[center][size=200]Scenario 2[/size][/center]\n[b]You arrive at a hostage situation, where the hostage taker is reported to have an explosive device in his possession, the negociator managed to have the hostage taker agree to give the bomb away. How would you use the equipment available to you to handle the retrieval of the explosive device. Give a detailed explanation of which equipment you use and why.[/b]\n[i]INSERT ANSWER HERE[/i]\n[center][size=200]Scenario 3[/size][/center]\n[b]During a drug bust, your team stumbles upon a safe door, locked and they are unable to open it. How would you use the equipment available to you to get through the safe door safely. [/b]\n[i]INSERT ANSWER HERE[/i]\n[/divbox]",
+			"govLink": "https://gov.eclipse-rp.net/posting.php?mode=post&f=4145",
+			"category": "Certification Application",
+			"fields": [
+				{
+					"name": "sebSince"
+				},
+				{
+					"name": "egq1"
+				},
+				{
+					"name": "egq2"
+				},
+				{
+					"name": "egq3"
+				}
+			]
 		}
 	],
 	"inputs": [
@@ -381,6 +404,21 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 			"name": "ats3",
 			"type": "textarea",
 			"label": "During a bank robbery, the suspects take a hostage and in turn negotiate for a helicopter to escape with. Knowing that the individuals on board the helicopter are armed, prone to firing upon law enforcement, and volatile, how do you approach the situation?"
+		},
+		{
+			"name": "egq1",
+			"type": "textarea",
+			"label": "Why are you applying for EOD, and how would you be an asset by getting the certification?"
+		},
+		{
+			"name": "egq2",
+			"type": "textarea",
+			"label": "What are the responsibilities of an EOD operator?"
+		},
+		{
+			"name": "egq3",
+			"type": "textarea",
+			"label": "Do you feel comfortable putting yourself under extreme high risk situations? And are you capable of operating under extreme stress? State few examples or experiences you have faced."
 		}
 	]
 } /* /ADMIN_DATA */;
