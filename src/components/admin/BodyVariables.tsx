@@ -3,9 +3,10 @@ import { Check, Sparkles, TriangleAlert } from "lucide-react";
 
 import { FieldPicker } from "@/components/admin/FieldPicker";
 import { Button } from "@/components/ui/button";
-import { catalogueInputFor } from "@/data/inputCatalogue";
+import { catalogueInputFor, catalogueRevision, getCustomInputs } from "@/data/inputCatalogue";
 import { bodyTokens, profileTokens } from "@/lib/formatTemplates";
 import type { CatalogueInput } from "@/lib/inputDefinitions";
+import { plainLabel } from "@/lib/labelText";
 import { cn } from "@/lib/utils";
 
 interface BodyVariablesProps {
@@ -34,9 +35,44 @@ interface BodyVariablesProps {
 	} | null;
 }
 
-/** The chip a profile value is clicked by; keeps the caret in the body. */
+/** The chip a token is clicked by; keeps the caret in the body. */
 const chipClass =
 	"flex cursor-pointer items-center gap-1.5 rounded-lg border border-subtle bg-surface px-2 py-1 text-[11.5px] transition-colors duration-150 hover:border-accent/40 hover:bg-accent-soft";
+
+/**
+ * One clickable token: a deputy-profile value, or a field made at /admin.
+ *
+ * Clicking writes its `{{token}}` at the body's caret, and the tick says the
+ * body already prints it. Cancelling the mousedown keeps the caret where it was
+ * in the textarea, since the button would otherwise take focus and lose it.
+ */
+function TokenChip({
+	token,
+	label,
+	title,
+	inUse,
+	onInsert,
+}: {
+	token: string;
+	label: string;
+	title: string;
+	inUse: boolean;
+	onInsert: (token: string) => void;
+}) {
+	return (
+		<button
+			type="button"
+			onMouseDown={(event) => event.preventDefault()}
+			onClick={() => onInsert(token)}
+			title={title}
+			className={cn(chipClass, inUse && "border-accent/40 bg-accent-soft")}
+		>
+			<span className="font-mono">{`{{${token}}}`}</span>
+			<span className="max-w-[14rem] truncate text-ink-faint">{label}</span>
+			{inUse ? <Check className="size-3 shrink-0 text-success" /> : null}
+		</button>
+	);
+}
 
 /**
  * The field side of the body editor: the parts of the body that are filled in
@@ -68,6 +104,17 @@ export function BodyVariables({
 	const usedNames = new Set(used);
 	const fromProfile = new Set(profileTokens.map((token) => token.token));
 
+	// The fields created at /admin, offered as chips like the profile values. The
+	// catalogue is a live registry rather than React state, so the revision is
+	// what tells this list to rebuild: a field made in the picker below shows up
+	// here at once, without this panel knowing how the catalogue is stored.
+	const revision = catalogueRevision();
+	const ownFields = useMemo(
+		() => getCustomInputs().map((input) => ({ name: input.name, label: plainLabel(input.label) })),
+		// eslint-disable-next-line react-hooks/exhaustive-deps -- the revision is the catalogue's identity
+		[revision],
+	);
+
 	// A token nothing can fill: neither a catalogue field nor a profile value.
 	const unknown = used.filter((token) => !fromProfile.has(token) && !catalogueInputFor(token));
 
@@ -80,7 +127,7 @@ export function BodyVariables({
 					replaced with a field when the format is used. Pick a field below to write its{" "}
 					<code className="font-mono">{'{{token}}'}</code> at the caret, or select part of the body first
 					to swap that exact text for the field. A field you create joins the format without touching the
-					body — place it when you are ready to.
+					body — place it from Your fields below when you are ready to.
 				</p>
 			</div>
 
@@ -147,6 +194,35 @@ export function BodyVariables({
 				/>
 			</div>
 
+			{/* The fields made at /admin, beside the profile values: the two are the
+			    same gesture, so they look and behave the same way. */}
+			{ownFields.length ? (
+				<div className="flex flex-col gap-1.5">
+					<span className="text-[10.5px] font-semibold tracking-[0.08em] text-ink-faint uppercase">
+						Your fields
+					</span>
+					<div className="thin-scroll flex max-h-[9.5rem] flex-wrap gap-1.5 overflow-y-auto pr-1">
+						{ownFields.map((field) => {
+							const inUse = usedNames.has(field.name);
+							return (
+								<TokenChip
+									key={field.name}
+									token={field.name}
+									label={field.label}
+									title={
+										inUse
+											? `Already in this body — {{${field.name}}}`
+											: `Insert {{${field.name}}} — ${field.label || "no wording yet"}`
+									}
+									inUse={inUse}
+									onInsert={onInsert}
+								/>
+							);
+						})}
+					</div>
+				</div>
+			) : null}
+
 			<div className="flex flex-col gap-1.5">
 				<span className="text-[10.5px] font-semibold tracking-[0.08em] text-ink-faint uppercase">
 					From the profile
@@ -155,22 +231,18 @@ export function BodyVariables({
 					{profileTokens.map((token) => {
 						const inUse = usedNames.has(token.token);
 						return (
-							<button
+							<TokenChip
 								key={token.token}
-								type="button"
-								onMouseDown={(event) => event.preventDefault()}
-								onClick={() => onInsert(token.token)}
+								token={token.token}
+								label={token.label}
 								title={
 									inUse
 										? `Already used in this body — {{${token.token}}} is ${token.label.toLowerCase()}`
 										: `Insert {{${token.token}}} — ${token.label}`
 								}
-								className={cn(chipClass, inUse && "border-accent/40 bg-accent-soft")}
-							>
-								<span className="font-mono">{`{{${token.token}}}`}</span>
-								<span className="max-w-[14rem] truncate text-ink-faint">{token.label}</span>
-								{inUse ? <Check className="size-3 shrink-0 text-success" /> : null}
-							</button>
+								inUse={inUse}
+								onInsert={onInsert}
+							/>
 						);
 					})}
 				</div>
