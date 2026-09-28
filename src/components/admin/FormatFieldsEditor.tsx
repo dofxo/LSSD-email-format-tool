@@ -8,12 +8,19 @@ import { Button } from "@/components/ui/button";
 import { Field, Input, LabelContent, Textarea } from "@/components/ui/input";
 import { catalogueInputFor, isCatalogueField } from "@/data/inputCatalogue";
 import { bodyHasRunFor } from "@/lib/checkboxLines";
-import { FIELD_TYPES, isValidTokenName, TYPE_LABELS, type FieldType } from "@/lib/inputDefinitions";
+import {
+	FIELD_TYPES,
+	GROUP_FIELD_TYPES,
+	GROUP_TYPE_LABELS,
+	isValidTokenName,
+	TYPE_LABELS,
+	type FieldType,
+} from "@/lib/inputDefinitions";
 import { bodyTokens, profileTokens } from "@/lib/formatTemplates";
 import { orderTokensByFields } from "@/lib/formats";
 import { labelHasImage } from "@/lib/labelText";
 import type { CatalogueInput } from "@/lib/inputDefinitions";
-import type { FormatFieldPick } from "@/types";
+import type { FormatFieldPick, GroupFieldType, GroupSubField } from "@/types";
 
 const PROFILE_TOKENS = new Set(profileTokens.map((token) => token.token));
 
@@ -56,6 +63,17 @@ interface FormatFieldsEditorProps {
 	 * and it is the body's own `[cb]` lines the choices name.
 	 */
 	onChangeItems?: (name: string, items: string[]) => void;
+	/**
+	 * Rewrites the answers a repeating group asks for, in form order. They belong
+	 * to the shared catalogue like the type, so every format using the group asks
+	 * the same questions.
+	 */
+	onChangeSubFields?: (name: string, subFields: GroupSubField[]) => void;
+	/**
+	 * Rewrites the block a repeating group prints, once per entry: one entry
+	 * written with the answers' `{{tokens}}`.
+	 */
+	onChangeTemplate?: (name: string, template: string) => void;
 	/** Which fields may have their own definition changed; the rest keep a plain badge. */
 	fieldGuard?: (name: string) => { ok: boolean; reason?: string };
 	/** Opens an admin-created field for editing (the picker's pencil uses it). */
@@ -94,10 +112,19 @@ const withWording = (
  * form asks for them in: a row's pencil retypes the `{{token}}` itself, in every
  * place the body uses it, and the arrows order it without touching the body.
  */export function FormatFieldsEditor({ tokenDriven, body, picks, onChange, onCreate, onDelete, deleteGuard,
-onRemoveFromBody, onPutInBody, onRenameField, onChangeType, onChangeItems, fieldGuard, onEditField }: FormatFieldsEditorProps) {
+onRemoveFromBody, onPutInBody, onRenameField, onChangeType, onChangeItems, onChangeSubFields,
+onChangeTemplate, fieldGuard, onEditField }: FormatFieldsEditorProps) {
 	const tokens = tokenDriven ? [...new Set(bodyTokens(body))] : [];
 	// The token currently being retyped, and what has been typed into it.
 	const [renaming, setRenaming] = useState<{ from: string; value: string } | null>(null);
+	/**
+	 * The checkbox lines being edited, by field name. A line that has just been
+	 * added holds nothing yet, and a choice with no wording has nothing to print
+	 * (nor to tick), so it could never reach the catalogue — it would be dropped on
+	 * the way in and the line would vanish as it was added. So the lines on screen
+	 * are held here, and only the ones with wording in them are written through.
+	 */
+	const [itemDrafts, setItemDrafts] = useState<Record<string, string[]>>({});
 	const unknown = tokenDriven
 		? tokens.filter((token) => !PROFILE_TOKENS.has(token) && !isCatalogueField(token))
 		: [];
@@ -192,6 +219,18 @@ onRemoveFromBody, onPutInBody, onRenameField, onChangeType, onChangeItems, field
 		onChange(next);
 	};
 
+	/**
+	 * Rewrites a checkbox field's lines: what is on screen is kept as typed, and
+	 * the choices the catalogue is given are the ones with wording in them.
+	 */
+	const setChoices = (name: string, next: string[]) => {
+		setItemDrafts((prev) => ({ ...prev, [name]: next }));
+		onChangeItems?.(
+			name,
+			next.map((item) => item.trim()).filter(Boolean),
+		);
+	};
+
 	return (
 		<div className="flex flex-col gap-2.5 rounded-2xl border border-subtle bg-surface-2/40 p-3.5">
 			<div className="flex flex-col gap-1">
@@ -246,10 +285,15 @@ onRemoveFromBody, onPutInBody, onRenameField, onChangeType, onChangeItems, field
 					const label = pick?.label ?? definition.label;
 					// A checkbox can print without a token: its choices name a block of the
 					// body's own `[cb]` lines, and its ticks flip those lines in place.
-					const choices = definition.items ?? [];
+					const storedChoices = definition.items ?? [];
+					// What is on screen: the lines being edited, or the stored ones until the
+					// first edit of this field.
+					const choices = itemDrafts[name] ?? storedChoices;
+					// The body is matched against the stored choices, since those are what the
+					// renderer prints — a line still being typed is not a choice yet.
 					const bindsRun =
-						definition.type === "checkbox" && choices.length > 0
-							? bodyHasRunFor(body, choices)
+						definition.type === "checkbox" && storedChoices.length > 0
+							? bodyHasRunFor(body, storedChoices)
 							: false;
 					return (							<div key={name} className="rounded-xl border border-subtle bg-surface/60 p-2.5">
 								<div className="flex items-center gap-2">
@@ -482,11 +526,14 @@ onRemoveFromBody, onPutInBody, onRenameField, onChangeType, onChangeItems, field
 												<div key={index} className="flex items-center gap-2">
 													<Input
 														id={index === 0 ? `pick-items-${name}` : undefined}
+														// A line just added takes the caret, so it can be typed into
+														// without a click.
+														autoFocus={item === "" && index === choices.length - 1}
 														value={item}
 														placeholder={`Line ${index + 1} — e.g. Minor`}
 														aria-label={`${name} line ${index + 1}`}
 														onChange={(event) =>
-															onChangeItems(
+															setChoices(
 																name,
 																choices.map((entry, at) => (at === index ? event.target.value : entry)),
 															)
@@ -497,7 +544,7 @@ onRemoveFromBody, onPutInBody, onRenameField, onChangeType, onChangeItems, field
 														variant="ghost"
 														title="Remove this line"
 														aria-label={`Remove ${name} line ${index + 1}`}
-														onClick={() => onChangeItems(name, choices.filter((_, at) => at !== index))}
+														onClick={() => setChoices(name, choices.filter((_, at) => at !== index))}
 													>
 														<Trash2 />
 													</Button>
@@ -507,12 +554,12 @@ onRemoveFromBody, onPutInBody, onRenameField, onChangeType, onChangeItems, field
 												size="sm"
 												variant="secondary"
 												className="self-start"
-												onClick={() => onChangeItems(name, [...choices, ""])}
+												onClick={() => setChoices(name, [...choices, ""])}
 											>
 												<Plus />
 												Add line
 											</Button>
-											{choices.length > 0 && !bindsRun ? (
+											{storedChoices.length > 0 && !bindsRun ? (
 												<span className="flex items-start gap-1.5 text-[11px] leading-relaxed text-warning">
 													<TriangleAlert className="mt-px size-3.5 shrink-0" />
 													<span>
@@ -523,6 +570,41 @@ onRemoveFromBody, onPutInBody, onRenameField, onChangeType, onChangeItems, field
 											) : null}
 										</div>
 									</Field>
+								) : null}
+
+								{definition.type === "group" && onChangeSubFields && onChangeTemplate && typeVerdict.ok ? (
+									<GroupEditor
+										name={name}
+										template={definition.template ?? ""}
+										subFields={definition.subFields ?? []}
+										onChangeTemplate={(next) => onChangeTemplate(name, next)}
+										onChangeSubFields={(next) => onChangeSubFields(name, next)}
+									/>
+								) : null}
+
+								{definition.type === "charges" ? (
+									<p className="text-[11.5px] leading-relaxed text-ink-faint">
+										Charges are picked out of the state penal code and print as one{" "}
+										<code className="font-mono">[*]VC01 - Speeding 1st Degree</code> line per charge, wherever{" "}
+										<code className="font-mono">{`{{${name}}}`}</code> sits in the body.
+									</p>
+								) : null}
+
+								{definition.type === "image" ? (
+									<p className="text-[11.5px] leading-relaxed text-ink-faint">
+										The answer is a link, printed as the picture it points at: put{" "}
+										<code className="font-mono">{`{{${name}}}`}</code> where the image should show and
+										the field adds the <code className="font-mono">[img]</code> tags itself. A blank answer
+										leaves that line out of the report.
+									</p>
+								) : null}
+
+								{definition.type === "images" ? (
+									<p className="text-[11.5px] leading-relaxed text-ink-faint">
+										Any number of links, each printed as its own <code className="font-mono">[img]</code>{" "}
+										line where <code className="font-mono">{`{{${name}}}`}</code> sits — put the token on
+										a line of its own for a stack of pictures. Links left blank print nothing.
+									</p>
 								) : null}
 							</div>
 						</div>
@@ -542,5 +624,190 @@ onRemoveFromBody, onPutInBody, onRenameField, onChangeType, onChangeItems, field
 				/>
 			)}
 		</div>
+	);
+}
+
+/** The tokens a group's answers may not use, since an entry's own position is printed under them. */
+const RESERVED_SUB_TOKENS = new Set(["index", "letter"]);
+
+/** A token name box: what is typed is kept as typed, and only a usable name is committed. */
+function SubTokenInput({
+	label,
+	value,
+	onChange,
+}: {
+	label: string;
+	value: string;
+	onChange: (name: string) => void;
+}) {
+	const [typed, setTyped] = useState(value);
+
+	return (
+		<Input
+			value={typed}
+			aria-label={label}
+			placeholder="token"
+			title="The token this answer prints as in the entry template"
+			className="w-36 shrink-0 font-mono text-[11.5px]"
+			onChange={(event) => {
+				const next = event.target.value;
+				setTyped(next);
+				if (isValidTokenName(next) && !RESERVED_SUB_TOKENS.has(next)) onChange(next);
+			}}
+			onBlur={() => {
+				if (!isValidTokenName(typed) || RESERVED_SUB_TOKENS.has(typed)) setTyped(value);
+			}}
+		/>
+	);
+}
+
+/**
+ * The editor of one repeating group: the answers each entry asks for, and the
+ * block one entry prints.
+ *
+ * The two belong together — an answer is only of any use once the entry template
+ * prints its `{{token}}`, and a template can only fill tokens that some answer
+ * provides — so they are edited side by side rather than a token name being
+ * typed blind.
+ */
+function GroupEditor({
+	name,
+	template,
+	subFields,
+	onChangeTemplate,
+	onChangeSubFields,
+}: {
+	name: string;
+	template: string;
+	subFields: GroupSubField[];
+	onChangeTemplate: (template: string) => void;
+	onChangeSubFields: (subFields: GroupSubField[]) => void;
+}) {
+	const patch = (index: number, change: Partial<GroupSubField>) =>
+		onChangeSubFields(subFields.map((sub, at) => (at === index ? { ...sub, ...change } : sub)));
+
+	const tokenList = subFields.length
+		? subFields.map((sub) => `{{${sub.name}}}`).join(", ")
+		: "{{…}}";
+
+	return (
+		<>
+			<Field
+				label="Entry template"
+				htmlFor={`pick-template-${name}`}
+				wide
+				hint={
+					<>
+						The block one entry prints, repeated for every entry added: {tokenList}, plus{" "}
+						<code className="font-mono">{"{{index}}"}</code> (1, 2, …) and{" "}
+						<code className="font-mono">{"{{letter}}"}</code> (A, B, …) for the entry's own place. A line
+						whose only answer is left blank drops out of the output.
+					</>
+				}
+			>
+				<Textarea
+					id={`pick-template-${name}`}
+					value={template}
+					rows={10}
+					className="min-h-[200px] font-mono text-[12px]"
+					onChange={(event) => onChangeTemplate(event.target.value)}
+				/>
+			</Field>
+
+			<Field
+				label="Answers"
+				wide
+				hint="What each entry of this group asks for, in form order. An answer's token is what the entry template fills."
+			>
+				<div className="flex flex-col gap-1.5">
+					{subFields.map((sub, index) => (
+						<div
+							key={index}
+							className="flex flex-col gap-1.5 rounded-xl border border-subtle bg-surface/60 p-2"
+						>
+							<div className="flex items-center gap-2">
+								<Input
+									value={sub.label}
+									aria-label={`Answer ${index + 1} wording`}
+									placeholder={`Question — e.g. ${index === 0 ? "Full name" : "Charges"}`}
+									title="The question shown above this answer"
+									onChange={(event) => patch(index, { label: event.target.value })}
+								/>
+								<SubTokenInput
+									label={`Token for answer ${index + 1}`}
+									value={sub.name}
+									onChange={(next) => patch(index, { name: next })}
+								/>
+								<select
+									value={sub.type}
+									aria-label={`Kind of answer ${index + 1}`}
+									title="What this answer asks for"
+									onChange={(event) =>
+										patch(index, { type: event.target.value as GroupFieldType })
+									}
+									className="shrink-0 cursor-pointer rounded-full border border-subtle bg-surface-2 py-0.5 pr-1 pl-2 text-[11px] text-ink-muted transition-colors duration-150 hover:border-accent/40 hover:text-accent"
+								>
+									{GROUP_FIELD_TYPES.map((type) => (
+										<option key={type} value={type}>
+											{GROUP_TYPE_LABELS[type]}
+										</option>
+									))}
+								</select>
+								<Button
+									size="icon-sm"
+									variant="ghost"
+									title="Remove this answer"
+									aria-label={`Remove answer ${index + 1}`}
+									onClick={() => onChangeSubFields(subFields.filter((_, at) => at !== index))}
+								>
+									<Trash2 />
+								</Button>
+							</div>
+
+							{sub.type === "select" ? (
+								<Textarea
+									value={(sub.options ?? []).map((option) => option.value).join("\n")}
+									aria-label={`Choices of answer ${index + 1}`}
+									placeholder="One dropdown choice per line"
+									rows={3}
+									className="min-h-[72px] text-[12.5px]"
+									onChange={(event) =>
+										patch(index, {
+											options: event.target.value
+												.split("\n")
+												.map((line) => line.trim())
+												.filter(Boolean)
+												.map((value) => ({ value, label: value })),
+										})
+									}
+								/>
+							) : null}
+						</div>
+					))}
+
+					<Button
+						size="sm"
+						variant="secondary"
+						className="self-start"
+						onClick={() =>
+							onChangeSubFields([
+								...subFields,
+								{ name: `answer${subFields.length + 1}`, label: "", type: "text" },
+							])
+						}
+					>
+						<Plus />
+						Add answer
+					</Button>
+
+					{!subFields.length ? (
+						<span className="flex items-start gap-1.5 text-[11px] leading-relaxed text-warning">
+							<TriangleAlert className="mt-px size-3.5 shrink-0" />
+							<span>No answers yet — nothing can be filled in for one entry.</span>
+						</span>
+					) : null}
+				</div>
+			</Field>
+		</>
 	);
 }
