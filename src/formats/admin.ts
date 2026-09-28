@@ -150,7 +150,7 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 			"division": "SEB",
 			"title": "Dive Team Certification",
 			"topicTitle": "[DIVE TEAM Certification] Operator {Fname Lname}",
-			"body": "{{theoScenario3}}{{theoScenario2}}{{theoScenario1}}{{primaryResponsibility}}{{whyApply}}{{sebJoinDate}}[img]https://i.imgur.com/b2vqkjc.png[/img]\n[lssdsubtitle]Section 1 - Personal Information[/lssdsubtitle]\n[divbox=white]\n[b]FULL NAME:[/b] {{name}}\n[b]RANK:[/b] {{dRank}}\n[b]BADGE NUMBER:[/b] {{badgeNumber}}\n[b]SEB SINCE:[/b] {{sebJoinDate}}\n[/divbox]\n\n[lssdsubtitle]Section 2 - General Questions[/lssdsubtitle]\n[divbox=white]\n[b][i]Why are you applying for the Dive Team?[/i][/b] [i](Minimum 120 words)[/i]\n{{whyApply}}\n[b][i]What do you believe are the primary responsibilities of a Dive Team operator?[/i][/b]\n{{primaryResponsibility}}{{hazardUnderWater}}\n[b][i]What hazards may a diver encounter during underwater operations?[/i][/b]\n{{hazardUnderWater}}\n[/divbox]\n[lssdsubtitle]Section 3 - Theoretical Scenario Questions[/lssdsubtitle]\n[divbox=white]\n[b][size=150]Scenario 1[/size][/b]  \nA 911 caller reports a person has jumped from a pier and has not resurfaced. Marine units confirm no visual contact. You are deployed as Dive Team.\n[b][i]What is your approach to resolving this situation?[/i][/b] [b](Minimum of 100 words)[/b]\n{{theoScenario1}}\n\n[b][size=150]Scenario 2[/size][/b]  \nDuring a boat pursuit, suspects are observed throwing multiple bags and a firearm into the sea before escaping.\n[b][i]How would you handle the recovery operation?[/i][/b] [b](Minimum of 100 words)[/b]\n{{theoScenario2}}\n\n[b][size=150]Scenario 3[/size][/b]  \nDuring a dive operation, your assigned partner signals low air and begins showing signs of panic.\n[b][i]What actions do you take?[/i][/b] [b](Minimum of 100 words)[/b]\n{{theoScenario1}}\n\n[/divbox]",
+			"body": "{{dts3}}{{dts2}}{{dts1}}{{dgq2}}{{dgq1}}{{sebJoinDate}}[img]https://i.imgur.com/b2vqkjc.png[/img]\n[lssdsubtitle]Section 1 - Personal Information[/lssdsubtitle]\n[divbox=white]\n[b]FULL NAME:[/b] {{name}}\n[b]RANK:[/b] {{dRank}}\n[b]BADGE NUMBER:[/b] {{badgeNumber}}\n[b]SEB SINCE:[/b] {{sebJoinDate}}\n[/divbox]\n\n[lssdsubtitle]Section 2 - General Questions[/lssdsubtitle]\n[divbox=white]\n[b][i]Why are you applying for the Dive Team?[/i][/b] [i](Minimum 120 words)[/i]\n{{dgq1}}\n[b][i]What do you believe are the primary responsibilities of a Dive Team operator?[/i][/b]\n{{dgq2}}{{dgq3}}\n[b][i]What hazards may a diver encounter during underwater operations?[/i][/b]\n{{dgq3}}\n[/divbox]\n[lssdsubtitle]Section 3 - Theoretical Scenario Questions[/lssdsubtitle]\n[divbox=white]\n[b][size=150]Scenario 1[/size][/b]  \nA 911 caller reports a person has jumped from a pier and has not resurfaced. Marine units confirm no visual contact. You are deployed as Dive Team.\n[b][i]What is your approach to resolving this situation?[/i][/b] [b](Minimum of 100 words)[/b]\n{{dts1}}\n\n[b][size=150]Scenario 2[/size][/b]  \nDuring a boat pursuit, suspects are observed throwing multiple bags and a firearm into the sea before escaping.\n[b][i]How would you handle the recovery operation?[/i][/b] [b](Minimum of 100 words)[/b]\n{{dts2}}\n\n[b][size=150]Scenario 3[/size][/b]  \nDuring a dive operation, your assigned partner signals low air and begins showing signs of panic.\n[b][i]What actions do you take?[/i][/b] [b](Minimum of 100 words)[/b]\n{{dts1}}\n\n[/divbox]",
 			"govLink": "https://gov.eclipse-rp.net/posting.php?mode=post&f=4145",
 			"category": "Certification Application",
 			"fields": [
@@ -159,25 +159,38 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 					"label": "SEB Join date"
 				},
 				{
-					"name": "whyApply"
+					"name": "dgq1"
 				},
 				{
-					"name": "primaryResponsibility"
+					"name": "dgq2"
 				},
 				{
-					"name": "hazardUnderWater"
+					"name": "dgq3"
 				},
 				{
-					"name": "theoScenario1",
-					"label": "A 911 caller reports a person has jumped from a pier and has not resurfaced. Marine units confirm no visual contact. You are deployed as Dive Team.\nWhat is your approach to resolving this situation? (Minimum of 100 words)"
+					"name": "dts1"
+				},
+				{
+					"name": "dts2"
+				},
+				{
+					"name": "ts3"
+				},
+				{
+					"name": "theoScenario3",
+					"label": "During a dive operation, your assigned partner signals low air and begins showing signs of panic.\nWhat actions do you take? (Minimum of 100 words)"
 				},
 				{
 					"name": "theoScenario2",
 					"label": "During a boat pursuit, suspects are observed throwing multiple bags and a firearm into the sea before escaping.\nHow would you handle the recovery operation? (Minimum of 100 words)"
 				},
 				{
-					"name": "theoScenario3",
-					"label": "During a dive operation, your assigned partner signals low air and begins showing signs of panic.\nWhat actions do you take? (Minimum of 100 words)"
+					"name": "theoScenario1",
+					"label": "A 911 caller reports a person has jumped from a pier and has not resurfaced. Marine units confirm no visual contact. You are deployed as Dive Team.\nWhat is your approach to resolving this situation? (Minimum of 100 words)"
+				},
+				{
+					"name": "badgeNumber",
+					"label": "Your badge number"
 				},
 				{
 					"name": "logDate",
@@ -190,10 +203,26 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 			"division": "SEB",
 			"title": "Advanced Aerial Unit Certification",
 			"topicTitle": "[AAU Certification] Operator {FName LName}",
-			"body": "[img]https://i.imgur.com/NUbXkVL.png[/img]\n[lssdsubtitle]Section 1 - Personal Information[/lssdsubtitle]\n[divbox=white]\n[b]Full Name:[/b] [i]INSERT ANSWER HERE[/i]\n[b]Rank:[/b] [i]INSERT ANSWER HERE[/i]\n[b]Badge Number:[/b] [i]INSERT ANSWER HERE[/i]\n[b]SEB Since:[/b] [i]INSERT ANSWER HERE[/i]\n[/divbox]\n[lssdsubtitle]Section 2 - General Questions[/lssdsubtitle]\n[divbox=white]\n[b]Why are you applying for the Advanced Aerial Unit Certification, and how would you be an asset to the Bureau by receiving it?[/b]\n[i]INSERT ANSWER HERE[/i]\n[b]What are the responsibilities of an Advanced Aerial Unit Pilot?[/b]\n[i]INSERT ANSWER HERE[/i]\n[b]Do you feel comfortable putting yourself under extreme high risk situations? And are you capable of operating under extreme stress? State a few examples or experiences you have faced. [/b]\n[i]INSERT ANSWER HERE[/i]\n[/divbox]\n[lssdsubtitle]Section 3 - Theoretical Scenario Questions[/lssdsubtitle]\n[divbox=white]\n[center][size=200]Scenario 1[/size][/center]\n[b]SAAA comes in over the department radio, wherein they state that their towers see an aircraft that won't respond to them. How do you approach the aircraft and resolve the situation? [/b]\n[i]INSERT ANSWER HERE[/i]\n[center][size=200]Scenario 2[/size][/center]\n[b]You are piloting the 2-D-8 Annihilator Gunship, and you are called to a large-scale gang situation in order to perform an aerial assault with a full team of operators on board, however, your aircraft comes under large-scale direct gunfire from the hostiles mentioned previous. What do you do?[/b]\n[i]INSERT ANSWER HERE[/i]\n[center][size=200]Scenario 3[/size][/center]\n[b]During a bank robbery, the suspects take a hostage and in turn negotiate for a helicopter to escape with. Knowing that the individuals on board the helicopter are armed, prone to firing upon law enforcement, and volatile, how do you approach the situation?[/b]\n[i]INSERT ANSWER HERE[/i]\n[/divbox]",
+			"body": "[img]https://i.imgur.com/NUbXkVL.png[/img]\n[lssdsubtitle]Section 1 - Personal Information[/lssdsubtitle]\n[divbox=white]\n[b]Full Name:[/b] [i]{{name}}[/i]\n[b]Rank:[/b] [i]{{dRank}}[/i]\n[b]Badge Number:[/b] [i]{{badgeNumber}}[/i]\n[b]SEB Since:[/b] [i]{{sebSince}}[/i]\n[/divbox]\n[lssdsubtitle]Section 2 - General Questions[/lssdsubtitle]\n[divbox=white]\n[b]Why are you applying for the Advanced Aerial Unit Certification, and how would you be an asset to the Bureau by receiving it?[/b]\n[i]{{agq1}}[/i]\n[b]What are the responsibilities of an Advanced Aerial Unit Pilot?[/b]\n[i]{{agq2}}[/i]\n[b]Do you feel comfortable putting yourself under extreme high risk situations? And are you capable of operating under extreme stress? State a few examples or experiences you have faced. [/b]\n[i]{{agq3}}[/i]\n[/divbox]\n[lssdsubtitle]Section 3 - Theoretical Scenario Questions[/lssdsubtitle]\n[divbox=white]\n[center][size=200]Scenario 1[/size][/center]\n[b]SAAA comes in over the department radio, wherein they state that their towers see an aircraft that won't respond to them. How do you approach the aircraft and resolve the situation? [/b]\n[i]{{ats1}}[/i]\n[center][size=200]Scenario 2[/size][/center]\n[b]You are piloting the 2-D-8 Annihilator Gunship, and you are called to a large-scale gang situation in order to perform an aerial assault with a full team of operators on board, however, your aircraft comes under large-scale direct gunfire from the hostiles mentioned previous. What do you do?[/b]\n[i]{{ats2}}[/i]\n[center][size=200]Scenario 3[/size][/center]\n[b]During a bank robbery, the suspects take a hostage and in turn negotiate for a helicopter to escape with. Knowing that the individuals on board the helicopter are armed, prone to firing upon law enforcement, and volatile, how do you approach the situation?[/b]\n[i]{{ats3}}[/i]\n[/divbox]",
 			"govLink": "https://gov.eclipse-rp.net/posting.php?mode=post&f=4145",
 			"category": "Certification Application",
-			"fields": []
+			"fields": [
+				{
+					"name": "sebSince"
+				},
+				{
+					"name": "agq1",
+					"label": "Why are you applying for the Advanced Aerial Unit Certification, and how would you be an asset to the Bureau by receiving it?"
+				},
+				{
+					"name": "agq2",
+					"label": "What are the responsibilities of an Advanced Aerial Unit Pilot?"
+				},
+				{
+					"name": "agq3",
+					"label": "Do you feel comfortable putting yourself under extreme high risk situations? And are you capable of operating under extreme stress? State a few examples or experiences you have faced."
+				}
+			]
 		}
 	],
 	"inputs": [
@@ -242,6 +271,116 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 			"name": "theoScenario3",
 			"type": "textarea",
 			"label": "During a dive operation, your assigned partner signals low air and begins showing signs of panic. What actions do you take? (Minimum of 100 words)"
+		},
+		{
+			"name": "whyApplytoAAU",
+			"type": "textarea",
+			"label": "Why are you applying for the Advanced Aerial Unit Certification, and how would you be an asset to the Bureau by receiving it?"
+		},
+		{
+			"name": "responsibilites",
+			"type": "textarea",
+			"label": "What are the responsibilities of an Advanced Aerial Unit Pilot?"
+		},
+		{
+			"name": "s1q1",
+			"type": "textarea",
+			"label": "Why are you applying for the Dive Team? (Minimum 120 words)"
+		},
+		{
+			"name": "gq1",
+			"type": "textarea",
+			"label": "Why are you applying for the Dive Team? (Minimum 120 words)"
+		},
+		{
+			"name": "gq2",
+			"type": "textarea",
+			"label": "What do you believe are the primary responsibilities of a Dive Team operator?"
+		},
+		{
+			"name": "gq3",
+			"type": "textarea",
+			"label": "What hazards may a diver encounter during underwater operations?"
+		},
+		{
+			"name": "ts1",
+			"type": "textarea",
+			"label": "A 911 caller reports a person has jumped from a pier and has not resurfaced. Marine units confirm no visual contact. You are deployed as Dive Team. What is your approach to resolving this situation? (Minimum of 100 words)"
+		},
+		{
+			"name": "ts2",
+			"type": "textarea",
+			"label": "Strategic Thinking - reasoning"
+		},
+		{
+			"name": "ts3",
+			"type": "textarea",
+			"label": "During a dive operation, your assigned partner signals low air and begins showing signs of panic. What actions do you take? (Minimum of 100 words)"
+		},
+		{
+			"name": "gs1",
+			"type": "textarea",
+			"label": "Why are you applying for the Advanced Aerial Unit Certification, and how would you be an asset to the Bureau by receiving it?"
+		},
+		{
+			"name": "dgq1",
+			"type": "textarea",
+			"label": "Why are you applying for the Dive Team? (Minimum 120 words)"
+		},
+		{
+			"name": "dgq2",
+			"type": "textarea",
+			"label": "What do you believe are the primary responsibilities of a Dive Team operator?"
+		},
+		{
+			"name": "dgq3",
+			"type": "textarea",
+			"label": "What hazards may a diver encounter during underwater operations?"
+		},
+		{
+			"name": "dts1",
+			"type": "textarea",
+			"label": "A 911 caller reports a person has jumped from a pier and has not resurfaced. Marine units confirm no visual contact. You are deployed as Dive Team. What is your approach to resolving this situation? (Minimum of 100 words)"
+		},
+		{
+			"name": "dts2",
+			"type": "textarea",
+			"label": "Strategic Thinking - reasoning"
+		},
+		{
+			"name": "dts3",
+			"type": "textarea",
+			"label": "During a dive operation, your assigned partner signals low air and begins showing signs of panic. What actions do you take? (Minimum of 100 words)"
+		},
+		{
+			"name": "agq1",
+			"type": "textarea",
+			"label": "Why are you applying for the Dive Team? (Minimum 120 words)"
+		},
+		{
+			"name": "agq3",
+			"type": "textarea",
+			"label": "What hazards may a diver encounter during underwater operations?"
+		},
+		{
+			"name": "agq2",
+			"type": "textarea",
+			"label": "What do you believe are the primary responsibilities of a Dive Team operator?"
+		},
+		{
+			"name": "ats1",
+			"type": "textarea",
+			"label": "SAAA comes in over the department radio, wherein they state that their towers see an aircraft that won't respond to them. How do you approach the aircraft and resolve the situation?"
+		},
+		{
+			"name": "ats2",
+			"type": "textarea",
+			"label": "You are piloting the 2-D-8 Annihilator Gunship, and you are called to a large-scale gang situation in order to perform an aerial assault with a full team of operators on board, however, your aircraft comes under large-scale direct gunfire from the hostiles mentioned previous. What do you do?"
+		},
+		{
+			"name": "ats3",
+			"type": "textarea",
+			"label": "During a bank robbery, the suspects take a hostage and in turn negotiate for a helicopter to escape with. Knowing that the individuals on board the helicopter are armed, prone to firing upon law enforcement, and volatile, how do you approach the situation?"
 		}
 	]
 } /* /ADMIN_DATA */;

@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { controlFieldClass } from "@/lib/styles";
+import { controlFieldClass, textareaFieldClass } from "@/lib/styles";
 import { cn } from "@/lib/utils";
 
 function Input({ className, ...props }: React.ComponentProps<"input">) {
@@ -8,17 +8,7 @@ function Input({ className, ...props }: React.ComponentProps<"input">) {
 }
 
 function Textarea({ className, ...props }: React.ComponentProps<"textarea">) {
-	return (
-		<textarea
-			data-slot="textarea"
-			className={cn(
-				controlFieldClass,
-				"thin-scroll min-h-[104px] resize-y px-3.5 py-2.5 leading-relaxed",
-				className
-			)}
-			{...props}
-		/>
-	);
+	return <textarea data-slot="textarea" className={cn(textareaFieldClass, className)} {...props} />;
 }
 
 function Label({ className, ...props }: React.ComponentProps<"label">) {

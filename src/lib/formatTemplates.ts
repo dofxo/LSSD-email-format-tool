@@ -71,3 +71,30 @@ export const profileTokens: { token: string; label: string }[] = [
  */
 export const bodyTokens = (body: string): string[] =>
 	[...new Set(Array.from(body.matchAll(TOKEN_PATTERN), (match) => match[1].trim()))];
+
+/** A run of body text, either plain or a whole `{{token}}` placeholder. */
+export interface BodySegment {
+	/** The exact text, braces and spacing included, so it can be printed back verbatim. */
+	text: string;
+	/** The token's name, set only on placeholder segments. */
+	token?: string;
+}
+
+/**
+ * A body cut into plain runs and `{{token}}` placeholders, in order. The admin
+ * body editor draws this over the textarea to pick the tokens out of the text,
+ * which a textarea itself cannot do — it styles one block of text, not parts of
+ * it.
+ */
+export const bodySegments = (body: string): BodySegment[] => {
+	const segments: BodySegment[] = [];
+	let end = 0;
+	for (const match of body.matchAll(TOKEN_PATTERN)) {
+		const start = match.index ?? 0;
+		if (start > end) segments.push({ text: body.slice(end, start) });
+		segments.push({ text: match[0], token: match[1].trim() });
+		end = start + match[0].length;
+	}
+	if (end < body.length) segments.push({ text: body.slice(end) });
+	return segments;
+};

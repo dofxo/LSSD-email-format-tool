@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowDown, ArrowUp, Check, Pencil, Trash2, TriangleAlert, X } from "lucide-react";
+import { ArrowDown, ArrowUp, Check, CornerDownLeft, Pencil, Trash2, TriangleAlert, X } from "lucide-react";
 import { copyText } from "@/hooks/useCopy";
 import { toast } from "react-toastify";
 
@@ -29,8 +29,13 @@ interface FormatFieldsEditorProps {
 	onDelete?: (input: CatalogueInput) => void;
 	/** Which fields are deletable, with the reason shown on hover when not. */
 	deleteGuard?: (name: string) => { ok: boolean; reason?: string };
-	/** Takes a field's `{{token}}` back out of the body (token-driven rows only). */
+	/**
+	 * Takes a field off this format — its `{{token}}` comes out of the body and
+	 * the field leaves the list (token-driven rows only).
+	 */
 	onRemoveFromBody?: (name: string) => void;
+	/** Puts a kept field's `{{token}}` back into the body at the caret. */
+	onPutInBody?: (name: string) => void;
 	/**
 	 * Renames a `{{token}}` in the body being edited (token-driven rows only).
 	 * The caller rewrites the body and makes sure a field answers to the new
@@ -80,8 +85,8 @@ const withWording = (
  * the fields, so this edits their wording, their token names and the order the
  * form asks for them in: a row's pencil retypes the `{{token}}` itself, in every
  * place the body uses it, and the arrows order it without touching the body.
- */
-export function FormatFieldsEditor({ tokenDriven, body, picks, onChange, onCreate, onDelete, deleteGuard,	onRemoveFromBody, onRenameField, onChangeType, fieldGuard, onEditField }: FormatFieldsEditorProps) {
+ */export function FormatFieldsEditor({ tokenDriven, body, picks, onChange, onCreate, onDelete, deleteGuard,
+onRemoveFromBody, onPutInBody, onRenameField, onChangeType, fieldGuard, onEditField }: FormatFieldsEditorProps) {
 	const tokens = tokenDriven ? [...new Set(bodyTokens(body))] : [];
 	// The token currently being retyped, and what has been typed into it.
 	const [renaming, setRenaming] = useState<{ from: string; value: string } | null>(null);
@@ -92,9 +97,21 @@ export function FormatFieldsEditor({ tokenDriven, body, picks, onChange, onCreat
 	// The rows to show: the body's tokens, or the picked fields, in the order the
 	// format asks for them — the same order the form uses, so a move made here is
 	// still there after a reload.
-	const names = tokenDriven
-		? orderTokensByFields(tokens.filter((token) => isCatalogueField(token)), picks)
-		: picks.map((pick) => pick.name);
+	//
+	// A body-driven format also lists the fields it keeps while the body is not
+	// printing them — their `{{token}}` was deleted, or is not written back yet.
+	// Both sorts of row go through the same list, so the format's own order is
+	// what shows and a field moved above the body's fields stays there; trimming
+	// the text is never what quietly removes a field, only the trash is.
+	const rows = tokenDriven
+		? [
+				...new Set([
+					...tokens.filter((token) => isCatalogueField(token)),
+					...picks.filter((pick) => isCatalogueField(pick.name)).map((pick) => pick.name),
+				]),
+			]
+		: [];
+	const names = tokenDriven ? orderTokensByFields(rows, picks) : picks.map((pick) => pick.name);
 	const pickByName = new Map(picks.map((pick) => [pick.name, pick]));
 
 	/**
@@ -170,13 +187,14 @@ export function FormatFieldsEditor({ tokenDriven, body, picks, onChange, onCreat
 	return (
 		<div className="flex flex-col gap-2.5 rounded-2xl border border-subtle bg-surface-2/40 p-3.5">
 			<div className="flex flex-col gap-1">
-				<span className="text-[12.5px] font-medium text-ink">Fields</span>
-				<p className="text-[11.5px] leading-relaxed text-ink-faint">
+				<span className="text-[12.5px] font-medium text-ink">Fields</span>				<p className="text-[11.5px] leading-relaxed text-ink-faint">
 					{tokenDriven ? (						<>This format has its own body, so its fields are the ones that body asks for — {names.length}{" "}
-							of them. Add one from the body editor above, rename its <code className="font-mono">{'{{token}}'}</code>{" "}											with the pencil, or take it back out with the trash. Move a field with the arrows to
+							of them. Add one from the body editor above, rename its <code className="font-mono">{'{{token}}'}</code>{" "}											with the pencil, or take it off the format with the trash. A field the body stops
+											printing stays on this list until you remove it, so nothing has to be re-made after an
+											edit — put its token back with one click. Move a field with the arrows to
 											say which one the form asks for first — the body above is left alone. Edit a label or
 											hint to word a field differently for this format. A field's type is shared, so its
-							badge is a menu — changing it changes that field everywhere it is asked for.</>
+											badge is a menu — changing it changes that field everywhere it is asked for.</>
 					) : (
 						<>
 							The fields this format's form asks for, in order. Each one is a field type with its own
@@ -212,6 +230,9 @@ export function FormatFieldsEditor({ tokenDriven, body, picks, onChange, onCreat
 					const definition = catalogueInputFor(name)!;
 					const pick = pickByName.get(name);
 					const typeVerdict = fieldGuard ? fieldGuard(name) : { ok: false };
+					// A field the body no longer prints: kept by the format, doing nothing
+					// in the output until its token is put back.
+					const printed = !tokenDriven || tokens.includes(name);
 					return (							<div key={name} className="rounded-xl border border-subtle bg-surface/60 p-2.5">
 								<div className="flex items-center gap-2">
 									{onChangeType && typeVerdict.ok ? (
@@ -303,7 +324,27 @@ export function FormatFieldsEditor({ tokenDriven, body, picks, onChange, onCreat
 											) : null}
 										</>
 									)}
-								{rowKeys.filter((key) => key === rowKeys[position]).length > 1 ? (
+								{!printed ? (
+									<span
+										className="flex min-w-0 flex-1 items-center gap-1.5 text-[11px] text-warning"
+										title={`The body does not print {{${name}}} any more, so what is typed in here stays out of the output. The field is kept on this format — put its token back to use it again.`}
+									>
+										<TriangleAlert className="size-3.5 shrink-0" />
+										<span className="truncate">Not printed by the body</span>
+										{onPutInBody ? (
+											<button
+												type="button"
+												onClick={() => onPutInBody(name)}
+												title={`Insert {{${name}}} into the body at the caret`}
+												aria-label={`Put ${name} back in the body`}
+												className="flex shrink-0 cursor-pointer items-center gap-1 rounded-full border border-warning/35 bg-warning/10 px-1.5 py-0.5 transition-colors duration-150 hover:bg-warning/20"
+											>
+												<CornerDownLeft className="size-3 shrink-0" />
+												Put it back
+											</button>
+										) : null}
+									</span>
+								) : rowKeys.filter((key) => key === rowKeys[position]).length > 1 ? (
 									<span
 										className="flex min-w-0 flex-1 items-center gap-1 text-[11px] text-warning"
 										title="Another field in this format has the same type and label"
@@ -340,8 +381,8 @@ export function FormatFieldsEditor({ tokenDriven, body, picks, onChange, onCreat
 											<Button
 												size="icon-sm"
 												variant="ghost"
-												title="Remove this field from the body"
-												aria-label={`Remove ${name} from the body`}
+												title={`Remove this field — takes {{${name}}} out of the body with it`}
+												aria-label={`Remove ${name} from the format`}
 												onClick={() => onRemoveFromBody(name)}
 											>
 												<Trash2 />
