@@ -1,4 +1,6 @@
-import { plainLabel } from "@/lib/labelText";
+// Relative on purpose: this module sits in the dev server's own config graph
+// (scripts/adminPlugin.ts reads it), where the `@` alias is not applied.
+import { plainLabel } from "./labelText";
 import type { FormatInputField } from "@/types";
 
 /** Every input type /admin can pick, in menu order. */
