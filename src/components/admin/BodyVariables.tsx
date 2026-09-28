@@ -77,8 +77,10 @@ export function BodyVariables({
 				<span className="text-[12.5px] font-medium text-ink">Fields</span>
 				<p className="text-[11.5px] leading-relaxed text-ink-faint">
 					The body is what the format asks for: wrap any part of it in double braces and that text is
-					replaced with a field when the format is used. Add a field below to drop it in at the caret, or
-					select part of the body first to swap that exact text for the field.
+					replaced with a field when the format is used. Pick a field below to write its{" "}
+					<code className="font-mono">{'{{token}}'}</code> at the caret, or select part of the body first
+					to swap that exact text for the field. A field you create joins the format without touching the
+					body — place it when you are ready to.
 				</p>
 			</div>
 

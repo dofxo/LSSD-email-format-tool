@@ -260,16 +260,14 @@ export function FormatEditor({
 	// the field but silently dropping the token that connects it.
 	const createAndPersist = (input: CatalogueInput) => {
 		onCreate(input);
-		// A format with a body of its own names its fields in that body, so a field
-		// made here would live in the text alone — delete the token and the field is
-		// gone with it. The new field is added to this format's own list as well,
-		// so it stays part of the format even when the body stops printing it. The
-		// other formats' pickers put their pick in themselves, hence body-driven
-		// only, which is also what keeps a row from being listed twice.
-		const nextPicks =
-			ownBody && !picksRef.current.some((pick) => pick.name === input.name)
-				? [...picksRef.current, { name: input.name }]
-				: picksRef.current;
+		// Creating a field adds it to this format, and to nothing else: its
+		// `{{token}}` is not typed into the body, so writing the question is not
+		// disturbed and a text edit can never be what removes a field. A format
+		// with a body of its own lists the new field as kept-but-not-printed, ready
+		// to be placed; a format that picks its fields lists it like any other.
+		const nextPicks = picksRef.current.some((pick) => pick.name === input.name)
+			? picksRef.current
+			: [...picksRef.current, { name: input.name }];
 		if (nextPicks !== picksRef.current) setPicks(nextPicks);
 		setTimeout(() => {
 			onSave(
