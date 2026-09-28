@@ -180,8 +180,10 @@ const App = () => {
 	};
 
 	// Opens the government section with the title and body travelling in the
-	// link itself, so the extension can fill the posting form on load.
-	const handleOpenGovLink = useCallback(() => {
+	// link itself, so the extension can fill the posting form on load. The body
+	// is also copied first: a clipboard write fails once the new tab takes the
+	// document's focus, so it has to settle before the window opens.
+	const handleOpenGovLink = useCallback(async () => {
 		if (!formatId) return;
 		setExtensionHint(true);
 		const url = govLinkFor(division, formatId);
@@ -190,9 +192,12 @@ const App = () => {
 			return;
 		}
 
+		const copied = await copy(generatedText, "format");
+
 		window.open(withGovPayload(url, topicTitle, generatedText), "_blank", "noopener,noreferrer");
-		toast.info("Opening the government website — the extension fills the title and post for you.");
-	}, [division, formatId, generatedText, topicTitle]);
+		if (copied) toast.success("Body copied to clipboard — opening the government website.");
+		else toast.info("Opening the government website — the body could not be copied, use the preview panel instead.");
+	}, [copy, division, formatId, generatedText, topicTitle]);
 
 	const handleCopyFormat = useCallback(async () => {
 		if (!formatId) return;
@@ -393,12 +398,12 @@ const App = () => {
 											key="gov-link"
 											variant="secondary"
 											size="sm"
-											onClick={handleOpenGovLink}
-											title="Open the government website section where this format is pasted"
-											aria-label="Open the government website section where this format is pasted"
+											onClick={() => void handleOpenGovLink()}
+											title="Copy the body to the clipboard and open the government website section where this format is posted"
+											aria-label="Copy the body to the clipboard and open the government website section where this format is posted"
 										>
 											<ExternalLink />
-											<span className="hidden lg:inline">Open in government website</span>
+											<span className="hidden lg:inline">Copy &amp; open government website</span>
 										</Button>
 									) : null}
 

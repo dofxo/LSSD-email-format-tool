@@ -304,6 +304,81 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 					"name": "lts3"
 				}
 			]
+		},
+		{
+			"id": "2",
+			"division": "General",
+			"title": "Accepted",
+			"topicTitle": "",
+			"body": "[img]https://i.ibb.co/35Dhzd5Z/s5FUN5w.png[/img]\n\n[lssdsubtitle]REQUEST ACCEPTED[/lssdsubtitle]\n[divbox=white]\n[list=none]\n[b]Dear {{FnameLname}},[/b]\n \nWe are glad to inform you that your ride-along request for the Los Santos County Sheriff's Department has been [b][i]accepted[/i][/b]. We request that you print this ride-along request out and keep it with you at all times throughout any ride-along that you may take. We would also like to thank you for showing interest in our ride-along program, we hope that you'll meet your desires and that you'll receive first-hand experience on what it's like being a Deputy Sheriff for the Los Santos County Sheriff's Department. \n \nThis ride-along request is valid for [b]7 days[/b], if you are still interested in partaking in the program after 7 days, you must send in a new request. \n \n[b]What should you do now?[/b]\n[list][*]Make sure that you come properly dressed for a Ride-Along, and with respect for our deputies, your personal hygiene should be prioritized. Refrain from using too much or very strong perfume as it may disorientate not only deputies but any civilians that you may come across during the ride-along. \n \n[*]If you are a licensed firearm holder, make sure that your firearm is kept safe, and locked away, in either your vehicle or at home. You may not bring your firearm with you during the ride-along.\n \n[*]Make sure that you carry not only a printed copy of this response but also some form of identification card. \n \n[*]If you are ready for a ride-along, proceed to visit Paleto or Sandy Station, you can consult with the deputy at the front desk or deputies leaving the station on whether they're available to take you on a ride-along. [/list]\n\n[hr][/hr]\n\nSincerely,\n\n[img]{{signature}}[/img]\n{{rankName}}\nLos Santos County Sheriff's Department\n \n[img]https://i.gyazo.com/72b2c28eca45c9928b9a7e1d289e3017.png[/img]\nSheriff Ian Walter\nLos Santos County Sheriff's Department\n[/list]\n[/divbox]\n[LSSDfooter][/LSSDfooter]",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=995",
+			"category": "Ride-Along Program",
+			"fields": [
+				{
+					"name": "FnameLname"
+				}
+			]
+		},
+		{
+			"id": "3",
+			"division": "General",
+			"title": "Denied",
+			"topicTitle": "",
+			"body": "[img]https://i.ibb.co/35Dhzd5Z/s5FUN5w.png[/img]\n\n[lssdsubtitle]REQUEST DENIED[/lssdsubtitle]\n[divbox=white]\n[list=none]\n[b]Dear {{FnameLname}},[/b]\n \nYou are being contacted regarding your ride-along request that you sent to the Los Santos County Sheriff's Department. Your request has been [b][i]denied[/i][/b] due to the following reasons: \n[list]\n[*]\n[*]\n[*]\n[/list]\n \nYou are free to send in a new request if you are still interested in partaking in the program.\n\n[hr][/hr]\n\nSincerely,\n\n[img]{{signature}}[/img]\n{{rankName}}\nLos Santos County Sheriff's Department\n \n[img]https://i.gyazo.com/72b2c28eca45c9928b9a7e1d289e3017.png[/img]\nSheriff Ian Walter\nLos Santos County Sheriff's Department\n[/list]\n[/divbox]\n[LSSDfooter][/LSSDfooter]",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=995",
+			"category": "Ride-Along Program",
+			"fields": []
+		},
+		{
+			"id": "4",
+			"division": "General",
+			"title": "Denied (Banned) -  Criminal Record",
+			"topicTitle": "",
+			"body": "[img]https://i.ibb.co/35Dhzd5Z/s5FUN5w.png[/img]\n\n[lssdsubtitle]REQUEST DENIED - BANNED[/lssdsubtitle] \n[divbox=white]\n[list=none]\n[b]Dear {{FnameLname}},[/b]\n \nYou are being contacted regarding your ride-along request that you sent to the Los Santos County Sheriff's Department. Your request has been [b][i]denied[/i][/b] and you are [b][i]banned[/i][/b] from re-applying to the program. The reason for this status is either due to your criminal record and/or for the reason(s) mentioned below. \n \n(( This ban is In Character only unless otherwise specified. You are free to reapply under a different character. ))\n\n[hr][/hr]\n\nSincerely,\n\n[img]{{signature}}[/img]\n{{rankName}}\nLos Santos County Sheriff's Department\n \n[img]https://i.gyazo.com/72b2c28eca45c9928b9a7e1d289e3017.png[/img]\nSheriff Ian Walter\nLos Santos County Sheriff's Department\n[/list]\n[/divbox]\n[LSSDfooter][/LSSDfooter]",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=995",
+			"category": "Ride-Along Program",
+			"fields": []
+		},
+		{
+			"id": "5",
+			"division": "General",
+			"title": "Request Expired",
+			"topicTitle": "",
+			"body": "[img]https://i.ibb.co/35Dhzd5Z/s5FUN5w.png[/img]\n\n[lssdsubtitle]REQUEST EXPIRED[/lssdsubtitle]\n[divbox=white]\n[list=none]\n[b]Dear {{FnameLname}},[/b]\n \nWe're sending you this notice to inform you that your ride-along request with the Los Santos County Sheriff's Department has expired and is no longer valid. If you wish to resume taking ride-alongs with deputies of the Sheriff's Department, you must resubmit another ride-along request on our website. \n\n\n[hr][/hr]\n\nSincerely,\n\n[img]{{signature}}[/img]\n{{rankName}}\nLos Santos County Sheriff's Department\n \n[img]https://i.gyazo.com/72b2c28eca45c9928b9a7e1d289e3017.png[/img]\nSheriff Ian Walter\nLos Santos County Sheriff's Department\n[/list]\n[/divbox]\n[LSSDfooter][/LSSDfooter]",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=995",
+			"category": "Ride-Along Program",
+			"fields": []
+		},
+		{
+			"id": "6",
+			"division": "General",
+			"title": "Ride-Along Session Report",
+			"topicTitle": "",
+			"body": "[img]https://i.ibb.co/35Dhzd5Z/s5FUN5w.png[/img]\n\n[lssdsubtitle]RIDE-ALONG SESSION REPORT[/lssdsubtitle]\n[divbox=white]\n[list=none]\n[b]Deputy Name:[/b] {{name}}\n[b]Deputy Rank[/b] {{dRank}}\n[b]Date and Time (( (Please use UTC: https://time.is/UTC )):[/b] {{rideAlongDate}} {{startTime}} > {{EndTime}}\n\n[b]Brief Summary of Session:[/b]\n[list]\n{{sessionSummary}}\n[/list]\n\n[b]Did any problems or issues occur?:[/b]\n[list]\n{{anyProblem}}\n[/list]\n\n[b]Notes for further ride-along sessions:[/b]\n[list]\n{{notesForFurther}}\n[/list]\n\n[hr][/hr]\n\nSincerely,\n\n[img]{{signature}}[/img]\n{{rankName}}\nLos Santos County Sheriff's Department\n[/list]\n[/divbox]\n[LSSDfooter][/LSSDfooter]",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=995",
+			"category": "Ride-Along Program",
+			"fields": [
+				{
+					"name": "rideAlongDate"
+				},
+				{
+					"name": "startTime",
+					"label": "Start Time "
+				},
+				{
+					"name": "EndTime",
+					"label": "End Time"
+				},
+				{
+					"name": "sessionSummary"
+				},
+				{
+					"name": "anyProblem"
+				},
+				{
+					"name": "notesForFurther"
+				}
+			]
 		}
 	],
 	"inputs": [
@@ -557,6 +632,47 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 			"name": "lts3",
 			"type": "textarea",
 			"label": "In the following scenario, you are responding to a large shoot-out with multiple injured 10-15's, 10-16's and PD officers. The location is the Legion Square parking lot. To respond quickly, you use the Blackstar to get there as quickly as possible. Shots are still being fired and heavy weapons are involved. Where and how would you deploy? Would you go street level, would you ask to be placed on a rooftop, how would you assess who is a threat and who is not?"
+		},
+		{
+			"name": "FnameLname",
+			"type": "text",
+			"label": "First Lastname"
+		},
+		{
+			"name": "rideAlongDate",
+			"type": "date",
+			"label": "Date",
+			"dateStyle": "short"
+		},
+		{
+			"name": "startTie",
+			"type": "time",
+			"label": "Time (UTC)"
+		},
+		{
+			"name": "startTime",
+			"type": "time",
+			"label": "Time (UTC)"
+		},
+		{
+			"name": "EndTime",
+			"type": "time",
+			"label": "Time (UTC)"
+		},
+		{
+			"name": "sessionSummary",
+			"type": "textarea",
+			"label": "Brief Summary of Session"
+		},
+		{
+			"name": "anyProblem",
+			"type": "textarea",
+			"label": "Did any problems or issues occur?"
+		},
+		{
+			"name": "notesForFurther",
+			"type": "textarea",
+			"label": "Notes for further ride-along sessions"
 		}
 	]
 } /* /ADMIN_DATA */;
