@@ -1,4 +1,5 @@
 import { inputsByDivision } from "@/data/formatInputs";
+import { profileTokens } from "@/lib/formatTemplates";
 import type { CatalogueInput, InputDefinition } from "@/lib/inputDefinitions";
 
 /**
@@ -12,10 +13,21 @@ const customInputs: CatalogueInput[] = [];
 /** Bumped whenever the registry changes, so cached derivatives know to rebuild. */
 let revision = 0;
 
-/** Adds admin-created inputs to the live catalogue; replaces existing tokens. */
+/**
+ * Tokens the deputy profile fills for every format. A field of the same name
+ * could never be asked for: the two would shadow each other, and which value a
+ * body printed would depend on which of them was read last.
+ */
+const profileOwned = new Set(profileTokens.map((token) => token.token));
+
+/**
+ * Adds admin-created inputs to the live catalogue; replaces existing tokens.
+ * Anything named after a profile token is dropped rather than registered, so a
+ * store that predates one cannot bring the duplicate field back.
+ */
 export const registerCustomInputs = (inputs: CatalogueInput[]) => {
 	customInputs.length = 0;
-	customInputs.push(...inputs);
+	customInputs.push(...inputs.filter((field) => !profileOwned.has(field.name)));
 	// Bumped rather than rebuilt here: the next lookup notices and folds the
 	// catalogue once, however many of them there are.
 	revision += 1;
