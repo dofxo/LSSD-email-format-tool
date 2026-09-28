@@ -549,7 +549,7 @@ const AdminPage = () => {
 	return (
 		<div className="accent-violet flex min-h-dvh flex-col">
 			<header className="sticky top-0 z-40 border-b border-subtle bg-canvas/80 backdrop-blur-xl backdrop-saturate-150">
-				<div className="mx-auto flex h-16 w-full max-w-[1200px] items-center gap-3 px-4 sm:px-6 lg:px-8">
+				<div className="mx-auto flex h-16 w-full max-w-[1680px] items-center gap-3 px-4 sm:px-6 lg:px-8 2xl:px-12">
 					<a href="/" className="flex min-w-0 items-center gap-3">
 						<span className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-subtle bg-surface shadow-xs">
 							<img src="/images/logo.webp" alt="" className="size-7 object-contain" />
@@ -594,7 +594,7 @@ const AdminPage = () => {
 				</div>
 			</header>
 
-			<main className="mx-auto flex w-full max-w-[1200px] flex-1 flex-col gap-5 px-4 py-6 sm:px-6 lg:px-8">
+			<main className="mx-auto flex w-full max-w-[1680px] flex-1 flex-col gap-6 px-4 pt-6 pb-14 sm:px-6 lg:px-8 2xl:px-12">
 				{!unlocked ? (
 					<Panel>
 						<PanelBody className="flex flex-col items-center gap-3 py-16 text-center">
