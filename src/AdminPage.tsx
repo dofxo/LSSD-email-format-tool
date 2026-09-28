@@ -5,8 +5,9 @@ import { ToastContainer, toast } from "react-toastify";
 import { BodyVariables } from "@/components/admin/BodyVariables";
 import { FormatEditor } from "@/components/admin/FormatEditor";
 import { PasswordGate } from "@/components/admin/PasswordGate";
+import { TokenTextarea } from "@/components/admin/TokenTextarea";
 import { Button } from "@/components/ui/button";
-import { Field, Input, Textarea } from "@/components/ui/input";
+import { Field, Input } from "@/components/ui/input";
 import { Panel, PanelBody, PanelHeader, PanelHeading } from "@/components/ui/panel";
 import { getFormat } from "@/formats";
 import { adminFormatStore } from "@/formats/admin";
@@ -692,7 +693,7 @@ const AdminPage = () => {
 									hint="The body this format posts to the government website. Wrap any part in double braces to fill it from a field."
 									wide
 								>
-									<Textarea
+									<TokenTextarea
 										id="new-format-body"
 										ref={newBodyRef}
 										value={newBody}

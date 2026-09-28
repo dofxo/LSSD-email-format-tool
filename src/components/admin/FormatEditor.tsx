@@ -3,8 +3,9 @@ import { ChevronDown, RotateCcw, Tag, Trash2 } from "lucide-react";
 
 import { BodyVariables } from "@/components/admin/BodyVariables";
 import { FormatFieldsEditor } from "@/components/admin/FormatFieldsEditor";
+import { TokenTextarea } from "@/components/admin/TokenTextarea";
 import { Button } from "@/components/ui/button";
-import { Field, Input, Textarea } from "@/components/ui/input";
+import { Field, Input } from "@/components/ui/input";
 import { catalogueInputFor } from "@/data/inputCatalogue";
 import { autoTokenizeBody } from "@/lib/autoTokenize";
 import { insertTokenAtCaret, removeTokenFromBody, renameTokenInBody } from "@/lib/bodyInsert";
@@ -194,14 +195,38 @@ export function FormatEditor({
 		setBodyEdited(true);
 	};
 
-	// Takes a field's {{token}} back out of the body, the way the picker put it
-	// in: the row disappears from Fields and the spot reverts to plain text. The
-	// next body is worked out here rather than read back from state, so the save
-	// carries exactly this edit even though React has not re-rendered yet.
+	// Takes a field off this format: its {{token}} comes back out of the body and
+	// the field leaves the list, so the row disappears and the spot reverts to
+	// plain text. Both halves are written here rather than read back from state,
+	// so the save carries exactly this edit even though React has not re-rendered
+	// yet.
 	const removeTokenAndPersist = (token: string) => {
 		const nextBody = removeTokenFromBody(bodyRef.current?.value ?? body, token);
+		const nextPicks = picksRef.current.filter((pick) => pick.name !== token);
 		setBody(nextBody);
 		setBodyEdited(true);
+		setPicks(nextPicks);
+		onSave(
+			{
+				title,
+				topicTitle,
+				body: nextBody,
+				govLink,
+				category,
+				fields: nextPicks,
+			},
+			{ skipRemount: true },
+		);
+	};
+
+	// Puts a field the body no longer prints back into it, at the caret — the one
+	// step between a field kept by this format and a field its output shows. The
+	// body editor is opened with it, so the token lands somewhere visible.
+	const restoreTokenAndPersist = (name: string) => {
+		const nextBody = insertTokenAtCaret(bodyRef.current, name, bodyValueRef.current);
+		setBody(nextBody);
+		setBodyEdited(true);
+		setBodyOpen(true);
 		onSave(
 			{
 				title,
@@ -235,6 +260,17 @@ export function FormatEditor({
 	// the field but silently dropping the token that connects it.
 	const createAndPersist = (input: CatalogueInput) => {
 		onCreate(input);
+		// A format with a body of its own names its fields in that body, so a field
+		// made here would live in the text alone — delete the token and the field is
+		// gone with it. The new field is added to this format's own list as well,
+		// so it stays part of the format even when the body stops printing it. The
+		// other formats' pickers put their pick in themselves, hence body-driven
+		// only, which is also what keeps a row from being listed twice.
+		const nextPicks =
+			ownBody && !picksRef.current.some((pick) => pick.name === input.name)
+				? [...picksRef.current, { name: input.name }]
+				: picksRef.current;
+		if (nextPicks !== picksRef.current) setPicks(nextPicks);
 		setTimeout(() => {
 			onSave(
 				{
@@ -243,7 +279,7 @@ export function FormatEditor({
 					body: bodyValueRef.current,
 					govLink,
 					category,
-					fields: picksRef.current,
+					fields: nextPicks,
 				},
 				// No remount: the card's local state already matches what was saved,
 				// and remounting would throw away the open picker mid-use.
@@ -488,7 +524,7 @@ export function FormatEditor({
 
 						{bodyOpen ? (
 							<div className="mt-2 flex flex-col gap-2">
-								<Textarea
+								<TokenTextarea
 									id={`body-${fieldId}`}
 									ref={bodyRef}
 									value={body}
@@ -527,16 +563,17 @@ export function FormatEditor({
 								/>
 							</div>
 						) : null}
-					</div>							<FormatFieldsEditor
-								tokenDriven={ownBody}
-								body={body}
-								picks={picks}
-								onChange={setPicks}
-								onCreate={createAndPersist}
-								onDelete={deleteAndPersist}
-								deleteGuard={deleteGuard}
-								onRemoveFromBody={removeTokenAndPersist}
-								onRenameField={renameTokenAndPersist}
+					</div>								<FormatFieldsEditor
+									tokenDriven={ownBody}
+									body={body}
+									picks={picks}
+									onChange={setPicks}
+									onCreate={createAndPersist}
+									onDelete={deleteAndPersist}
+									deleteGuard={deleteGuard}
+									onRemoveFromBody={removeTokenAndPersist}
+									onPutInBody={restoreTokenAndPersist}
+									onRenameField={renameTokenAndPersist}
 								onChangeType={onUpdateFieldType}
 								fieldGuard={fieldGuard}
 								onEditField={onUpdateField}
