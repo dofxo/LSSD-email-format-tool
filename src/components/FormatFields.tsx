@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
-import { CalendarDays, Check, Clock, MousePointerClick, Plus, Sparkles, Square, SquareCheck, Trash2 } from "lucide-react";
+import { CalendarDays, Check, Clock, ImageIcon, MousePointerClick, Plus, Sparkles, Square, SquareCheck, Trash2 } from "lucide-react";
 import moment from "moment";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { ChargesPicker } from "@/components/ChargesPicker";
 import { Combobox } from "@/components/ui/combobox";
+import { GroupField } from "@/components/GroupField";
 import { Field, Input, LabelContent, Textarea } from "@/components/ui/input";
 import { PanelEmpty } from "@/components/ui/panel";
 import { Segmented } from "@/components/ui/segmented";
@@ -38,6 +40,18 @@ const DATE_STYLE_OPTIONS: { value: DateStyle; label: string }[] = [
 
 const cleanLabel = (label: string) => label.replace(/\s*\n\s*$/, "").trim();
 
+/**
+ * The link inside an image answer: a whole `[img]…[/img]` block pasted off a
+ * post is taken back to the URL in it, so the preview shows the picture and the
+ * tags the field prints are the only ones in the report.
+ */
+const imageUrlIn = (value: string) =>
+	value
+		.trim()
+		.replace(/^\[img[^\]]*\]\s*/i, "")
+		.replace(/\s*\[\/img\]$/i, "")
+		.trim();
+
 interface FormatFieldsProps {
 	formatId: string;
 	fields: FormatInputField[];
@@ -50,12 +64,15 @@ interface FormatFieldsProps {
 export function FormatFields({ formatId, fields, formatData, setFormatData, resetKey = 0 }: FormatFieldsProps) {
 	const [rawDates, setRawDates] = useState<Record<string, string>>({});
 	const [listDrafts, setListDrafts] = useState<Record<string, string>>({});
+	/** Links that would not load, so a picture that is not there is not drawn over and over. */
+	const [brokenLinks, setBrokenLinks] = useState<Record<string, boolean>>({});
 
 	// Drop local (unformatted) values whenever the fields are reset upstream.
 	useEffect(() => {
 		if (resetKey === 0) return;
 		setRawDates({});
 		setListDrafts({});
+		setBrokenLinks({});
 	}, [resetKey]);
 
 	// Pre-fill the email date with today so common cases need zero typing.
@@ -104,6 +121,9 @@ export function FormatFields({ formatId, fields, formatData, setFormatData, rese
 		const { name, value } = event.target;
 		setFormatData((prev) => ({ ...prev, [name]: value }));
 	};
+
+	const markBroken = (url: string) =>
+		setBrokenLinks((prev) => (prev[url] ? prev : { ...prev, [url]: true }));
 
 	const handleSelectChange = (name: string, value: string) => {
 		setFormatData((prev) => ({ ...prev, [name]: value }));
@@ -192,11 +212,14 @@ export function FormatFields({ formatId, fields, formatData, setFormatData, rese
 				const labelNode = <LabelContent text={label} ordinal={index + 1} />;
 				const labelText = plainLabel(label);
 
-				if (field.type === "list") {
+				if (field.type === "list" || field.type === "images") {
+					// A repeating list that holds image links: the entries are URLs, so each
+					// one is typed and checked the same way a single image field's is.
+					const isImageList = field.type === "images";
 					const items = Array.isArray(rawValue) ? (rawValue as string[]) : [];
 					const draft = listDrafts[field.name] ?? "";
 					const addItem = () => {
-						const value = draft.trim();
+						const value = isImageList ? imageUrlIn(draft) : draft.trim();
 						if (!value) return;
 						setFormatData((prev) => ({
 							...prev,
@@ -225,8 +248,15 @@ export function FormatFields({ formatId, fields, formatData, setFormatData, rese
 								<Input
 									id={field.name}
 									name={field.name}
+									type={isImageList ? "url" : "text"}
+									inputMode={isImageList ? "url" : undefined}
+									autoComplete={isImageList ? "off" : undefined}
+									spellCheck={isImageList ? false : undefined}
 									value={draft}
-									placeholder={field.itemPlaceholder ?? "Type an item, then press Enter"}
+									placeholder={
+										field.itemPlaceholder ??
+										(isImageList ? "Paste an image link, then press Enter" : "Type an item, then press Enter")
+									}
 									onChange={(event) => setListDrafts((prev) => ({ ...prev, [field.name]: event.target.value }))}
 									onKeyDown={(event) => {
 										if (event.key === "Enter") {
@@ -254,6 +284,15 @@ export function FormatFields({ formatId, fields, formatData, setFormatData, rese
 											key={`${item}-${index}`}
 											className="animate-fade flex items-center gap-2.5 rounded-xl border border-subtle bg-surface-2 py-1.5 pr-1.5 pl-3"
 										>
+											{isImageList && !brokenLinks[imageUrlIn(item)] ? (
+												<img
+													src={imageUrlIn(item)}
+													alt=""
+													title={imageUrlIn(item)}
+													onError={() => markBroken(imageUrlIn(item))}
+													className="size-8 shrink-0 rounded-lg border border-subtle bg-surface-2 object-cover"
+												/>
+											) : null}
 											<span className="min-w-0 flex-1 truncate text-[13px] text-ink">{item}</span>
 											<button
 												type="button"
@@ -360,7 +399,41 @@ export function FormatFields({ formatId, fields, formatData, setFormatData, rese
 							</div>
 						</Field>
 					);
-				}				if (field.type === "time") {
+				}
+
+				if (field.type === "group") {
+					return (
+						<GroupField
+							key={field.name}
+							field={field}
+							value={rawValue}
+							label={labelNode}
+							onChange={(entries) => setFormatData((prev) => ({ ...prev, [field.name]: entries }))}
+						/>
+					);
+				}
+
+				if (field.type === "charges") {
+					const codes = Array.isArray(rawValue) ? (rawValue as string[]) : [];
+					return (
+						<Field
+							key={field.name}
+							label={labelNode}
+							hint={field.hint}
+							wide
+							meta={codes.length ? `${codes.length} picked` : undefined}
+						>
+							<ChargesPicker
+								id={field.name}
+								value={codes}
+								ariaLabel={labelText}
+								onChange={(next) => setFormatData((prev) => ({ ...prev, [field.name]: next }))}
+							/>
+						</Field>
+					);
+				}
+
+				if (field.type === "time") {
 					return (
 						<Field key={field.name} label={labelNode} htmlFor={field.name} hint={field.hint} wide meta={meta}>
 							<div className="flex flex-wrap items-center gap-2">
@@ -423,6 +496,54 @@ export function FormatFields({ formatId, fields, formatData, setFormatData, rese
 								value={stringValue}
 								onChange={handleTextChange}
 							/>
+						</Field>
+					);
+				}
+
+				// An image field asks for a link and prints it as the picture it points
+				// at, so the answer is shown above the report as the reader will see it.
+				if (field.type === "image") {
+					const url = imageUrlIn(stringValue);
+					const shown = Boolean(url) && !brokenLinks[url];
+					return (
+						<Field
+							key={field.name}
+							label={labelNode}
+							htmlFor={field.name}
+							hint={field.hint}
+							wide
+							meta={meta}
+						>
+							<div className="flex min-w-0 items-center gap-2">
+								<Input
+									id={field.name}
+									name={field.name}
+									type="url"
+									inputMode="url"
+									autoComplete="off"
+									spellCheck={false}
+									placeholder="https://…"
+									value={stringValue}
+									onChange={handleTextChange}
+									className="min-w-0 flex-1"
+								/>
+								{shown ? (
+									<img
+										src={url}
+										alt=""
+										title="Preview of the linked picture"
+										onError={() => markBroken(url)}
+										className="size-11 shrink-0 rounded-xl border border-subtle bg-surface-2 object-cover"
+									/>
+								) : (
+									<span
+										title="The linked picture shows here once a link is pasted"
+										className="flex size-11 shrink-0 items-center justify-center rounded-xl border border-dashed border-subtle text-ink-faint"
+									>
+										<ImageIcon className="size-4" />
+									</span>
+								)}
+							</div>
 						</Field>
 					);
 				}

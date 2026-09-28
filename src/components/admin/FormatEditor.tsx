@@ -14,7 +14,14 @@ import { bodyTokens } from "@/lib/formatTemplates";
 import { cn } from "@/lib/utils";
 import type { AdminFormatDraft, AdminFormatFields } from "@/formats/adminTypes";
 import type { CatalogueInput, FieldType } from "@/lib/inputDefinitions";
-import type { DeputyData, FormatData, FormatFieldPick, FormatInputField, divisionsType } from "@/types";
+import type {
+	DeputyData,
+	FormatData,
+	FormatFieldPick,
+	FormatInputField,
+	GroupSubField,
+	divisionsType,
+} from "@/types";
 
 /** Turns a pick into the field a form renders, using the catalogue for everything but wording. */
 const resolvePick = (pick: FormatFieldPick): FormatInputField | null => {
@@ -73,6 +80,10 @@ interface FormatEditorProps {
 	onUpdateFieldType?: (name: string, type: FieldType) => void;
 	/** Rewrites a checkbox field's choices, everywhere it is used. */
 	onUpdateFieldItems?: (name: string, items: string[]) => void;
+	/** Rewrites a repeating group's answers, everywhere it is used. */
+	onUpdateFieldSubFields?: (name: string, subFields: GroupSubField[]) => void;
+	/** Rewrites the block a repeating group prints, once per entry. */
+	onUpdateFieldTemplate?: (name: string, template: string) => void;
 	/** Which fields may have their definition changed; built-ins keep a plain badge. */
 	fieldGuard?: (name: string) => { ok: boolean; reason?: string };
 	onSave: (fields: AdminFormatFields, opts?: { skipRemount?: boolean }) => void;
@@ -100,6 +111,8 @@ export function FormatEditor({
 	onUpdateField,
 	onUpdateFieldType,
 	onUpdateFieldItems,
+	onUpdateFieldSubFields,
+	onUpdateFieldTemplate,
 	fieldGuard,
 	onSave,
 	onReset,
@@ -590,6 +603,8 @@ export function FormatEditor({
 									onPutInBody={restoreTokenAndPersist}
 									onRenameField={renameTokenAndPersist}									onChangeType={onUpdateFieldType}
 									onChangeItems={onUpdateFieldItems}
+									onChangeSubFields={onUpdateFieldSubFields}
+									onChangeTemplate={onUpdateFieldTemplate}
 									fieldGuard={fieldGuard}
 								onEditField={onUpdateField}
 							/>

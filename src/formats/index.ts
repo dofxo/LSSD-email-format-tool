@@ -7,7 +7,7 @@ import { FTBFormats } from "./divisions/FTB";
 import { SEBFormats } from "./divisions/SEB";
 import { adminBodyFor } from "@/lib/adminFormats";
 import { formatFieldsFor } from "@/lib/formats";
-import { renderFormatTemplate, type CheckboxFieldSpec } from "@/lib/formatTemplates";
+import { renderFormatTemplate, type CheckboxFieldSpec, type GroupFieldSpec } from "@/lib/formatTemplates";
 import type { DeputyData, divisionsType, FormatData } from "@/types";
 
 export const registry = {
@@ -30,6 +30,36 @@ const checkboxFieldsFor = (division: divisionsType, formatId: string): CheckboxF
 		.filter((field) => field.type === "checkbox" && field.items?.length)
 		.map((field) => ({ name: field.name, items: field.items as string[] }));
 
+/**
+ * The format's repeating groups, in the order its form asks for them. Each one
+ * carries the entry template its `{{token}}` prints, so the renderer fills the
+ * block once per entry the deputy added.
+ */
+const groupFieldsFor = (division: divisionsType, formatId: string): GroupFieldSpec[] =>
+	formatFieldsFor(division, formatId)
+		.filter((field) => field.type === "group" && field.subFields?.length && field.template?.trim())
+		.map((field) => ({
+			name: field.name,
+			subFields: field.subFields ?? [],
+			template: field.template ?? "",
+		}));
+
+/** The names of the format's charges fields, whose answers are penal code codes. */
+const chargeFieldsFor = (division: divisionsType, formatId: string): string[] =>
+	formatFieldsFor(division, formatId)
+		.filter((field) => field.type === "charges")
+		.map((field) => field.name);
+
+/**
+ * The names of the format's image fields, one link or several. Each link is
+ * printed wrapped in `[img]` tags, so a body only has to carry the token to show
+ * the picture — or, for a several-links field, the whole stack of them.
+ */
+const imageFieldsFor = (division: divisionsType, formatId: string): string[] =>
+	formatFieldsFor(division, formatId)
+		.filter((field) => field.type === "image" || field.type === "images")
+		.map((field) => field.name);
+
 export const getFormat = ({
 	formatData,
 	deputyData,
@@ -51,6 +81,9 @@ export const getFormat = ({
 				deputyData,
 				division,
 				checkboxFields: checkboxFieldsFor(division, formatId),
+				groupFields: groupFieldsFor(division, formatId),
+				chargeFields: chargeFieldsFor(division, formatId),
+				imageFields: imageFieldsFor(division, formatId),
 			}),
 			formats: {},
 		};

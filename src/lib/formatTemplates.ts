@@ -1,5 +1,6 @@
 import { checkboxRuns, runMatchesChoices, tickRun, tickedKeysFor } from "@/lib/checkboxLines";
-import type { DeputyData, FormatData, divisionsType } from "@/types";
+import { chargeLine } from "@/data/penalCode";
+import type { DeputyData, FormatData, GroupSubField, divisionsType } from "@/types";
 
 /** Matches {{token}} placeholders; whitespace inside the braces is ignored. */
 const TOKEN_PATTERN = /\{\{\s*([\w.]+)\s*\}\}/g;
@@ -11,6 +12,115 @@ export interface CheckboxFieldSpec {
 	/** The `[cb]` lines it answers for, in order. */
 	items: string[];
 }
+
+/**
+ * One repeating group, as its `{{token}}` in the body prints it: the entry
+ * template, filled once per entry with that entry's answers.
+ */
+export interface GroupFieldSpec {
+	/** The field's token; its entries are stored under it. */
+	name: string;
+	/** The answers each entry holds, in the order the form asks for them. */
+	subFields: GroupSubField[];
+	/** One entry, written with the sub-fields' `{{tokens}}` and `{{index}}` / `{{letter}}`. */
+	template: string;
+}
+
+/** The position of an entry written as a letter: A, B, … Z, then AA, AB, … */
+export const letterFor = (index: number): string => {
+	let letters = "";
+	let value = index;
+	do {
+		letters = String.fromCharCode(65 + (value % 26)) + letters;
+		value = Math.floor(value / 26) - 1;
+	} while (value >= 0);
+	return letters;
+};
+
+/** Whether an answer holds anything worth printing. */
+const isAnswered = (value: unknown): boolean => {
+	if (Array.isArray(value)) return value.length > 0;
+	if (typeof value === "string") return value.trim().length > 0;
+	return value !== undefined && value !== null;
+};
+
+/** The penal code codes a charges field holds, as the lines a report quotes. */
+const chargeEntries = (value: unknown): string[] =>
+	(Array.isArray(value) ? value : [])
+		.map((code) => chargeLine(String(code ?? "").trim()))
+		.filter(Boolean);
+
+/** One sub-field's answer as the entry template prints it. */
+const subValueText = (sub: GroupSubField, value: unknown): string => {
+	if (sub.type === "charges") return chargeEntries(value).map((line) => `[*]${line}`).join("\n");
+	if (Array.isArray(value)) return value.map((entry) => `[*]${String(entry)}`).join("\n");
+	return value === undefined || value === null ? "" : String(value);
+};
+
+/** A line's text as a reader would see it, with every phpBBcode tag taken out. */
+const withoutTags = (text: string): string => text.replace(/\[[^\]]*\]/g, "").trim();
+
+/**
+ * Takes out the body's lines that a blank answer leaves with nothing to show.
+ *
+ * A line that only ever held `{{tokens}}` prints nothing once every one of them
+ * is unanswered, and a line of nothing but tags is worse than no line at all: an
+ * unfilled `[img]{{photo}}[/img]` would post a broken image and a stray `[[/i]`
+ * the reader has to scroll past. A line that says something of its own — even
+ * just "[b]Full Name:[/b]" — always stays, blank answer or not.
+ *
+ * A checkbox field's token is left alone: with nothing ticked it still prints
+ * its whole list of empty boxes, which is exactly what the form is for.
+ */
+const dropEmptiedLines = (template: string, values: Record<string, unknown>, checkboxNames: Set<string>): string =>
+	template
+		.split("\n")
+		.filter((line) => {
+			const tokens = Array.from(line.matchAll(TOKEN_PATTERN), (match) => match[1].trim());
+			if (!tokens.length) return true;
+			if (tokens.some((token) => checkboxNames.has(token))) return true;
+			if (tokens.some((token) => isAnswered(values[token]))) return true;
+			// Nothing answered on this line: it stays only if it still reads as text.
+			return withoutTags(line.replace(TOKEN_PATTERN, "")) !== "";
+		})
+		.join("\n");
+
+/** One group entry, filled in and tidied. */
+const renderGroupEntry = (
+	spec: GroupFieldSpec,
+	answers: Record<string, unknown>,
+	index: number,
+): string =>
+	spec.template
+		.split("\n")
+		.map((line) => {
+			let filled = false;
+			const withValues = line.replace(TOKEN_PATTERN, (_match, token: string) => {
+				filled = true;
+				if (token === "index") return String(index + 1);
+				if (token === "letter") return letterFor(index);
+				const sub = spec.subFields.find((entry) => entry.name === token);
+				return sub ? subValueText(sub, answers[token]) : "";
+			});
+			// A line that only ever held a token prints nothing once that answer is
+			// blank, so it goes rather than leaving an empty [img] or [list] behind.
+			if (filled && !withoutTags(withValues)) return null;
+			return withValues;
+		})
+		.filter((line): line is string => line !== null)
+		.join("\n");
+
+/**
+ * A group's entries as the body prints them: one filled entry after another,
+ * with entries nobody answered left out — so the letters and numbers run A, B, C
+ * with no gaps.
+ */
+const renderGroup = (spec: GroupFieldSpec, value: unknown): string =>
+	(Array.isArray(value) ? value : [])
+		.filter((entry): entry is Record<string, unknown> => !!entry && typeof entry === "object")
+		.filter((entry) => spec.subFields.some((sub) => isAnswered(entry[sub.name])))
+		.map((entry, index) => renderGroupEntry(spec, entry, index))
+		.join("\n");
 
 /** Values a format body's tokens are filled from. */
 export interface TemplateContext {
@@ -27,7 +137,64 @@ export interface TemplateContext {
 	 * and only the ticked lines change.
 	 */
 	checkboxFields?: CheckboxFieldSpec[];
+	/**
+	 * The format's repeating groups, as its body prints them. A group's token is
+	 * filled with its entry template, once per entry the deputy added.
+	 */
+	groupFields?: GroupFieldSpec[];
+	/**
+	 * The names of the format's charges fields. What each holds is a list of
+	 * penal code codes, printed as the charge lines a report quotes.
+	 */
+	chargeFields?: string[];
+	/**
+	 * The names of the format's image fields, both the one-link kind and the
+	 * several-links kind. Each link is printed as the picture it points at, so the
+	 * body only has to carry the token — and a blank answer leaves no `[img]` tag
+	 * behind to post.
+	 */
+	imageFields?: string[];
 }
+
+/**
+ * One pasted link, with any `[img]` tags it arrived in taken off: the whole
+ * `[img]…[/img]` block copied off a post works as it is, rather than nesting one
+ * tag pair inside another. Empty when there is no link in the answer.
+ */
+const imageUrl = (value: unknown): string =>
+	typeof value === "string"
+		? value
+				.trim()
+				.replace(/^\[img[^\]]*\]\s*/i, "")
+				.replace(/\s*\[\/img\]$/i, "")
+				.trim()
+		: "";
+
+/**
+ * An image field's answer as the body prints it: one `[img]url[/img]` line per
+ * picture — a single-link field has one, a several-links field has as many as
+ * were added, in the order they were added. Links left blank are left out, and
+ * an answer with nothing in it at all prints nothing.
+ */
+const imageLinks = (value: unknown): string =>
+	(Array.isArray(value) ? value : [value])
+		.map(imageUrl)
+		.filter(Boolean)
+		.map((url) => `[img]${url}[/img]`)
+		.join("\n");
+
+/** Matches an image field's token already sitting inside `[img]` tags. */
+const WRAPPED_IMAGE_TOKEN = /\[img[^\]]*\]\s*\{\{\s*([\w.]+)\s*\}\}\s*\[\/img\]/gi;
+
+/**
+ * Leaves an image field's token bare where the body wraps it in `[img]` tags
+ * itself: the field prints the tags, so keeping both would nest one pair inside
+ * the other. Wrapping that names anything but an image field is left as written.
+ */
+const unwrapImageTokens = (template: string, imageFields: Set<string>): string =>
+	template.replace(WRAPPED_IMAGE_TOKEN, (match, token: string) =>
+		imageFields.has(token.trim()) ? `{{${token.trim()}}}` : match,
+	);
 
 /** Turns a field value into text; lists become one `[*]` bullet per entry. */
 const stringify = (value: unknown): string => {
@@ -75,8 +242,19 @@ const expandCheckboxTokens = (
  * flip in place.
  */
 export const renderFormatTemplate = (template: string, context: TemplateContext): string => {
-	const { formatData, deputyData, division, checkboxFields = [] } = context;
+	const {
+		formatData,
+		deputyData,
+		division,
+		checkboxFields = [],
+		groupFields = [],
+		chargeFields = [],
+		imageFields = [],
+	} = context;
 	if (!template || (!template.includes("{{") && !checkboxFields.length)) return template;
+	// Image fields print their own `[img]` tags, so a token the body already wraps
+	// is written bare from here on.
+	const body = imageFields.length ? unwrapImageTokens(template, new Set(imageFields)) : template;
 	const profile: Record<string, unknown> = {
 		name: deputyData.name,
 		signature: deputyData.signature,
@@ -96,14 +274,37 @@ export const renderFormatTemplate = (template: string, context: TemplateContext)
 		if (!values[token]) values[token] = fallback;
 	}
 
+	// Repeating groups, charge pickers and image fields print generated text rather
+	// than what was typed, so they are rendered into the value map here and the
+	// ordinary fill below prints each one verbatim, wherever its token sits in the body.
+	for (const spec of groupFields) {
+		const text = renderGroup(spec, values[spec.name]);
+		if (text.trim()) values[spec.name] = text;
+	}
+	for (const name of chargeFields) {
+		const lines = chargeEntries(values[name]);
+		if (lines.length) values[name] = lines.map((line) => `[*]${line}`).join("\n");
+	}
+	for (const name of imageFields) {
+		values[name] = imageLinks(values[name]);
+	}
+
+	// Lines the blank answers emptied come out before anything is filled, so an
+	// unfilled photo input leaves no [img] tag behind to post.
+	const trimmed = dropEmptiedLines(
+		body,
+		values,
+		new Set(checkboxFields.map((field) => field.name)),
+	);
+
 	// A field whose token the body carries prints its block there instead of
 	// ticking one, so only the token-less fields look for a run of lines.
-	const tokens = new Set(bodyTokens(template));
+	const tokens = new Set(bodyTokens(trimmed));
 	const runFields = checkboxFields.filter((field) => !tokens.has(field.name));
-	let withTicks = template;
+	let withTicks = trimmed;
 
 	if (runFields.length) {
-		const lines = template.split("\n");
+		const lines = trimmed.split("\n");
 		const runs = checkboxRuns(lines);
 		// Each field takes the first block its choices name that no other field has
 		// taken, so two blocks listing the same words stay independent.

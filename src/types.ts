@@ -39,11 +39,43 @@ export interface FormatFieldPick {
 	hint?: string;
 }
 
+/**
+ * What one answer inside a repeating group can be. Deliberately short: a group
+ * exists to lay a report's repeated block out, not to nest a whole form.
+ */
+export type GroupFieldType = "text" | "textarea" | "select" | "list" | "charges";
+
+/** One answer a repeating group asks for, e.g. a suspect's name or charges. */
+export interface GroupSubField {
+	/** Token the entry template fills, e.g. `fullName`. */
+	name: string;
+	/** Question shown above the input. */
+	label: string;
+	type: GroupFieldType;
+	/** Choices of a `select` sub-field. */
+	options?: { value: string; label: string }[];
+	/** Placeholder for a `list` sub-field's add-input. */
+	placeholder?: string;
+}
+
 /** A single dynamic field rendered for a response format. */
 export interface FormatInputField {
 	name: string;
 	label: string;
-	type: "text" | "number" | "date" | "time" | "select" | "textarea" | "check" | "checkbox" | "list";
+	type:
+		| "text"
+		| "number"
+		| "date"
+		| "time"
+		| "select"
+		| "textarea"
+		| "check"
+		| "checkbox"
+		| "list"
+		| "image"
+		| "images"
+		| "charges"
+		| "group";
 	/** Format ids (as strings) that require this field. */
 	formats: string[];
 	hint?: string;
@@ -54,6 +86,14 @@ export interface FormatInputField {
 	itemPlaceholder?: string;
 	/** Toggleable items for "check" fields; stored as "<fieldName>:<index>" keys. The choices of a "checkbox" field: its body token prints one [cb] line per choice, [cbc] for the ticked ones. */
 	items?: string[];
+	/** Answers a "group" field asks for, once per entry. */
+	subFields?: GroupSubField[];
+	/**
+	 * One entry of a "group" field, written with the sub-fields' `{{tokens}}`
+	 * plus `{{index}}` (1, 2, …) and `{{letter}}` (A, B, …). The field's own
+	 * `{{token}}` in the body prints this text once per entry.
+	 */
+	template?: string;
 }
 
 export interface FormatData {

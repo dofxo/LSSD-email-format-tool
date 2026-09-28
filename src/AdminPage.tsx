@@ -29,7 +29,7 @@ import {
 	type CatalogueInput,
 	type FieldType,
 } from "@/lib/inputDefinitions";
-import type { DeputyData, FormatData, FormatFieldPick, divisionsType } from "@/types";
+import type { DeputyData, FormatData, FormatFieldPick, GroupSubField, divisionsType } from "@/types";
 
 const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD as string | undefined;
 // Persisted in localStorage (like the supervisory unlock on the main page), so
@@ -396,6 +396,32 @@ const AdminPage = () => {
 		updateInput(
 			{ ...entry, items },
 			`Checkboxes for {{${name}}} updated — press Save formats to keep them.`,
+		);
+	};
+
+	/** Rewrites one repeating group's answers, leaving the rest of its definition alone. */
+	const updateInputSubFields = (name: string, subFields: GroupSubField[]) => {
+		const entry = (store.inputs ?? []).find((input) => input.name === name);
+		if (!entry) {
+			toast.error(`{{${name}}} ships with the tool — its answers cannot be changed here.`);
+			return;
+		}
+		updateInput(
+			{ ...entry, subFields },
+			`Answers for {{${name}}} updated — press Save formats to keep them.`,
+		);
+	};
+
+	/** Rewrites the block one repeating group prints per entry. */
+	const updateInputTemplate = (name: string, template: string) => {
+		const entry = (store.inputs ?? []).find((input) => input.name === name);
+		if (!entry) {
+			toast.error(`{{${name}}} ships with the tool — its entry template cannot be changed here.`);
+			return;
+		}
+		updateInput(
+			{ ...entry, template },
+			`The block {{${name}}} prints updated — press Save formats to keep it.`,
 		);
 	};
 
@@ -804,6 +830,8 @@ const AdminPage = () => {
 									onUpdateField={updateInput}
 									onUpdateFieldType={updateInputType}
 									onUpdateFieldItems={updateInputItems}
+									onUpdateFieldSubFields={updateInputSubFields}
+									onUpdateFieldTemplate={updateInputTemplate}
 									deleteGuard={deleteGuardFor}
 									fieldGuard={editGuardFor}
 										defaultTopicTitle={format.defaultTopicTitle}
