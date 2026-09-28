@@ -150,7 +150,7 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 			"division": "SEB",
 			"title": "Dive Team Certification",
 			"topicTitle": "[DIVE TEAM Certification] Operator {Fname Lname}",
-			"body": "{{dts3}}{{dts2}}{{dts1}}{{dgq2}}{{dgq1}}{{sebJoinDate}}[img]https://i.imgur.com/b2vqkjc.png[/img]\n[lssdsubtitle]Section 1 - Personal Information[/lssdsubtitle]\n[divbox=white]\n[b]FULL NAME:[/b] {{name}}\n[b]RANK:[/b] {{dRank}}\n[b]BADGE NUMBER:[/b] {{badgeNumber}}\n[b]SEB SINCE:[/b] {{sebJoinDate}}\n[/divbox]\n\n[lssdsubtitle]Section 2 - General Questions[/lssdsubtitle]\n[divbox=white]\n[b][i]Why are you applying for the Dive Team?[/i][/b] [i](Minimum 120 words)[/i]\n{{dgq1}}\n[b][i]What do you believe are the primary responsibilities of a Dive Team operator?[/i][/b]\n{{dgq2}}{{dgq3}}\n[b][i]What hazards may a diver encounter during underwater operations?[/i][/b]\n{{dgq3}}\n[/divbox]\n[lssdsubtitle]Section 3 - Theoretical Scenario Questions[/lssdsubtitle]\n[divbox=white]\n[b][size=150]Scenario 1[/size][/b]  \nA 911 caller reports a person has jumped from a pier and has not resurfaced. Marine units confirm no visual contact. You are deployed as Dive Team.\n[b][i]What is your approach to resolving this situation?[/i][/b] [b](Minimum of 100 words)[/b]\n{{dts1}}\n\n[b][size=150]Scenario 2[/size][/b]  \nDuring a boat pursuit, suspects are observed throwing multiple bags and a firearm into the sea before escaping.\n[b][i]How would you handle the recovery operation?[/i][/b] [b](Minimum of 100 words)[/b]\n{{dts2}}\n\n[b][size=150]Scenario 3[/size][/b]  \nDuring a dive operation, your assigned partner signals low air and begins showing signs of panic.\n[b][i]What actions do you take?[/i][/b] [b](Minimum of 100 words)[/b]\n{{dts1}}\n\n[/divbox]",
+			"body": "[img]https://i.imgur.com/b2vqkjc.png[/img]\n[lssdsubtitle]Section 1 - Personal Information[/lssdsubtitle]\n[divbox=white]\n[b]FULL NAME:[/b] {{name}}\n[b]RANK:[/b] {{dRank}}\n[b]BADGE NUMBER:[/b] {{badgeNumber}}\n[b]SEB SINCE:[/b] {{sebJoinDate}}\n[/divbox]\n\n[lssdsubtitle]Section 2 - General Questions[/lssdsubtitle]\n[divbox=white]\n[b][i]Why are you applying for the Dive Team?[/i][/b] [i](Minimum 120 words)[/i]\n{{dgq1}}\n[b][i]What do you believe are the primary responsibilities of a Dive Team operator?[/i][/b]\n{{dgq2}}\n[b][i]What hazards may a diver encounter during underwater operations?[/i][/b]\n{{dgq3}}\n[/divbox]\n[lssdsubtitle]Section 3 - Theoretical Scenario Questions[/lssdsubtitle]\n[divbox=white]\n[b][size=150]Scenario 1[/size][/b]  \nA 911 caller reports a person has jumped from a pier and has not resurfaced. Marine units confirm no visual contact. You are deployed as Dive Team.\n[b][i]What is your approach to resolving this situation?[/i][/b] [b](Minimum of 100 words)[/b]\n{{dts1}}\n\n[b][size=150]Scenario 2[/size][/b]  \nDuring a boat pursuit, suspects are observed throwing multiple bags and a firearm into the sea before escaping.\n[b][i]How would you handle the recovery operation?[/i][/b] [b](Minimum of 100 words)[/b]\n{{dts2}}\n\n[b][size=150]Scenario 3[/size][/b]  \nDuring a dive operation, your assigned partner signals low air and begins showing signs of panic.\n[b][i]What actions do you take?[/i][/b] [b](Minimum of 100 words)[/b]\n{{dts3}}\n\n[/divbox]",
 			"govLink": "https://gov.eclipse-rp.net/posting.php?mode=post&f=4145",
 			"category": "Certification Application",
 			"fields": [
@@ -174,27 +174,8 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 					"name": "dts2"
 				},
 				{
-					"name": "ts3"
-				},
-				{
-					"name": "theoScenario3",
-					"label": "During a dive operation, your assigned partner signals low air and begins showing signs of panic.\nWhat actions do you take? (Minimum of 100 words)"
-				},
-				{
-					"name": "theoScenario2",
-					"label": "During a boat pursuit, suspects are observed throwing multiple bags and a firearm into the sea before escaping.\nHow would you handle the recovery operation? (Minimum of 100 words)"
-				},
-				{
-					"name": "theoScenario1",
-					"label": "A 911 caller reports a person has jumped from a pier and has not resurfaced. Marine units confirm no visual contact. You are deployed as Dive Team.\nWhat is your approach to resolving this situation? (Minimum of 100 words)"
-				},
-				{
 					"name": "badgeNumber",
 					"label": "Your badge number"
-				},
-				{
-					"name": "logDate",
-					"label": "SEB Join Date"
 				}
 			]
 		},
@@ -229,7 +210,7 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 			"division": "SEB",
 			"title": "EOD Technician Certification",
 			"topicTitle": "[EOD Certification] Operator {FName LName}",
-			"body": "[img]https://i.imgur.com/1qJrDRr.png[/img]\n[lssdsubtitle]Section 1 - Personal Information[/lssdsubtitle]\n[divbox=white]\n[b]Full Name:[/b] [i]{{name}}[/i]\n[b]Rank:[/b] [i]{{dRank}}[/i]\n[b]Badge Number:[/b] [i]{{badgeNumber}}[/i]\n[b]SEB Since:[/b] [i]{{sebSince}}[/i]\n[/divbox]\n[lssdsubtitle]Section 2 - General Questions[/lssdsubtitle]\n[divbox=white]\n[b]Why are you applying for EOD, and how would you be an asset by getting the certification?[/b]\n[i]{{egq1}}[/i]\n[b]What are the responsibilities of an EOD operator?[/b]\n[i]{{egq2}}[/i]\n[b]Do you feel comfortable putting yourself under extreme high risk situations? And are you capable of operating under extreme stress? State few examples or experiences you have faced. [/b]\n[i]{{egq3}}[/i]\n[/divbox]\n[lssdsubtitle]Section 3 - Theoretical Scenario Questions[/lssdsubtitle]\n[divbox=white]\n[center][size=200]Scenario 1[/size][/center]\n[b]You have been called to paleto station, where a deputy found on top of the front desk what looked to him as an explosive device of some sort. How would you go by to assess and identify the device? And how would you handle it? Give a detailed explanation, Image attached below of what the device looks like. [/b]\n[img]https://i.ibb.co/FbjTZ24J/rx-N9x5n.jpg[/img]\n[i]INSERT ANSWER HERE[/i]\n[center][size=200]Scenario 2[/size][/center]\n[b]You arrive at a hostage situation, where the hostage taker is reported to have an explosive device in his possession, the negociator managed to have the hostage taker agree to give the bomb away. How would you use the equipment available to you to handle the retrieval of the explosive device. Give a detailed explanation of which equipment you use and why.[/b]\n[i]INSERT ANSWER HERE[/i]\n[center][size=200]Scenario 3[/size][/center]\n[b]During a drug bust, your team stumbles upon a safe door, locked and they are unable to open it. How would you use the equipment available to you to get through the safe door safely. [/b]\n[i]INSERT ANSWER HERE[/i]\n[/divbox]",
+			"body": "[img]https://i.imgur.com/1qJrDRr.png[/img]\n[lssdsubtitle]Section 1 - Personal Information[/lssdsubtitle]\n[divbox=white]\n[b]Full Name:[/b] [i]{{name}}[/i]\n[b]Rank:[/b] [i]{{dRank}}[/i]\n[b]Badge Number:[/b] [i]{{badgeNumber}}[/i]\n[b]SEB Since:[/b] [i]{{sebSince}}[/i]\n[/divbox]\n[lssdsubtitle]Section 2 - General Questions[/lssdsubtitle]\n[divbox=white]\n[b]Why are you applying for EOD, and how would you be an asset by getting the certification?[/b]\n[i]{{egq1}}[/i]\n[b]What are the responsibilities of an EOD operator?[/b]\n[i]{{egq2}}[/i]\n[b]Do you feel comfortable putting yourself under extreme high risk situations? And are you capable of operating under extreme stress? State few examples or experiences you have faced. [/b]\n[i]{{egq3}}[/i]\n[/divbox]\n[lssdsubtitle]Section 3 - Theoretical Scenario Questions[/lssdsubtitle]\n[divbox=white]\n[center][size=200]Scenario 1[/size][/center]\n[b]You have been called to paleto station, where a deputy found on top of the front desk what looked to him as an explosive device of some sort. How would you go by to assess and identify the device? And how would you handle it? Give a detailed explanation, Image attached below of what the device looks like. [/b]\n[img]https://i.ibb.co/FbjTZ24J/rx-N9x5n.jpg[/img]\n[i]{{ets1}}[/i]\n[center][size=200]Scenario 2[/size][/center]\n[b]You arrive at a hostage situation, where the hostage taker is reported to have an explosive device in his possession, the negociator managed to have the hostage taker agree to give the bomb away. How would you use the equipment available to you to handle the retrieval of the explosive device. Give a detailed explanation of which equipment you use and why.[/b]\n[i]{{ets2}}[/i]\n[center][size=200]Scenario 3[/size][/center]\n[b]During a drug bust, your team stumbles upon a safe door, locked and they are unable to open it. How would you use the equipment available to you to get through the safe door safely.[/b]\n[i]{{ets3}}[/i]\n[/divbox]",
 			"govLink": "https://gov.eclipse-rp.net/posting.php?mode=post&f=4145",
 			"category": "Certification Application",
 			"fields": [
@@ -244,6 +225,83 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 				},
 				{
 					"name": "egq3"
+				},
+				{
+					"name": "ets1"
+				},
+				{
+					"name": "ets2"
+				},
+				{
+					"name": "ets3"
+				}
+			]
+		},
+		{
+			"id": "40",
+			"division": "SEB",
+			"title": "Crisis Negotiator Certification",
+			"topicTitle": "[CN Certification] Operator {FName LName}",
+			"body": "[img]https://i.imgur.com/b2vqkjc.png[/img]\n[lssdsubtitle]Section 1 - Personal Information[/lssdsubtitle]\n[divbox=white]\n[b]FULL NAME:[/b] {{name}}\n[b]RANK:[/b] {{dRank}}\n[b]BADGE NUMBER:[/b] {{badgeNumber}}\n[b]SEB SINCE:[/b] {{sebSince}}\n[/divbox]\n\n[lssdsubtitle]Section 2 - General Questions[/lssdsubtitle]\n[divbox=white]\n[b][i]Why are you applying for the Crisis Negotiator Certification?[/i][/b] [i](Minimum 120 words)[/i]\n{{cgq1}}\n[b][i]Have you ever been in a situation where you had to negotiate a situation?[/i][/b]\n{{cgq2}}\n[b][i]How would you define negotiation?[/i][/b]\n{{cgq3}}\n[b][i]What negotiation skills do you believe are crucial for successful outcomes?[/i][/b]\n{{cgq4}}\n[/divbox]\n[lssdsubtitle]Section 3 - Theoretical Scenario Questions[/lssdsubtitle]\n[divbox=white]\n[b][size=150]Scenario 1[/size][/b]\n[b]Situation: A group of armed individuals has barricaded themselves in a residential building, holding multiple hostages. Describe the strategic considerations you would make as the assigned negotiator and how you would direct your team to approach this delicate and very dangerous situation.[/b]\n{{cts1}}\n[b][size=150]Scenario 2[/size][/b]\n[b]Situation: A hostage-taker exhibits signs of extreme agitation and is becoming increasingly unpredictable. Outline your communication strategy and how you would manage the evolving threat while ensuring the safety of both hostages and your team. Please be detailed in your response.[/b]\n{{cts2}}\n[b][size=150]Scenario 3[/size][/b]\n[b]Situation: You are negotiating a hostage situation and the hostage taker is becoming very agitated and is failing to adhere to the previously discussed demands. You have been very open to working with the Hostage Taker to the best of your ability but are beginning to believe that there will not be an easy way to get the hostage to safety. You have a Sniper Certified Operator Available, explain your next course of action and how you would handle the situation from there.[/b]\n{{cts3}}\n[/divbox]",
+			"govLink": "https://gov.eclipse-rp.net/posting.php?mode=post&f=4145",
+			"category": "Certification Application",
+			"fields": [
+				{
+					"name": "sebSince"
+				},
+				{
+					"name": "cgq1"
+				},
+				{
+					"name": "cgq2"
+				},
+				{
+					"name": "cgq3"
+				},
+				{
+					"name": "cgq4"
+				},
+				{
+					"name": "cts1"
+				},
+				{
+					"name": "cts2"
+				},
+				{
+					"name": "cts3"
+				}
+			]
+		},
+		{
+			"id": "41",
+			"division": "SEB",
+			"title": "Long Range Rifle Certification",
+			"topicTitle": "[LRR Certification] Operator {FName LName}",
+			"body": "[img]https://i.imgur.com/7SSPqSy.png[/img]\n\n[lssdsubtitle]Section 1 - Personal Information[/lssdsubtitle]\n[divbox=white]\n[b]Full Name:[/b] [i]{{name}}[/i]\n[b]Rank:[/b] [i]{{dRank}}[/i]\n[b]Badge Number:[/b] [i]{{badgeNumber}}[/i]\n[b]SEB Since:[/b] [i]{{sebSince}}[/i]\n[/divbox]\n \n[lssdsubtitle]Section 2 - General Questions[/lssdsubtitle]\n \n[divbox=white]\n[b]How would you be an asset to the Special Enforcement Bureau if you became Long Range Rifle Qualified[/b]\n[i]{{lgq1}}[/i]\n \n[b]Do you feel comfortable making split-second decisions? If so, provide us a detailed description of a scenario where you had to make a split-second decision previously.[/b]\n[i]{{lgq2}}[/i]\n \n[b]What motivates you to become certified to use Long Range Rifles? (in depth, at least 1 paragraph)[/b]\n[i]{{lgq3}}[/i]\n[/divbox]\n \n[lssdsubtitle] Section 3 - Theoretical Scenario Questions [/lssdsubtitle]\n \n[divbox=white]\n[hr][/hr]\n[size=125][b]SCENARIO 1[/b][/size]\n[b] In the following scenario you and your team arrive at the Paleto Bay gas station. When you arrive, you and your team spot a man wielding a pistol, holding a lady at gunpoint. ([color=#FF0000]see illustrative picture below[/color]). Behind the man, you see three injured people who have been shot and need immediate medical attention. To be able to tend to them, the man needs to be arrested or taken down. Your team can not get an angle at him from the ground without noticing. He's screaming he will shoot her if any of you comes closer. There are multiple buildings you can go onto. One of the north side, one on the south side, where the team is standing and one of the west side. How would you go about this scenario and how would you take the suspect out without injuring the already injured 10-16's and the hostage.[/b]\n\n[spoiler=Image][center][img]https://i.ibb.co/V0JPbw9L/Hly7k-NC.png[/img][/center][/spoiler]\n \n[i]{{lts1}}[/i]\n[hr][/hr]\n \n[size=125][b]SCENARIO 2[/b][/size]\n[b]On your way to an operation, you find a deputy along the road that just got shot at and you see a car leaving the area. You have two vehicles present. One vehicle will go after the suspect and the other one will treat the deputy. A long pursuit follows and when the suspect is finally brought to a stop, he gets out and aims his weapon and you and your team. However, you only have your service pistol and sniper rifle on you. Would you be allowed to use the sniper rifle? If so, how would you use it? If not, why wouldn't you be allowed to use it?[/b]\n \n[i]{{lts2}}[/i]\n[hr][/hr]\n \n[size=125][b]SCENARIO 3[/b][/size]\n[b] In the following scenario, you are responding to a large shoot-out with multiple injured 10-15's, 10-16's and PD officers. The location is the Legion Square parking lot. To respond quickly, you use the Blackstar to get there as quickly as possible. Shots are still being fired and heavy weapons are involved. Where and how would you deploy? Would you go street level, would you ask to be placed on a rooftop, how would you assess who is a threat and who is not?[/b]\n\n \n[i]{{lts3}}[/i]\n\n\n[/divbox]\n[img]https://i.imgur.com/q0fHG1F.png[/img]",
+			"govLink": "https://gov.eclipse-rp.net/posting.php?mode=post&f=4145",
+			"category": "Certification Application",
+			"fields": [
+				{
+					"name": "sebSince"
+				},
+				{
+					"name": "lgq1"
+				},
+				{
+					"name": "lgq2"
+				},
+				{
+					"name": "lgq3"
+				},
+				{
+					"name": "lts1",
+					"label": "In the following scenario you and your team arrive at the Paleto Bay gas station. When you arrive, you and your team spot a man wielding a pistol, holding a lady at gunpoint. (see illustrative picture below). Behind the man, you see three injured people who have been shot and need immediate medical attention. To be able to tend to them, the man needs to be arrested or taken down. Your team can not get an angle at him from the ground without noticing. He's screaming he will shoot her if any of you comes closer. There are multiple buildings you can go onto. One of the north side, one on the south side, where the team is standing and one of the west side. How would you go about this scenario and how would you take the suspect out without injuring the already injured 10-16's and the hostage.\n{img=https://i.ibb.co/V0JPbw9L/Hly7k-NC.png}"
+				},
+				{
+					"name": "lts2"
+				},
+				{
+					"name": "lts3"
 				}
 			]
 		}
@@ -419,6 +477,86 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 			"name": "egq3",
 			"type": "textarea",
 			"label": "Do you feel comfortable putting yourself under extreme high risk situations? And are you capable of operating under extreme stress? State few examples or experiences you have faced."
+		},
+		{
+			"name": "ets1",
+			"type": "textarea",
+			"label": "You have been called to paleto station, where a deputy found on top of the front desk what looked to him as an explosive device of some sort. How would you go by to assess and identify the device? And how would you handle it? Give a detailed explanation, Image attached below of what the device looks like. \n[img]https://i.ibb.co/FbjTZ24J/rx-N9x5n.jpg[/img]"
+		},
+		{
+			"name": "ets2",
+			"type": "textarea",
+			"label": "You arrive at a hostage situation, where the hostage taker is reported to have an explosive device in his possession, the negociator managed to have the hostage taker agree to give the bomb away. How would you use the equipment available to you to handle the retrieval of the explosive device. Give a detailed explanation of which equipment you use and why."
+		},
+		{
+			"name": "ets3",
+			"type": "textarea",
+			"label": "During a drug bust, your team stumbles upon a safe door, locked and they are unable to open it. How would you use the equipment available to you to get through the safe door safely."
+		},
+		{
+			"name": "cgq1",
+			"type": "textarea",
+			"label": "Why are you applying for the Crisis Negotiator Certification? (Minimum 120 words)"
+		},
+		{
+			"name": "cgq2",
+			"type": "textarea",
+			"label": "Have you ever been in a situation where you had to negotiate a situation?"
+		},
+		{
+			"name": "cgq3",
+			"type": "textarea",
+			"label": "How would you define negotiation?"
+		},
+		{
+			"name": "cgq4",
+			"type": "textarea",
+			"label": "What negotiation skills do you believe are crucial for successful outcomes?"
+		},
+		{
+			"name": "cts1",
+			"type": "textarea",
+			"label": "A group of armed individuals has barricaded themselves in a residential building, holding multiple hostages. Describe the strategic considerations you would make as the assigned negotiator and how you would direct your team to approach this delicate and very dangerous situation."
+		},
+		{
+			"name": "cts2",
+			"type": "textarea",
+			"label": "A hostage-taker exhibits signs of extreme agitation and is becoming increasingly unpredictable. Outline your communication strategy and how you would manage the evolving threat while ensuring the safety of both hostages and your team. Please be detailed in your response."
+		},
+		{
+			"name": "cts3",
+			"type": "textarea",
+			"label": "Situation: You are negotiating a hostage situation and the hostage taker is becoming very agitated and is failing to adhere to the previously discussed demands. You have been very open to working with the Hostage Taker to the best of your ability but are beginning to believe that there will not be an easy way to get the hostage to safety. You have a Sniper Certified Operator Available, explain your next course of action and how you would handle the situation from there."
+		},
+		{
+			"name": "lgq1",
+			"type": "textarea",
+			"label": "How would you be an asset to the Special Enforcement Bureau if you became Long Range Rifle Qualified"
+		},
+		{
+			"name": "lgq2",
+			"type": "textarea",
+			"label": "Do you feel comfortable making split-second decisions? If so, provide us a detailed description of a scenario where you had to make a split-second decision previously."
+		},
+		{
+			"name": "lgq3",
+			"type": "textarea",
+			"label": "What motivates you to become certified to use Long Range Rifles? (in depth, at least 1 paragraph)"
+		},
+		{
+			"name": "lts1",
+			"type": "textarea",
+			"label": "In the following scenario you and your team arrive at the Paleto Bay gas station. When you arrive, you and your team spot a man wielding a pistol, holding a lady at gunpoint. (see illustrative picture below). Behind the man, you see three injured people who have been shot and need immediate medical attention. To be able to tend to them, the man needs to be arrested or taken down. Your team can not get an angle at him from the ground without noticing. He's screaming he will shoot her if any of you comes closer. There are multiple buildings you can go onto. One of the north side, one on the south side, where the team is standing and one of the west side. How would you go about this scenario and how would you take the suspect out without injuring the already injured 10-16's and the hostage."
+		},
+		{
+			"name": "lts2",
+			"type": "textarea",
+			"label": "On your way to an operation, you find a deputy along the road that just got shot at and you see a car leaving the area. You have two vehicles present. One vehicle will go after the suspect and the other one will treat the deputy. A long pursuit follows and when the suspect is finally brought to a stop, he gets out and aims his weapon and you and your team. However, you only have your service pistol and sniper rifle on you. Would you be allowed to use the sniper rifle? If so, how would you use it? If not, why wouldn't you be allowed to use it?"
+		},
+		{
+			"name": "lts3",
+			"type": "textarea",
+			"label": "In the following scenario, you are responding to a large shoot-out with multiple injured 10-15's, 10-16's and PD officers. The location is the Legion Square parking lot. To respond quickly, you use the Blackstar to get there as quickly as possible. Shots are still being fired and heavy weapons are involved. Where and how would you deploy? Would you go street level, would you ask to be placed on a rooftop, how would you assess who is a threat and who is not?"
 		}
 	]
 } /* /ADMIN_DATA */;
