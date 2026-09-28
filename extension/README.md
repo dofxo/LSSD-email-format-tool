@@ -42,6 +42,18 @@ The payload is base64url of a small JSON envelope:
 
 A page with no subject box (a reply or an edit) still gets its body filled.
 
+If the skin wraps the body in a rich-text editor, the post is written **through
+that editor** rather than straight into the textarea — an editor keeps its own
+copy of the text and syncs it back over the textarea when the post is sent, so
+writing the textarea alone would be undone. The editor is also re-written for a
+few seconds after the first fill, because posting pages often restore a draft or
+build the editor a moment after load. The moment you start typing, the extension
+stops touching the form.
+
+When the link carries a post but no posting form turns up on the page, a small
+notice says so instead of failing silently — the usual cause is not being logged
+in, or the page redirecting somewhere that is not a posting page.
+
 ## How the tool knows it is installed
 
 The manifest carries a fixed `key`, which pins the extension to one id:
@@ -76,9 +88,17 @@ showing the suggestion.
 3. Turn on **Developer mode** (top-right).
 4. Click **Load unpacked** and select that folder.
 
-Because the manifest now pins an id, an older copy loaded before this change
-appears as a second, separate extension. Remove the old one so it does not sit
-there unused.
+Because the manifest pins an id, a copy loaded before that change appears as a
+second, separate extension. Remove the old one so it does not sit there unused.
+
+### Updating an installed copy
+
+Unpacked extensions are read from the folder you pointed at, so replacing the
+files is not enough on its own: open `chrome://extensions`, find **LSSD Format
+Tool** and press its **Reload** icon (or remove it and load the new folder). The
+version on the card tells you which copy you are running — the current one is
+**1.0.1**, which writes through a rich-text editor and retries briefly after
+loading.
 
 ## Files
 

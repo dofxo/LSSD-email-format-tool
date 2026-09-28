@@ -25,7 +25,9 @@ function Label({ className, ...props }: React.ComponentProps<"label">) {
 	return (
 		<label
 			data-slot="label"
-			className={cn("text-[12.5px] font-medium text-ink-muted", className)}
+			// `pre-line` so a label written over several lines (a question and its
+			// qualifier, say) keeps those breaks instead of collapsing into one run.
+			className={cn("text-[12.5px] font-medium whitespace-pre-line text-ink-muted", className)}
 			{...props}
 		/>
 	);
@@ -60,7 +62,7 @@ function Field({
 	// drop underneath when it is not, rather than squeezing the control.
 	const inlineHint = !wide && Boolean(hint);
 	const hintNode = hint ? (
-		<p className="min-w-0 text-[12px] leading-relaxed text-ink-faint">{hint}</p>
+		<p className="min-w-0 text-[12px] leading-relaxed whitespace-pre-line text-ink-faint">{hint}</p>
 	) : null;
 
 	return (

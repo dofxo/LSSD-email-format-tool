@@ -10,7 +10,7 @@ import { Field, Input, Textarea } from "@/components/ui/input";
 import { Panel, PanelBody, PanelHeader, PanelHeading } from "@/components/ui/panel";
 import { getFormat } from "@/formats";
 import { adminFormatStore } from "@/formats/admin";
-import type { AdminFormatFields, AdminFormatStore } from "@/formats/adminTypes";
+import type { AdminFormatDraft, AdminFormatFields, AdminFormatStore } from "@/formats/adminTypes";
 import { formatCategories } from "@/formats/formatCategories";
 import { useTheme } from "@/hooks/useTheme";
 import { applyStoreInputs, fetchAdminFormats, overrideKey, saveAdminFormats } from "@/lib/adminFormats";
@@ -22,7 +22,12 @@ import { formatFieldsFor, labelsByDivision } from "@/lib/formats";
 import { renderTitleTemplate, titleTemplates } from "@/lib/formatTitles";
 import { controlFieldClass } from "@/lib/styles";
 import { cn } from "@/lib/utils";
-import type { CatalogueInput } from "@/lib/inputDefinitions";
+import {
+	normaliseInput,
+	TYPE_LABELS,
+	type CatalogueInput,
+	type FieldType,
+} from "@/lib/inputDefinitions";
 import type { DeputyData, FormatData, FormatFieldPick, divisionsType } from "@/types";
 
 const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD as string | undefined;
@@ -51,6 +56,36 @@ const cloneStore = (store: AdminFormatStore): AdminFormatStore => ({
 	custom: store.custom.map((entry) => ({ ...entry })),
 	inputs: [...(store.inputs ?? [])],
 });
+
+/**
+ * Folds one card's on-screen values into the store the save writes: into the
+ * format itself when it was created here, into its override when it is built in,
+ * with the same "an empty topic title keeps the built-in one" rule the card-level
+ * saves use.
+ */
+const withDraft = (
+	current: AdminFormatStore,
+	division: divisionsType,
+	formatId: string,
+	fields: AdminFormatFields,
+): AdminFormatStore => {
+	if (current.custom.some((entry) => entry.division === division && entry.id === formatId)) {
+		return {
+			...current,
+			custom: current.custom.map((entry) =>
+				entry.division === division && entry.id === formatId ? { ...entry, ...fields } : entry,
+			),
+		};
+	}
+	const { topicTitle, ...rest } = fields;
+	return {
+		...current,
+		overrides: {
+			...current.overrides,
+			[overrideKey(division, formatId)]: topicTitle.trim() ? { ...rest, topicTitle } : rest,
+		},
+	};
+};
 
 /**
  * A readable preview of a format's built-in topic title, with the blanks left by
@@ -147,6 +182,28 @@ const AdminPage = () => {
 		}
 		return used;
 	};
+
+	// Both derived once per store change, for the guards below.
+	const usedNames = useMemo(() => usedNamesFor(store), [store]);
+	const deletableNames = useMemo(
+		() => new Set((store.inputs ?? []).map((entry) => entry.name)),
+		[store],
+	);
+
+	/**
+	 * The open cards' readers, keyed "DIVISION/formatId". A card registers one
+	 * reader and unregisters when it unmounts, so a collapsed division drops out.
+	 */
+	/** A card's first edit is what makes the page's Save formats button live. */
+	const noteDirty = useCallback(() => setDirty(true), []);
+
+	const drafts = useRef(new Map<string, () => AdminFormatDraft | null>());
+	const registerDraft = useCallback((key: string, read: () => AdminFormatDraft | null) => {
+		drafts.current.set(key, read);
+		return () => {
+			if (drafts.current.get(key) === read) drafts.current.delete(key);
+		};
+	}, []);
 
 	const toggleDivision = (division: divisionsType) =>
 		setOpenDivisions((prev) => ({ ...prev, [division]: !prev[division] }));
@@ -257,13 +314,30 @@ const AdminPage = () => {
 	};
 
 	/**
+	 * Keeps a token that was renamed in a format's body answering to a field. An
+	 * existing field is used as it stands; a genuinely new name is added to the
+	 * catalogue carrying the wording of the field it replaced, so a body never
+	 * goes on asking for something nothing can fill.
+	 */
+	const renameInput = (from: string, to: string) => {
+		if (catalogueInputFor(to)) return;
+		const source = catalogueInputFor(from);
+		const replacement = normaliseInput(source ? { ...source, name: to } : { name: to, type: "text", label: to });
+		if (!replacement) {
+			toast.error(`“${to}” is not a usable field name.`);
+			return;
+		}
+		createInput(replacement);
+	};
+
+	/**
 	 * Removes an admin-created field from the catalogue. Built-in fields are not
 	 * deletable — the pickers simply don't offer it — so anything reaching here is
 	 * in the store's `inputs`. A field still used by a saved format is refused:
 	 * deleting it would leave that format asking for something nobody can fill.
 	 */
 	const deleteInput = (input: CatalogueInput) => {
-		const usedBy = usedNamesFor(store).get(input.name);
+		const usedBy = usedNames.get(input.name);
 		if (usedBy?.length) {
 			toast.error(
 				`{{${input.name}}} is still used by ${usedBy.join(", ")} — remove it from there first.`,
@@ -281,22 +355,88 @@ const AdminPage = () => {
 	};
 
 	/**
+	 * Rewrites an admin-created field's own definition, keeping its token name.
+	 * The catalogue owns a field's type, so the change reaches every format that
+	 * asks for the field at once; built-ins are not touched this way, since their
+	 * definitions live in the source tree.
+	 */
+	const updateInput = (input: CatalogueInput) => {
+		const index = (store.inputs ?? []).findIndex((entry) => entry.name === input.name);
+		if (index === -1) {
+			toast.error(`{{${input.name}}} ships with the tool — its definition cannot be changed here.`);
+			return;
+		}
+		const normalised = normaliseInput(input);
+		if (!normalised) {
+			toast.error("Those settings do not make a usable field.");
+			return;
+		}
+		const next: AdminFormatStore = {
+			...store,
+			inputs: (store.inputs ?? []).map((entry, i) => (i === index ? normalised : entry)),
+		};
+		applyStoreInputs(next);
+		setStore(next);
+		setDirty(true);
+		toast.success(
+			`{{${normalised.name}}} is now a ${TYPE_LABELS[normalised.type]} — press Save formats to keep it.`,
+		);
+	};
+
+	/** Switches one field's type, leaving the rest of its definition alone. */
+	const updateInputType = (name: string, type: FieldType) => {
+		const entry = (store.inputs ?? []).find((input) => input.name === name);
+		if (!entry) {
+			toast.error(`{{${name}}} ships with the tool — its type cannot be changed.`);
+			return;
+		}
+		updateInput({ ...entry, type });
+		if (type === "select" && !entry.options?.length) {
+			toast.info("A dropdown needs options — add them with the field's edit pencil.");
+		}
+		if (type === "check" && !entry.items?.length) {
+			toast.info("A checklist needs items — add them with the field's edit pencil.");
+		}
+	};
+
+	/**
 	 * Whether a field can be deleted from the catalogue right now. Only fields
 	 * created at /admin can be — built-ins are part of the source tree. A saved
 	 * format still asking for the field blocks deletion; unsaved local usage is
 	 * checked by the format cards themselves, which know their draft state.
+	 *
+	 * Worked out once per store: the pickers ask this for every row they draw, and
+	 * each answer used to re-read every format and every body in the store.
 	 */
-	const deleteGuardFor = (name: string): { ok: boolean; reason?: string } => {
-		if (!catalogueInputFor(name)) return { ok: false };
-		if (!(store.inputs ?? []).some((entry) => entry.name === name)) {
-			return { ok: false, reason: "Built-in field — it ships with the tool and cannot be deleted." };
-		}
-		const usedBy = usedNamesFor(store).get(name);
-		if (usedBy?.length) {
-			return { ok: false, reason: `Still used by ${usedBy.join(", ")} — remove it from there first.` };
-		}
-		return { ok: true };
-	};
+	const deleteGuardFor = useCallback(
+		(name: string): { ok: boolean; reason?: string } => {
+			if (!catalogueInputFor(name)) return { ok: false };
+			if (!deletableNames.has(name)) {
+				return { ok: false, reason: "Built-in field — it ships with the tool and cannot be deleted." };
+			}
+			const usedBy = usedNames.get(name);
+			if (usedBy?.length) {
+				return { ok: false, reason: `Still used by ${usedBy.join(", ")} — remove it from there first.` };
+			}
+			return { ok: true };
+		},
+		[deletableNames, usedNames],
+	);
+
+	/**
+	 * Which fields can have their own definition edited. Built-ins ship theirs, so
+	 * only fields created at /admin offer it.
+	 */
+	const editGuardFor = useCallback(
+		(name: string): { ok: boolean; reason?: string } =>
+			deletableNames.has(name)
+				? { ok: true }
+				: {
+						ok: false,
+						reason: "Built-in field — its type ships with the tool. Word it differently per format instead.",
+					},
+		[deletableNames],
+	);
 
 	/** The new-format picker's guard, which also sees the draft body's tokens. */
 	const newFormatGuard = (name: string): { ok: boolean; reason?: string } => {
@@ -319,8 +459,8 @@ const AdminPage = () => {
 			body: newBody,
 			govLink: newGovLink.trim(),
 			category: newCategory.trim(),
-			// A format with a body takes its inputs from that body's tokens, so only
-			// wording overrides would ever live here.
+			// A format with a body takes its fields from that body's tokens; this list
+			// is where their wording and their order go once either is edited.
 			fields: [],
 		});
 		setNewTitle("");
@@ -331,11 +471,23 @@ const AdminPage = () => {
 		toast.success("Format added. Press Save formats to write it to the file.");
 	};
 
+	/**
+	 * Writes the page, not the store: every mounted card hands over its on-screen
+	 * values here, so a card needs no save button of its own and a keystroke typed
+	 * a moment before this click is still included.
+	 */
 	const handleSave = async () => {
+		const next = Array.from(drafts.current.values()).reduce((current, read) => {
+			const draft = read();
+			return draft ? withDraft(current, draft.division, draft.formatId, draft.fields) : current;
+		}, store);
 		setSaving(true);
-		const result = await saveAdminFormats(store);
+		const result = await saveAdminFormats(next);
 		setSaving(false);
 		if (result.ok) {
+			// The store catches up with what was written, which also clears the
+			// cards' unsaved markers.
+			setStore(next);
 			setDirty(false);
 			toast.success("Saved to src/formats/admin.ts");
 		} else {
@@ -555,6 +707,8 @@ const AdminPage = () => {
 									onCreate={createInput}
 									onDelete={deleteInput}
 									deleteGuard={newFormatGuard}
+									onEditField={updateInput}
+									fieldGuard={editGuardFor}
 								/>
 
 								<div>
@@ -620,9 +774,15 @@ const AdminPage = () => {
 										}
 										defaultDeputy={EMPTY_DEPUTY}
 										initialPicks={format.picks}
-										onCreate={createInput}
-										onDeleteField={deleteInput}
-										deleteGuard={deleteGuardFor}
+									onCreate={createInput}
+									onDeleteField={deleteInput}
+									onRenameField={renameInput}
+									registerDraft={registerDraft}
+									onDirty={noteDirty}
+									onUpdateField={updateInput}
+									onUpdateFieldType={updateInputType}
+									deleteGuard={deleteGuardFor}
+									fieldGuard={editGuardFor}
 										defaultTopicTitle={format.defaultTopicTitle}
 										onSave={(fields, opts) =>
 											format.custom

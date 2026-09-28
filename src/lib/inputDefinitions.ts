@@ -42,6 +42,26 @@ export type CatalogueInput = InputDefinition & { name: string };
 export const isValidTokenName = (name: string): boolean => /^[\w.]+$/.test(name);
 
 /**
+ * A token name worked out from a field's wording, so the name box can be
+ * offered filled in: "SEB Join Date" becomes `sebJoinDate`, "Note (optional)"
+ * becomes `noteOptional`. Empty when the label holds nothing usable.
+ */
+export const suggestTokenName = (label: string): string => {
+	const words = label
+		.replace(/[^\w\s.-]/g, " ")
+		.split(/[\s._-]+/)
+		.filter(Boolean);
+	if (!words.length) return "";
+	return words
+		.map((word, index) =>
+			index === 0
+				? word.toLowerCase()
+				: word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
+		)
+		.join("");
+};
+
+/**
  * Keeps a catalogue input well-formed, whatever produced it (an /admin form or
  * a JSON payload). Returns null when it cannot be used.
  */

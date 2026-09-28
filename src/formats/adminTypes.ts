@@ -18,10 +18,10 @@ export interface AdminFormatFields {
 	/** Heading the format is grouped under in the picker. `""` falls back to the default. */
 	category: string;
 	/**
-	 * The inputs this format asks for, in form order, picked from the shared
-	 * catalogue. An empty list means the format asks for nothing; a format whose
-	 * body names its own tokens uses them for the field set and this list only for
-	 * its wording overrides.
+	 * The fields this format asks for, in form order, picked from the shared
+	 * catalogue. An empty list means the format asks for nothing — except one whose
+	 * body names its own tokens: there the body settles which fields exist, and
+	 * this list says what order they are asked in and how they are worded.
 	 */
 	fields: FormatFieldPick[];
 }
@@ -44,6 +44,17 @@ export interface AdminFormatOverride {
 	category?: string;
 	/** Replaces the format's built-in input list (name, order and wording). */
 	fields?: FormatFieldPick[];
+}
+
+/**
+ * A format's unsaved values, handed to the page-level save by the card holding
+ * them. Cards keep their own state while being edited, so the save asks each of
+ * them what is on screen rather than trusting the store.
+ */
+export interface AdminFormatDraft {
+	division: divisionsType;
+	formatId: string;
+	fields: AdminFormatFields;
 }
 
 /** Everything /admin writes back into src/formats/admin.ts. */

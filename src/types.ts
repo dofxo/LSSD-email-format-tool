@@ -16,6 +16,13 @@ export interface DeputyData {
 export type divisionsType = "RED" | "ATD" | "TSD" | "General" | "Supervisory" | "FTB" | "SEB";
 
 /**
+ * How a date input prints its value: "December 2nd, 2025", "02/DEC/2025" or
+ * "02/DEC/25". Every date field can be switched between them; the catalogue
+ * definition supplies the default.
+ */
+export type DateStyle = "full" | "short" | "shortYear";
+
+/**
  * One input a format asks for, picked from the shared catalogue in
  * src/data/inputCatalogue.ts. A format stores only the names it uses (in the
  * order its form renders them); the type, options and default wording come from
@@ -39,8 +46,8 @@ export interface FormatInputField {
 	formats: string[];
 	hint?: string;
 	options?: { value: string; label: string }[];
-	/** Output style for date fields; defaults to the app-wide email date style. */
-	dateStyle?: "full" | "short" | "shortYear";
+	/** Default output style for this date field; the picker can still change it. */
+	dateStyle?: DateStyle;
 	/** Placeholder for "list" fields' add-input. */
 	itemPlaceholder?: string;
 	/** Toggleable items for "check" fields; stored as "<fieldName>:<index>" keys. */
@@ -60,7 +67,13 @@ export interface FormatData {
 	applicantGender?: "male" | "female";
 	date?: string;
 	interviewDate?: string;
-	dateFormat?: "full" | "short"; // "full" for "December 2nd, 2025", "short" for "02/DEC/2025"
+	dateFormat?: DateStyle; // "full" for "December 2nd, 2025", "short" for "02/DEC/2025"
+	/**
+	 * Date style chosen for an individual date input, keyed by field name. Absent
+	 * means the field keeps its catalogue default, and the field named `date`
+	 * falls back to `dateFormat` above.
+	 */
+	dateFormats?: Record<string, DateStyle>;
 	reasons?: string[];
 	appLink?: string;
 	firstImpression?: string;
