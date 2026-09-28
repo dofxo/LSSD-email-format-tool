@@ -26,9 +26,10 @@ interface FormatPickerProps {
  *
  * A division can carry forty-odd formats, so the list is walked in two steps:
  * the categories first, then the formats inside the one that was opened, with a
- * back row to return. Typing anywhere searches every format in the division at
- * once — and shows which category each hit came from — so the way you already
- * used the picker still works.
+ * back row to return. The search works on whichever list is on screen — the
+ * categories at the top, a category's own formats once it is open — so you
+ * search for the folder first and the format inside it second, rather than a
+ * query reaching across every category at once.
  */
 export function FormatPicker({
 	division,
@@ -45,7 +46,6 @@ export function FormatPicker({
 	/** The category being looked at, or null for the category list itself. */
 	const [openHeading, setOpenHeading] = useState<string | null>(null);
 	const [query, setQuery] = useState("");
-	const searching = query.trim().length > 0;
 
 	// Every visit starts at the top of the list, with nothing typed in.
 	useEffect(() => {
@@ -161,17 +161,16 @@ export function FormatPicker({
 					align="start"
 					sideOffset={8}
 					className="w-[max(var(--radix-popover-trigger-width),20rem)] overflow-hidden p-0"
-				>
-					<Command>
-						<CommandInput
-							value={query}
-							onValueChange={setQuery}
-							placeholder="Search every format…"
-							aria-label="Search formats"
-						/>
+				>						<Command>
+							<CommandInput
+								value={query}
+								onValueChange={setQuery}
+								placeholder={current ? "Search these formats…" : "Search the categories…"}
+								aria-label={current ? "Search formats" : "Search categories"}
+							/>
 
-						{/* Where you are, and the way back out of a category. */}
-						{current && !searching ? (
+							{/* Where you are, and the way back out of a category. */}
+							{current ? (
 							<div className="flex items-center gap-2 border-b border-subtle bg-surface-2/40 px-2.5 py-2">
 								{alone ? (
 									<span className="flex size-6 shrink-0 items-center justify-center rounded-lg border border-subtle bg-surface text-ink-muted">
@@ -195,22 +194,14 @@ export function FormatPicker({
 									{current.items.length}
 								</span>
 							</div>
-						) : null}
+						) : null}							<CommandList className="thin-scroll max-h-[22rem]">
+								<CommandEmpty className="px-3 py-8 text-center text-[12.5px] text-ink-muted">
+									{current ? "No formats in this category match your search." : "No categories match your search."}
+								</CommandEmpty>
 
-						<CommandList className="thin-scroll max-h-[22rem]">
-							<CommandEmpty className="px-3 py-8 text-center text-[12.5px] text-ink-muted">
-								No formats match your search.
-							</CommandEmpty>
-
-							{searching ? (
-								groups.map((group) => (
-									<CommandGroup key={group.heading} heading={group.heading}>
-										{group.items.map((option) => renderFormat(option, group.heading))}
-									</CommandGroup>
-								))
-							) : current ? (
-								<CommandGroup>{current.items.map((option) => renderFormat(option, current.heading))}</CommandGroup>
-							) : (
+								{current ? (
+									<CommandGroup>{current.items.map((option) => renderFormat(option, current.heading))}</CommandGroup>
+								) : (
 								groups.map((group) => {
 									const holdsSelection = Boolean(selected && group.items.some((item) => item.id === selected.id));
 									return (
@@ -265,8 +256,9 @@ export function FormatPicker({
 					</>
 				) : (
 					<span>
-						Open a category to see its formats, or search all {options.length} — for example “denied”,
-						“interview” or “promotion”.
+						Open a category to see its formats — the search looks at whichever list is on screen:
+						the categories here, the formats once one is open. Type “Written” to find the folder,
+						then “denied” inside it for the format.
 					</span>
 				)}
 			</p>

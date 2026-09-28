@@ -5,11 +5,12 @@ import moment from "moment";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Combobox } from "@/components/ui/combobox";
-import { Field, Input, Textarea } from "@/components/ui/input";
+import { Field, Input, LabelContent, Textarea } from "@/components/ui/input";
 import { PanelEmpty } from "@/components/ui/panel";
 import { Segmented } from "@/components/ui/segmented";
 import { TimeInput } from "@/components/ui/timeInput";
 import { isFilled } from "@/lib/formats";
+import { plainLabel } from "@/lib/labelText";
 import type { DateStyle, FormatData, FormatInputField } from "@/types";
 
 const currentDateValue = (withTime: boolean) => moment().format(withTime ? "YYYY-MM-DDTHH:mm" : "YYYY-MM-DD");
@@ -178,13 +179,18 @@ export function FormatFields({ formatId, fields, formatData, setFormatData, rese
 
 	return (
 		<div className="flex min-w-0 flex-col gap-5">
-			{fields.map((field) => {
+			{fields.map((field, index) => {
 				const rawValue = formatData[field.name as keyof FormatData];
 				const stringValue = typeof rawValue === "string" ? rawValue : "";
 				const meta = isFilled(rawValue) ? (
 					<Check className="size-3.5 text-success" aria-label="Filled in" />
 				) : null;
 				const label = cleanLabel(field.label);
+				// The wording as it is shown — numbered as the form asks it, with any
+				// picture the label asks for — and as plain words for the places a screen
+				// reader reads it out.
+				const labelNode = <LabelContent text={label} ordinal={index + 1} />;
+				const labelText = plainLabel(label);
 
 				if (field.type === "list") {
 					const items = Array.isArray(rawValue) ? (rawValue as string[]) : [];
@@ -209,7 +215,7 @@ export function FormatFields({ formatId, fields, formatData, setFormatData, rese
 					return (
 						<Field
 							key={field.name}
-							label={label}
+							label={labelNode}
 							htmlFor={field.name}
 							hint={field.hint}
 							wide
@@ -272,7 +278,7 @@ export function FormatFields({ formatId, fields, formatData, setFormatData, rese
 						<Field
 							key={field.name}
 							wide
-							label={label}
+							label={labelNode}
 							htmlFor={field.name}
 							hint={field.hint}
 							meta={meta}
@@ -297,7 +303,7 @@ export function FormatFields({ formatId, fields, formatData, setFormatData, rese
 								</Button>
 								<Segmented
 									size="sm"
-									ariaLabel={`${label} date style`}
+									ariaLabel={`${labelText} date style`}
 									value={dateStyle}
 									onChange={(value) => handleDateStyleChange(field.name, value)}
 									options={DATE_STYLE_OPTIONS}
@@ -313,7 +319,7 @@ export function FormatFields({ formatId, fields, formatData, setFormatData, rese
 					return (
 						<Field
 							key={field.name}
-							label={label}
+							label={labelNode}
 							hint={field.hint}
 							wide
 							meta={selected.length ? `${selected.length} ticked` : undefined}
@@ -356,12 +362,12 @@ export function FormatFields({ formatId, fields, formatData, setFormatData, rese
 					);
 				}				if (field.type === "time") {
 					return (
-						<Field key={field.name} label={label} htmlFor={field.name} hint={field.hint} wide meta={meta}>
+						<Field key={field.name} label={labelNode} htmlFor={field.name} hint={field.hint} wide meta={meta}>
 							<div className="flex flex-wrap items-center gap-2">
 								<TimeInput
 									id={field.name}
 									value={stringValue}
-									ariaLabel={label}
+									ariaLabel={labelText}
 									onChange={(value) => setFormatData((prev) => ({ ...prev, [field.name]: value || undefined }))}
 								/>
 								<Button
@@ -384,7 +390,7 @@ export function FormatFields({ formatId, fields, formatData, setFormatData, rese
 					return (
 						<Field
 							key={field.name}
-							label={label}
+							label={labelNode}
 							htmlFor={field.name}
 							hint={field.hint}
 							meta={meta}
@@ -395,7 +401,7 @@ export function FormatFields({ formatId, fields, formatData, setFormatData, rese
 								onChange={(value) => handleSelectChange(field.name, value)}
 								options={field.options ?? []}
 								placeholder="Select…"
-								ariaLabel={label}
+								ariaLabel={labelText}
 							/>
 						</Field>
 					);
@@ -405,7 +411,7 @@ export function FormatFields({ formatId, fields, formatData, setFormatData, rese
 					return (
 						<Field
 							key={field.name}
-							label={label}
+							label={labelNode}
 							htmlFor={field.name}
 							hint={field.hint}
 							wide
@@ -424,7 +430,7 @@ export function FormatFields({ formatId, fields, formatData, setFormatData, rese
 				return (
 					<Field
 						key={field.name}
-						label={label}
+						label={labelNode}
 						htmlFor={field.name}
 						hint={field.hint}
 						meta={meta}

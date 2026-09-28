@@ -25,7 +25,11 @@ interface FieldPickerProps {
 	used: string[];
 	/** Called with the catalogue field that was chosen. */
 	onPick: (name: string) => void;
-	/** Creates a brand-new catalogue field; the picker then picks it. */
+	/**
+	 * Creates a brand-new catalogue field. Creating is not picking: the field is
+	 * made, and whether that also puts it on a format or drops it into a body is
+	 * for the caller to decide — nothing is written into the words on screen.
+	 */
 	onCreate: (input: CatalogueInput) => void;
 	/**
 	 * Deletes an admin-created field from the catalogue. Left out, nothing in the
@@ -117,7 +121,6 @@ export function FieldPicker({ used, onPick, onCreate, onDelete, deleteGuard, onE
 
 	const create = (input: CatalogueInput) => {
 		onCreate(input);
-		onPick(input.name);
 		setCreating(false);
 		setSearch("");
 	};

@@ -1,5 +1,6 @@
 import * as React from "react";
 
+import { labelParts } from "@/lib/labelText";
 import { controlFieldClass, textareaFieldClass } from "@/lib/styles";
 import { cn } from "@/lib/utils";
 
@@ -20,6 +21,44 @@ function Label({ className, ...props }: React.ComponentProps<"label">) {
 			className={cn("text-[12.5px] font-medium whitespace-pre-line text-ink-muted", className)}
 			{...props}
 		/>
+	);
+}
+
+/**
+ * A field's wording with any picture it asks for: an admin writes
+ * `{img=https://…}` in a label and the image is shown with the question, so a
+ * form can carry a diagram or a signature banner. Used for the labels the
+ * person filling the form reads, never for the ones naming a control.
+ *
+ * `ordinal` numbers the question as the form asks it — a long certification has
+ * a dozen of them, and the count is worth seeing while filling it in. The number
+ * is decoration around the wording, so it is drawn here rather than written into
+ * the label itself.
+ */
+function LabelContent({ text, ordinal, className }: { text: string; ordinal?: number; className?: string }) {
+	const parts = labelParts(text);
+	// Nothing else to say for a picture alone, and nothing worth repeating for one
+	// shown alongside wording that is read out anyway.
+	const standalone = !parts.some((part) => part.text.trim());
+
+	return (
+		<span className={cn("whitespace-pre-line", className)}>
+			{ordinal ? <span className="text-ink-faint tabular-nums">{ordinal}.</span> : null}
+			{ordinal ? " " : null}
+			{parts.map((part, index) =>
+				part.image ? (
+					<img
+						key={index}
+						src={part.image}
+						alt={standalone ? "Image" : ""}
+						title={part.image}
+						className="my-1 block max-h-64 w-auto max-w-full rounded-control border border-subtle bg-surface object-contain"
+					/>
+				) : (
+					<React.Fragment key={index}>{part.text}</React.Fragment>
+				),
+			)}
+		</span>
 	);
 }
 
@@ -77,4 +116,4 @@ function Field({
 	);
 }
 
-export { Input, Textarea, Label, Field };
+export { Input, Textarea, Label, Field, LabelContent };
