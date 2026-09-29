@@ -16,8 +16,9 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 		},
 		"SEB/30": {
 			"title": "Probationary Operator Profile",
+			"topicTitle": "[TRAINE OPERATOR] {Operator Name}",
 			"body": "",
-			"govLink": "",
+			"govLink": "https://gov.eclipse-rp.net/posting.php?mode=post&f=4086",
 			"category": "Operator Training",
 			"fields": [
 				{
@@ -76,7 +77,7 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 		"SEB/31": {
 			"title": "OTP Session 1",
 			"body": "",
-			"govLink": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4086",
 			"category": "Operator Training",
 			"fields": [
 				{
@@ -99,14 +100,14 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 		"SEB/34": {
 			"title": "Exam Sent to Trainee",
 			"body": "",
-			"govLink": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4086",
 			"category": "Operator Training",
 			"fields": []
 		},
 		"SEB/33": {
 			"title": "OTP Session 3",
 			"body": "",
-			"govLink": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4086",
 			"category": "Operator Training",
 			"fields": [
 				{
@@ -126,7 +127,7 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 		"SEB/32": {
 			"title": "OTP Session 2",
 			"body": "",
-			"govLink": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4086",
 			"category": "Operator Training",
 			"fields": [
 				{
@@ -146,7 +147,7 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 		"TSD/1": {
 			"title": "BRAVO Certification - Pending practical",
 			"body": "[lssdfooter][/lssdfooter]\n[divbox=white]\n[tsdlogo][/tsdlogo][aligntable=right,0,0,0,0,0,0][right][font=Arial][b]\n[size=150]Los Santos County Sheriff's Department[/size][/b]\n[size=115]Traffic Services Detail[/size]\n[size=95]\"Certification Pending Practical\"[/size][/font][/right][/aligntable]\n[hr]\n[list=none][right]{{date}}[/right]\n[b]Deputy {{deputyName}}[/b]\n\nTSD Command is reaching out to inform you that your BRAVO Certification application has been moved to [b][color=orange][b]Pending Practical[/b][/color][/b]. You should now reach to out to any Traffic Deputy II or above who is BRAVO certified to complete your practical.\n\n[/list]\n\n\n\n[hr][/hr][list=none]\n\n[img]{{signature}}[/img]\n{{dRank}} {{name}}\n, Traffic Services Detail\nLos Santos County Sheriff's Department\n\n[/list][/divbox]\n[lssdfooter][/lssdfooter]",
-			"govLink": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=3917",
 			"category": "BRAVO Certification",
 			"fields": [
 				{
@@ -154,6 +155,2541 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 				},
 				{
 					"name": "date"
+				}
+			]
+		},
+		"RED/1": {
+			"title": "Application Pending Review",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=958",
+			"category": "Applications",
+			"fields": [
+				{
+					"name": "applicantName"
+				},
+				{
+					"name": "applicantGender"
+				},
+				{
+					"name": "date"
+				}
+			]
+		},
+		"RED/2": {
+			"title": "Application Shortlisted",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=958",
+			"category": "Applications",
+			"fields": [
+				{
+					"name": "applicantName"
+				},
+				{
+					"name": "applicantGender"
+				},
+				{
+					"name": "date"
+				}
+			]
+		},
+		"RED/3": {
+			"title": "Application Denied - Criminal Record",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=958",
+			"category": "Applications",
+			"fields": [
+				{
+					"name": "applicantName"
+				},
+				{
+					"name": "applicantGender"
+				},
+				{
+					"name": "date"
+				}
+			]
+		},
+		"RED/4": {
+			"title": "Application Denied - Input Reason(s)",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=958",
+			"category": "Applications",
+			"fields": [
+				{
+					"name": "applicantName"
+				},
+				{
+					"name": "applicantGender"
+				},
+				{
+					"name": "date"
+				},
+				{
+					"name": "reasons"
+				}
+			]
+		},
+		"RED/5": {
+			"title": "Application Denied - No Spots",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=958",
+			"category": "Applications",
+			"fields": [
+				{
+					"name": "applicantName"
+				},
+				{
+					"name": "applicantGender"
+				},
+				{
+					"name": "date"
+				}
+			]
+		},
+		"RED/6": {
+			"title": "Application Pending Edit(s)",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=958",
+			"category": "Applications",
+			"fields": [
+				{
+					"name": "applicantName"
+				},
+				{
+					"name": "applicantGender"
+				},
+				{
+					"name": "date"
+				},
+				{
+					"name": "reasons"
+				}
+			]
+		},
+		"RED/7": {
+			"title": "Accepted for Interview",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=958",
+			"category": "Interviews",
+			"fields": [
+				{
+					"name": "applicantName"
+				},
+				{
+					"name": "applicantGender"
+				},
+				{
+					"name": "date"
+				}
+			]
+		},
+		"RED/8": {
+			"title": "Interview Scheduling Attempt",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=958",
+			"category": "Interviews",
+			"fields": [
+				{
+					"name": "applicantName"
+				},
+				{
+					"name": "applicantGender"
+				},
+				{
+					"name": "date"
+				}
+			]
+		},
+		"RED/9": {
+			"title": "Interview Scheduled",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=958",
+			"category": "Interviews",
+			"fields": [
+				{
+					"name": "applicantName"
+				},
+				{
+					"name": "applicantGender"
+				},
+				{
+					"name": "date"
+				},
+				{
+					"name": "interviewDate"
+				}
+			]
+		},
+		"RED/10": {
+			"title": "Accepted for Academy",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=958",
+			"category": "Academy",
+			"fields": [
+				{
+					"name": "applicantName"
+				},
+				{
+					"name": "applicantGender"
+				},
+				{
+					"name": "date"
+				}
+			]
+		},
+		"RED/11": {
+			"title": "Passed Academy",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=958",
+			"category": "Academy",
+			"fields": [
+				{
+					"name": "date"
+				}
+			]
+		},
+		"RED/14": {
+			"title": "Personal Email",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose",
+			"category": "Correspondence",
+			"fields": []
+		},
+		"TSD/2": {
+			"title": "BRAVO Certification - Application accepted",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=3917",
+			"category": "BRAVO Certification",
+			"fields": [
+				{
+					"name": "deputyName"
+				},
+				{
+					"name": "date"
+				}
+			]
+		},
+		"TSD/3": {
+			"title": "BRAVO Certification - Application denied",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=3917",
+			"category": "BRAVO Certification",
+			"fields": [
+				{
+					"name": "deputyName"
+				},
+				{
+					"name": "date"
+				}
+			]
+		},
+		"TSD/4": {
+			"title": "BRAVO Certification - Certificaion passed",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=3917",
+			"category": "BRAVO Certification",
+			"fields": [
+				{
+					"name": "deputyName"
+				},
+				{
+					"name": "date"
+				}
+			]
+		},
+		"TSD/5": {
+			"title": "Interceptor Certification - Pending practical",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=3917",
+			"category": "Interceptor Certification",
+			"fields": [
+				{
+					"name": "deputyName"
+				},
+				{
+					"name": "date"
+				}
+			]
+		},
+		"TSD/6": {
+			"title": "Interceptor Certification - Application accepted",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=3917",
+			"category": "Interceptor Certification",
+			"fields": [
+				{
+					"name": "deputyName"
+				},
+				{
+					"name": "date"
+				}
+			]
+		},
+		"TSD/7": {
+			"title": "Interceptor Certification - Application denied",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=3917",
+			"category": "Interceptor Certification",
+			"fields": [
+				{
+					"name": "deputyName"
+				},
+				{
+					"name": "date"
+				}
+			]
+		},
+		"TSD/8": {
+			"title": "Interceptor Certification - Certificaion passed",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=3917",
+			"category": "Interceptor Certification",
+			"fields": [
+				{
+					"name": "deputyName"
+				},
+				{
+					"name": "date"
+				}
+			]
+		},
+		"TSD/9": {
+			"title": "D10 Certification - Pending practical",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=3917",
+			"category": "D10 Certification",
+			"fields": [
+				{
+					"name": "deputyName"
+				},
+				{
+					"name": "date"
+				}
+			]
+		},
+		"TSD/10": {
+			"title": "D10 Certification - Application accepted",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=3917",
+			"category": "D10 Certification",
+			"fields": [
+				{
+					"name": "deputyName"
+				},
+				{
+					"name": "date"
+				}
+			]
+		},
+		"TSD/11": {
+			"title": "D10 Certification - Application denied",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=3917",
+			"category": "D10 Certification",
+			"fields": [
+				{
+					"name": "deputyName"
+				},
+				{
+					"name": "date"
+				}
+			]
+		},
+		"TSD/12": {
+			"title": "D10 Certification - Certification passed",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=3917",
+			"category": "D10 Certification",
+			"fields": [
+				{
+					"name": "deputyName"
+				},
+				{
+					"name": "date"
+				}
+			]
+		},
+		"ATD/1": {
+			"title": "Spike Strip - Application Accepted - Reply to application",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4227",
+			"category": "Spike Strip Certification",
+			"fields": []
+		},
+		"ATD/2": {
+			"title": "Spike Strip - Application Accepted - Email Deputy",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose",
+			"category": "Spike Strip Certification",
+			"fields": [
+				{
+					"name": "deputyName"
+				},
+				{
+					"name": "deputyRank"
+				},
+				{
+					"name": "date"
+				}
+			]
+		},
+		"ATD/3": {
+			"title": "Spike Strip - Application Denied - Reply to application",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4227",
+			"category": "Spike Strip Certification",
+			"fields": []
+		},
+		"ATD/4": {
+			"title": "Spike Strip - Application Denied - Email Deputy",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose",
+			"category": "Spike Strip Certification",
+			"fields": [
+				{
+					"name": "deputyName"
+				},
+				{
+					"name": "deputyRank"
+				},
+				{
+					"name": "date"
+				}
+			]
+		},
+		"ATD/5": {
+			"title": "Spike Strip - Certification Accepted - Reply to application",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4227",
+			"category": "Spike Strip Certification",
+			"fields": []
+		},
+		"ATD/6": {
+			"title": "Spike Strip - Certification Accepted - Email Deputy",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose",
+			"category": "Spike Strip Certification",
+			"fields": [
+				{
+					"name": "deputyName"
+				},
+				{
+					"name": "deputyRank"
+				},
+				{
+					"name": "date"
+				}
+			]
+		},
+		"ATD/7": {
+			"title": "Spike Strip - Certification Denied - Reply to application",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4227",
+			"category": "Spike Strip Certification",
+			"fields": []
+		},
+		"ATD/8": {
+			"title": "Spike Strip - Certification Denied - Email Deputy",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose",
+			"category": "Spike Strip Certification",
+			"fields": [
+				{
+					"name": "deputyName"
+				},
+				{
+					"name": "deputyRank"
+				},
+				{
+					"name": "date"
+				}
+			]
+		},
+		"ATD/9": {
+			"title": "HIOU Certification - Application Accepted - Reply to application",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4227",
+			"category": "HIOU Certification",
+			"fields": []
+		},
+		"ATD/10": {
+			"title": "HIOU Certification - Application Accepted - Email Deputy",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose",
+			"category": "HIOU Certification",
+			"fields": [
+				{
+					"name": "deputyName"
+				},
+				{
+					"name": "deputyRank"
+				},
+				{
+					"name": "date"
+				}
+			]
+		},
+		"ATD/11": {
+			"title": "HIOU Certification - Application Denied - Reply to application",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4227",
+			"category": "HIOU Certification",
+			"fields": []
+		},
+		"ATD/12": {
+			"title": "HIOU Certification - Application Denied - Email Deputy",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose",
+			"category": "HIOU Certification",
+			"fields": [
+				{
+					"name": "deputyName"
+				},
+				{
+					"name": "deputyRank"
+				},
+				{
+					"name": "date"
+				}
+			]
+		},
+		"ATD/13": {
+			"title": "HIOU Certification - Certification Accepted - Reply to application",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4227",
+			"category": "HIOU Certification",
+			"fields": []
+		},
+		"ATD/14": {
+			"title": "HIOU Certification - Certification Accepted - Email Deputy",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose",
+			"category": "HIOU Certification",
+			"fields": [
+				{
+					"name": "deputyName"
+				},
+				{
+					"name": "deputyRank"
+				},
+				{
+					"name": "date"
+				}
+			]
+		},
+		"ATD/15": {
+			"title": "HIOU Certification - Certification Denied - Reply to application",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4227",
+			"category": "HIOU Certification",
+			"fields": []
+		},
+		"ATD/16": {
+			"title": "HIOU Certification - Certification Denied - Email Deputy",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose",
+			"category": "HIOU Certification",
+			"fields": [
+				{
+					"name": "deputyName"
+				},
+				{
+					"name": "deputyRank"
+				},
+				{
+					"name": "date"
+				}
+			]
+		},
+		"ATD/17": {
+			"title": "HSIU Certification - Application Accepted - Reply to application",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4227",
+			"category": "HSIU Certification",
+			"fields": []
+		},
+		"ATD/18": {
+			"title": "HSIU Certification - Application Accepted - Email Deputy",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose",
+			"category": "HSIU Certification",
+			"fields": [
+				{
+					"name": "deputyName"
+				},
+				{
+					"name": "deputyRank"
+				},
+				{
+					"name": "date"
+				}
+			]
+		},
+		"ATD/19": {
+			"title": "HSIU Certification - Application Denied - Reply to application",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4227",
+			"category": "HSIU Certification",
+			"fields": []
+		},
+		"ATD/20": {
+			"title": "HSIU Certification - Application Denied - Email Deputy",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose",
+			"category": "HSIU Certification",
+			"fields": [
+				{
+					"name": "deputyName"
+				},
+				{
+					"name": "deputyRank"
+				},
+				{
+					"name": "date"
+				}
+			]
+		},
+		"ATD/21": {
+			"title": "HSIU Certification - Certification Accepted - Reply to application",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4227",
+			"category": "HSIU Certification",
+			"fields": []
+		},
+		"ATD/22": {
+			"title": "HSIU Certification - Certification Accepted - Email Deputy",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose",
+			"category": "HSIU Certification",
+			"fields": [
+				{
+					"name": "deputyName"
+				},
+				{
+					"name": "deputyRank"
+				},
+				{
+					"name": "date"
+				}
+			]
+		},
+		"ATD/23": {
+			"title": "HSIU Certification - Certification Denied - Reply to application",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4227",
+			"category": "HSIU Certification",
+			"fields": []
+		},
+		"ATD/24": {
+			"title": "HSIU Certification - Certification Denied - Email Deputy",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose",
+			"category": "HSIU Certification",
+			"fields": [
+				{
+					"name": "deputyName"
+				},
+				{
+					"name": "deputyRank"
+				},
+				{
+					"name": "date"
+				}
+			]
+		},
+		"ATD/25": {
+			"title": "HIU Certification - Application Accepted - Reply to application",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4227",
+			"category": "HIU Certification",
+			"fields": []
+		},
+		"ATD/26": {
+			"title": "HIU Certification - Application Accepted - Email Deputy",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose",
+			"category": "HIU Certification",
+			"fields": [
+				{
+					"name": "deputyName"
+				},
+				{
+					"name": "deputyRank"
+				},
+				{
+					"name": "date"
+				}
+			]
+		},
+		"ATD/27": {
+			"title": "HIU Certification - Application Denied - Reply to application",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4227",
+			"category": "HIU Certification",
+			"fields": []
+		},
+		"ATD/28": {
+			"title": "HIU Certification - Application Denied - Email Deputy",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose",
+			"category": "HIU Certification",
+			"fields": [
+				{
+					"name": "deputyName"
+				},
+				{
+					"name": "deputyRank"
+				},
+				{
+					"name": "date"
+				}
+			]
+		},
+		"ATD/29": {
+			"title": "HIU Certification - Certification Accepted - Reply to application",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4227",
+			"category": "HIU Certification",
+			"fields": []
+		},
+		"ATD/30": {
+			"title": "HIU Certification - Certification Accepted - Email Deputy",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose",
+			"category": "HIU Certification",
+			"fields": [
+				{
+					"name": "deputyName"
+				},
+				{
+					"name": "deputyRank"
+				},
+				{
+					"name": "date"
+				}
+			]
+		},
+		"ATD/31": {
+			"title": "HIU Certification - Certification Denied - Reply to application",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4227",
+			"category": "HIU Certification",
+			"fields": []
+		},
+		"ATD/32": {
+			"title": "HIU Certification - Certification Denied - Email Deputy",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose",
+			"category": "HIU Certification",
+			"fields": [
+				{
+					"name": "deputyName"
+				},
+				{
+					"name": "deputyRank"
+				},
+				{
+					"name": "date"
+				}
+			]
+		},
+		"ATD/33": {
+			"title": "HSMU Certification - Application Accepted - Reply to application",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4227",
+			"category": "HSMU Certification",
+			"fields": []
+		},
+		"ATD/34": {
+			"title": "HSMU Certification - Application Accepted - Email Deputy",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose",
+			"category": "HSMU Certification",
+			"fields": [
+				{
+					"name": "deputyName"
+				},
+				{
+					"name": "deputyRank"
+				},
+				{
+					"name": "date"
+				}
+			]
+		},
+		"ATD/35": {
+			"title": "HSMU Certification - Application Denied - Reply to application",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4227",
+			"category": "HSMU Certification",
+			"fields": []
+		},
+		"ATD/36": {
+			"title": "HSMU Certification - Application Denied - Email Deputy",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose",
+			"category": "HSMU Certification",
+			"fields": [
+				{
+					"name": "deputyName"
+				},
+				{
+					"name": "deputyRank"
+				},
+				{
+					"name": "date"
+				}
+			]
+		},
+		"ATD/37": {
+			"title": "HSMU Certification - Certification Accepted - Reply to application",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4227",
+			"category": "HSMU Certification",
+			"fields": []
+		},
+		"ATD/38": {
+			"title": "HSMU Certification - Certification Accepted - Email Deputy",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose",
+			"category": "HSMU Certification",
+			"fields": [
+				{
+					"name": "deputyName"
+				},
+				{
+					"name": "deputyRank"
+				},
+				{
+					"name": "date"
+				}
+			]
+		},
+		"ATD/39": {
+			"title": "HSMU Certification - Certification Denied - Reply to application",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4227",
+			"category": "HSMU Certification",
+			"fields": []
+		},
+		"ATD/40": {
+			"title": "HSMU Certification - Certification Denied - Email Deputy",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose",
+			"category": "HSMU Certification",
+			"fields": [
+				{
+					"name": "deputyName"
+				},
+				{
+					"name": "deputyRank"
+				},
+				{
+					"name": "date"
+				}
+			]
+		},
+		"ATD/41": {
+			"title": "Firearm Certification - Application Accepted - Reply to application and Deputy",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4227",
+			"category": "Firearm Certification",
+			"fields": [
+				{
+					"name": "deputyName"
+				},
+				{
+					"name": "deputyRank"
+				},
+				{
+					"name": "certificationType"
+				}
+			]
+		},
+		"ATD/42": {
+			"title": "Firearm Certification - Application Denied(score) - Reply to application and Deputy",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4227",
+			"category": "Firearm Certification",
+			"fields": [
+				{
+					"name": "deputyName"
+				},
+				{
+					"name": "deputyRank"
+				},
+				{
+					"name": "certificationType"
+				},
+				{
+					"name": "scoredPoint"
+				},
+				{
+					"name": "leastPoint"
+				}
+			]
+		},
+		"ATD/43": {
+			"title": "Firearm Certification - Application Denied(Other) - Reply to application and Deputy",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4227",
+			"category": "Firearm Certification",
+			"fields": [
+				{
+					"name": "deputyName"
+				},
+				{
+					"name": "deputyRank"
+				},
+				{
+					"name": "certificationType"
+				},
+				{
+					"name": "reasons"
+				}
+			]
+		},
+		"ATD/44": {
+			"title": "Firearm Certification - Certificaion Passed - Reply to application and Deputy",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4227",
+			"category": "Firearm Certification",
+			"fields": [
+				{
+					"name": "deputyName"
+				},
+				{
+					"name": "deputyRank"
+				},
+				{
+					"name": "certificationType"
+				}
+			]
+		},
+		"ATD/45": {
+			"title": "Firearm Certification - Certificaion Denied - Reply to application and Deputy",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4227",
+			"category": "Firearm Certification",
+			"fields": [
+				{
+					"name": "deputyName"
+				},
+				{
+					"name": "deputyRank"
+				},
+				{
+					"name": "reasons"
+				}
+			]
+		},
+		"ATD/46": {
+			"title": "Personnel File - New certification - Reply to post",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=3513",
+			"category": "Personnel Files",
+			"fields": [
+				{
+					"name": "deputyName"
+				},
+				{
+					"name": "certificationType"
+				},
+				{
+					"name": "date"
+				}
+			]
+		},
+		"ATD/47": {
+			"title": "Personnel File - New certification - Edit main post",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=3513",
+			"category": "Personnel Files",
+			"fields": [
+				{
+					"name": "certificationType"
+				},
+				{
+					"name": "date"
+				},
+				{
+					"name": "issuedBy"
+				},
+				{
+					"name": "certificationStatus"
+				}
+			]
+		},
+		"FTB/1": {
+			"title": "Field Training Session I Report",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=1037",
+			"category": "Training sessions",
+			"fields": [
+				{
+					"name": "fts1Date"
+				},
+				{
+					"name": "fts1PatrolStart"
+				},
+				{
+					"name": "fts1PatrolEnd"
+				},
+				{
+					"name": "fts1Checklist"
+				},
+				{
+					"name": "fts1Handbook"
+				},
+				{
+					"name": "fts1Behaviour"
+				},
+				{
+					"name": "fts1Communications"
+				},
+				{
+					"name": "fts1Roleplay"
+				},
+				{
+					"name": "fts1SectionsToRepeat"
+				},
+				{
+					"name": "fts1Mistakes"
+				},
+				{
+					"name": "fts1ReadyProgress"
+				},
+				{
+					"name": "fts1AdditionalNotes"
+				}
+			]
+		},
+		"FTB/2": {
+			"title": "Field Training Session II Report",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=1037",
+			"category": "Training sessions",
+			"fields": [
+				{
+					"name": "fts2Date"
+				},
+				{
+					"name": "fts2PatrolStart"
+				},
+				{
+					"name": "fts2PatrolEnd"
+				},
+				{
+					"name": "fts2Checklist"
+				},
+				{
+					"name": "fts2Handbook"
+				},
+				{
+					"name": "fts2VehicleOperation"
+				},
+				{
+					"name": "fts2Impound"
+				},
+				{
+					"name": "fts2Behaviour"
+				},
+				{
+					"name": "fts2Communications"
+				},
+				{
+					"name": "fts2Roleplay"
+				},
+				{
+					"name": "fts2SectionsToRepeat"
+				},
+				{
+					"name": "fts2Mistakes"
+				},
+				{
+					"name": "fts2ReadyProgress"
+				},
+				{
+					"name": "fts2AdditionalNotes"
+				}
+			]
+		},
+		"FTB/3": {
+			"title": "Field Training Session III Report",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=1037",
+			"category": "Training sessions",
+			"fields": [
+				{
+					"name": "fts3Date"
+				},
+				{
+					"name": "fts3PatrolStart"
+				},
+				{
+					"name": "fts3PatrolEnd"
+				},
+				{
+					"name": "fts3Checklist"
+				},
+				{
+					"name": "fts3Handbook"
+				},
+				{
+					"name": "fts3Behaviour"
+				},
+				{
+					"name": "fts3Communications"
+				},
+				{
+					"name": "fts3Pursuit"
+				},
+				{
+					"name": "fts3Driving"
+				},
+				{
+					"name": "fts3Roleplay"
+				},
+				{
+					"name": "fts3SectionsToRepeat"
+				},
+				{
+					"name": "fts3Mistakes"
+				},
+				{
+					"name": "fts3ReadyProgress"
+				},
+				{
+					"name": "fts3AdditionalNotes"
+				}
+			]
+		},
+		"FTB/4": {
+			"title": "Field Training Evaluation Report",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=1037",
+			"category": "Evaluations",
+			"fields": [
+				{
+					"name": "fteDate"
+				},
+				{
+					"name": "ftePatrolStart"
+				},
+				{
+					"name": "ftePatrolEnd"
+				},
+				{
+					"name": "fteTask0"
+				},
+				{
+					"name": "fteTask1"
+				},
+				{
+					"name": "fteTask2"
+				},
+				{
+					"name": "fteTask3"
+				},
+				{
+					"name": "fteTask4"
+				},
+				{
+					"name": "fteTask5"
+				},
+				{
+					"name": "fteTask6"
+				},
+				{
+					"name": "fteTask7"
+				},
+				{
+					"name": "fteTask8"
+				},
+				{
+					"name": "fteTask9"
+				},
+				{
+					"name": "fteTask10"
+				},
+				{
+					"name": "fteTimeline"
+				},
+				{
+					"name": "fteGrade0"
+				},
+				{
+					"name": "fteNote0"
+				},
+				{
+					"name": "fteGrade1"
+				},
+				{
+					"name": "fteNote1"
+				},
+				{
+					"name": "fteGrade2"
+				},
+				{
+					"name": "fteNote2"
+				},
+				{
+					"name": "fteGrade3"
+				},
+				{
+					"name": "fteNote3"
+				},
+				{
+					"name": "fteGrade4"
+				},
+				{
+					"name": "fteNote4"
+				},
+				{
+					"name": "fteGrade5"
+				},
+				{
+					"name": "fteNote5"
+				},
+				{
+					"name": "fteGrade6"
+				},
+				{
+					"name": "fteNote6"
+				},
+				{
+					"name": "fteGrade7"
+				},
+				{
+					"name": "fteNote7"
+				},
+				{
+					"name": "fteGrade8"
+				},
+				{
+					"name": "fteNote8"
+				},
+				{
+					"name": "fteMockWith"
+				},
+				{
+					"name": "fteMockGradeKeepUp"
+				},
+				{
+					"name": "fteMockNoteKeepUp"
+				},
+				{
+					"name": "fteMockGradeCallouts"
+				},
+				{
+					"name": "fteMockNoteCallouts"
+				},
+				{
+					"name": "fteMockGradeDriving"
+				},
+				{
+					"name": "fteMockNoteDriving"
+				},
+				{
+					"name": "fteMockGradeBackups"
+				},
+				{
+					"name": "fteMockNoteBackups"
+				},
+				{
+					"name": "fteArrestReportLink"
+				},
+				{
+					"name": "fteReadySolo"
+				},
+				{
+					"name": "fteIssues"
+				},
+				{
+					"name": "fteIntervention"
+				},
+				{
+					"name": "fteConcerning"
+				},
+				{
+					"name": "fteRpCommands"
+				},
+				{
+					"name": "fteOocDemeanor"
+				},
+				{
+					"name": "fteRulesUnderstanding"
+				},
+				{
+					"name": "fteShouldPass"
+				}
+			]
+		},
+		"FTB/5": {
+			"title": "Daily Observation Report",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=1037",
+			"category": "Evaluations",
+			"fields": [
+				{
+					"name": "dorTraineeResponse"
+				},
+				{
+					"name": "dorPatrolSummary"
+				},
+				{
+					"name": "dorWrong"
+				},
+				{
+					"name": "dorAdditionalTraining"
+				},
+				{
+					"name": "dorGrade0"
+				},
+				{
+					"name": "dorResponse0"
+				},
+				{
+					"name": "dorGrade1"
+				},
+				{
+					"name": "dorResponse1"
+				},
+				{
+					"name": "dorGrade2"
+				},
+				{
+					"name": "dorResponse2"
+				},
+				{
+					"name": "dorGrade3"
+				},
+				{
+					"name": "dorResponse3"
+				},
+				{
+					"name": "dorGrade4"
+				},
+				{
+					"name": "dorResponse4"
+				},
+				{
+					"name": "dorGrade5"
+				},
+				{
+					"name": "dorResponse5"
+				},
+				{
+					"name": "dorGrade6"
+				},
+				{
+					"name": "dorResponse6"
+				},
+				{
+					"name": "dorFeedback"
+				}
+			]
+		},
+		"FTB/6": {
+			"title": "Mock Pursuit Report",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=1037",
+			"category": "Pursuits",
+			"fields": [
+				{
+					"name": "mprDate"
+				},
+				{
+					"name": "mprTime"
+				},
+				{
+					"name": "mprFtdRankName"
+				},
+				{
+					"name": "mprTraineeName"
+				},
+				{
+					"name": "mprGradeKeepUp"
+				},
+				{
+					"name": "mprNoteKeepUp"
+				},
+				{
+					"name": "mprGradeCallouts"
+				},
+				{
+					"name": "mprNoteCallouts"
+				},
+				{
+					"name": "mprGradeDriving"
+				},
+				{
+					"name": "mprNoteDriving"
+				},
+				{
+					"name": "mprGradeBackups"
+				},
+				{
+					"name": "mprNoteBackups"
+				},
+				{
+					"name": "mprAnythingElse"
+				}
+			]
+		},
+		"FTB/7": {
+			"title": "Reinstatement Theory Session",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=1037",
+			"category": "Reinstatement",
+			"fields": [
+				{
+					"name": "rtsDate"
+				},
+				{
+					"name": "rtsPatrolStart"
+				},
+				{
+					"name": "rtsPatrolEnd"
+				},
+				{
+					"name": "rtsChecklist"
+				},
+				{
+					"name": "rtsHandbook"
+				},
+				{
+					"name": "rtsBehaviour"
+				},
+				{
+					"name": "rtsCommunications"
+				},
+				{
+					"name": "rtsRoleplay"
+				},
+				{
+					"name": "rtsArrestReportLink"
+				},
+				{
+					"name": "rtsSectionsToRepeat"
+				},
+				{
+					"name": "rtsMistakes"
+				},
+				{
+					"name": "rtsReadyProgress"
+				},
+				{
+					"name": "rtsAdditionalNotes"
+				}
+			]
+		},
+		"FTB/8": {
+			"title": "Reinstatement Evaluation",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=1037",
+			"category": "Reinstatement",
+			"fields": [
+				{
+					"name": "rteDate"
+				},
+				{
+					"name": "rtePatrolStart"
+				},
+				{
+					"name": "rtePatrolEnd"
+				},
+				{
+					"name": "rteChecklist"
+				},
+				{
+					"name": "rteTimeline"
+				},
+				{
+					"name": "rteGradeAttitude"
+				},
+				{
+					"name": "rteNoteAttitude"
+				},
+				{
+					"name": "rteGradeFieldAwareness"
+				},
+				{
+					"name": "rteNoteFieldAwareness"
+				},
+				{
+					"name": "rteGradeHandbook"
+				},
+				{
+					"name": "rteNoteHandbook"
+				},
+				{
+					"name": "rteGradeCommunication"
+				},
+				{
+					"name": "rteNoteCommunication"
+				},
+				{
+					"name": "rteGradeDriving"
+				},
+				{
+					"name": "rteNoteDriving"
+				},
+				{
+					"name": "rteGradeStress"
+				},
+				{
+					"name": "rteNoteStress"
+				},
+				{
+					"name": "rteGradeRoleplay"
+				},
+				{
+					"name": "rteNoteRoleplay"
+				},
+				{
+					"name": "rteArrestReportLink"
+				},
+				{
+					"name": "rteReadySolo"
+				},
+				{
+					"name": "rteIssues"
+				},
+				{
+					"name": "rteIntervention"
+				},
+				{
+					"name": "rteConcerning"
+				},
+				{
+					"name": "rteRpCommands"
+				},
+				{
+					"name": "rteOocDemeanor"
+				},
+				{
+					"name": "rteRulesUnderstanding"
+				},
+				{
+					"name": "rteShouldPass"
+				}
+			]
+		},
+		"SEB/1": {
+			"title": "Confidential Email",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose",
+			"category": "Correspondence",
+			"fields": [
+				{
+					"name": "date"
+				},
+				{
+					"name": "body"
+				},
+				{
+					"name": "bureauPosition"
+				},
+				{
+					"name": "certifications"
+				}
+			]
+		},
+		"SEB/2": {
+			"title": "Deployment Log",
+			"topicTitle": "{Title} - {Date} - ACTIVE",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/posting.php?mode=post&f=3215",
+			"category": "Logs",
+			"fields": [
+				{
+					"name": "operators"
+				},
+				{
+					"name": "logDate"
+				},
+				{
+					"name": "deploymentStart"
+				},
+				{
+					"name": "deploymentEnd"
+				},
+				{
+					"name": "confiscatedItems"
+				},
+				{
+					"name": "suspects"
+				},
+				{
+					"name": "eventDescription"
+				}
+			]
+		},
+		"SEB/3": {
+			"title": "Patrol Log",
+			"topicTitle": " SEB Patrol - {DATE} - {Passive/Active}",
+			"body": "[img]https://i.imgur.com/XKbhNaG.png[/img]\n[center][color=#BF0000][size=85]Sharing this information is strictly forbidden.[/size][/color][/center]\n[divbox=white][center][size=85][i]S.E.B. Callsign: {{callsign}}[/i][/size][/center]\n[b]Operators:[/b]\n[list=]\n{{operators}}\n[/list]\n[b]Date:[/b] {{logDate}}\n[b]Time:[/b] {{deploymentStart}} - {{deploymentEnd}}\n\n[b]DELTA Summary/Timeline:[/b]\n\n{{eventDescription}}\n\n\n[b]Signature:[/b] [i]{{signature}}[/i]\n[/divbox]",
+			"govLink": "https://gov.eclipse-rp.net/posting.php?mode=post&f=3216",
+			"category": "Logs",
+			"fields": [
+				{
+					"name": "callsign",
+					"label": "S.E.B. Callsign (e.g. 242S)"
+				},
+				{
+					"name": "operators"
+				},
+				{
+					"name": "logDate"
+				},
+				{
+					"name": "deploymentStart"
+				},
+				{
+					"name": "deploymentEnd"
+				},
+				{
+					"name": "eventDescription"
+				}
+			]
+		},
+		"SEB/4": {
+			"title": "Dive Team Certification - Passed (Written Exam)",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4145",
+			"category": "Written exams",
+			"fields": [
+				{
+					"name": "operatorLastName"
+				},
+				{
+					"name": "applicationDate"
+				},
+				{
+					"name": "senderPosition"
+				}
+			]
+		},
+		"SEB/5": {
+			"title": "Dive Team Certification - Failed (Written Exam)",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4145",
+			"category": "Written exams",
+			"fields": [
+				{
+					"name": "senderPosition"
+				},
+				{
+					"name": "reasons"
+				}
+			]
+		},
+		"SEB/6": {
+			"title": "Advanced Aerial Unit Certification - Passed (Written Exam)",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4145",
+			"category": "Written exams",
+			"fields": [
+				{
+					"name": "operatorLastName"
+				},
+				{
+					"name": "applicationDate"
+				},
+				{
+					"name": "senderPosition"
+				},
+				{
+					"name": "date"
+				}
+			]
+		},
+		"SEB/7": {
+			"title": "Advanced Aerial Unit Certification - Failed (Written Exam)",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4145",
+			"category": "Written exams",
+			"fields": [
+				{
+					"name": "operatorLastName"
+				},
+				{
+					"name": "applicationDate"
+				},
+				{
+					"name": "senderPosition"
+				},
+				{
+					"name": "date"
+				},
+				{
+					"name": "reasons"
+				}
+			]
+		},
+		"SEB/8": {
+			"title": "Long Range Rifle Certification - Passed (Written Exam)",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4145",
+			"category": "Written exams",
+			"fields": [
+				{
+					"name": "date"
+				}
+			]
+		},
+		"SEB/9": {
+			"title": "Long Range Rifle Certification - Failed (Written Exam)",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4145",
+			"category": "Written exams",
+			"fields": [
+				{
+					"name": "date"
+				},
+				{
+					"name": "reasons"
+				}
+			]
+		},
+		"SEB/10": {
+			"title": "EOD Technician Certification - Passed (Written Exam)",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4145",
+			"category": "Written exams",
+			"fields": [
+				{
+					"name": "operatorLastName"
+				},
+				{
+					"name": "applicationDate"
+				},
+				{
+					"name": "senderPosition"
+				},
+				{
+					"name": "date"
+				}
+			]
+		},
+		"SEB/11": {
+			"title": "EOD Technician Certification - Failed (Written Exam)",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4145",
+			"category": "Written exams",
+			"fields": [
+				{
+					"name": "operatorLastName"
+				},
+				{
+					"name": "applicationDate"
+				},
+				{
+					"name": "senderPosition"
+				},
+				{
+					"name": "date"
+				},
+				{
+					"name": "reasons"
+				}
+			]
+		},
+		"SEB/12": {
+			"title": "Crisis Negotiator Certification - Passed (Written Exam)",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4145",
+			"category": "Written exams",
+			"fields": [
+				{
+					"name": "operatorLastName"
+				},
+				{
+					"name": "applicationDate"
+				},
+				{
+					"name": "senderPosition"
+				},
+				{
+					"name": "date"
+				}
+			]
+		},
+		"SEB/13": {
+			"title": "Crisis Negotiator Certification - Failed (Written Exam)",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4145",
+			"category": "Written exams",
+			"fields": [
+				{
+					"name": "operatorLastName"
+				},
+				{
+					"name": "applicationDate"
+				},
+				{
+					"name": "senderPosition"
+				},
+				{
+					"name": "date"
+				},
+				{
+					"name": "reasons"
+				}
+			]
+		},
+		"SEB/14": {
+			"title": "Dive Team Certification - Passed (Practical Exam)",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4145",
+			"category": "Practical exams",
+			"fields": [
+				{
+					"name": "operatorLastName"
+				},
+				{
+					"name": "practicalDate"
+				},
+				{
+					"name": "senderPosition"
+				}
+			]
+		},
+		"SEB/15": {
+			"title": "Dive Team Certification - Failed (Practical Exam)",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4145",
+			"category": "Practical exams",
+			"fields": [
+				{
+					"name": "operatorLastName"
+				},
+				{
+					"name": "practicalDate"
+				},
+				{
+					"name": "senderPosition"
+				},
+				{
+					"name": "reasons"
+				}
+			]
+		},
+		"SEB/16": {
+			"title": "Advanced Aerial Unit Certification - Passed (Practical Exam)",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4145",
+			"category": "Practical exams",
+			"fields": [
+				{
+					"name": "operatorLastName"
+				},
+				{
+					"name": "practicalDate"
+				},
+				{
+					"name": "senderPosition"
+				},
+				{
+					"name": "date"
+				}
+			]
+		},
+		"SEB/17": {
+			"title": "Advanced Aerial Unit Certification - Failed (Practical Exam)",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4145",
+			"category": "Practical exams",
+			"fields": [
+				{
+					"name": "operatorLastName"
+				},
+				{
+					"name": "practicalDate"
+				},
+				{
+					"name": "senderPosition"
+				},
+				{
+					"name": "date"
+				},
+				{
+					"name": "reasons"
+				}
+			]
+		},
+		"SEB/18": {
+			"title": "Long Range Rifle Certification - Passed (Practical Exam)",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4145",
+			"category": "Practical exams",
+			"fields": [
+				{
+					"name": "operatorLastName"
+				},
+				{
+					"name": "practicalDate"
+				},
+				{
+					"name": "senderPosition"
+				},
+				{
+					"name": "date"
+				}
+			]
+		},
+		"SEB/19": {
+			"title": "Long Range Rifle Certification - Failed (Practical Exam)",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4145",
+			"category": "Practical exams",
+			"fields": [
+				{
+					"name": "operatorLastName"
+				},
+				{
+					"name": "practicalDate"
+				},
+				{
+					"name": "senderPosition"
+				},
+				{
+					"name": "date"
+				},
+				{
+					"name": "reasons"
+				}
+			]
+		},
+		"SEB/20": {
+			"title": "EOD Technician Certification - Passed (Practical Exam)",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4145",
+			"category": "Practical exams",
+			"fields": [
+				{
+					"name": "operatorLastName"
+				},
+				{
+					"name": "practicalDate"
+				},
+				{
+					"name": "senderPosition"
+				},
+				{
+					"name": "date"
+				}
+			]
+		},
+		"SEB/21": {
+			"title": "EOD Technician Certification - Failed (Practical Exam)",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4145",
+			"category": "Practical exams",
+			"fields": [
+				{
+					"name": "operatorLastName"
+				},
+				{
+					"name": "practicalDate"
+				},
+				{
+					"name": "senderPosition"
+				},
+				{
+					"name": "date"
+				},
+				{
+					"name": "reasons"
+				}
+			]
+		},
+		"SEB/22": {
+			"title": "Crisis Negotiator Certification - Passed (Practical Exam)",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4145",
+			"category": "Practical exams",
+			"fields": [
+				{
+					"name": "operatorLastName"
+				},
+				{
+					"name": "senderPosition"
+				},
+				{
+					"name": "cnGrade0"
+				},
+				{
+					"name": "cnReason0"
+				},
+				{
+					"name": "cnGrade1"
+				},
+				{
+					"name": "cnReason1"
+				},
+				{
+					"name": "cnGrade2"
+				},
+				{
+					"name": "cnReason2"
+				},
+				{
+					"name": "cnGrade3"
+				},
+				{
+					"name": "cnReason3"
+				},
+				{
+					"name": "cnGrade4"
+				},
+				{
+					"name": "cnReason4"
+				},
+				{
+					"name": "cnGrade5"
+				},
+				{
+					"name": "cnReason5"
+				}
+			]
+		},
+		"SEB/23": {
+			"title": "Crisis Negotiator Certification - Failed (Practical Exam)",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4145",
+			"category": "Practical exams",
+			"fields": [
+				{
+					"name": "operatorLastName"
+				},
+				{
+					"name": "senderPosition"
+				},
+				{
+					"name": "cnGrade0"
+				},
+				{
+					"name": "cnReason0"
+				},
+				{
+					"name": "cnGrade1"
+				},
+				{
+					"name": "cnReason1"
+				},
+				{
+					"name": "cnGrade2"
+				},
+				{
+					"name": "cnReason2"
+				},
+				{
+					"name": "cnGrade3"
+				},
+				{
+					"name": "cnReason3"
+				},
+				{
+					"name": "cnGrade4"
+				},
+				{
+					"name": "cnReason4"
+				},
+				{
+					"name": "cnGrade5"
+				},
+				{
+					"name": "cnReason5"
+				}
+			]
+		},
+		"SEB/24": {
+			"title": "Operator Exam - Passed",
+			"topicTitle": "Operator Exam Result",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose",
+			"category": "Operator exams",
+			"fields": [
+				{
+					"name": "date"
+				},
+				{
+					"name": "bureauPosition"
+				},
+				{
+					"name": "certifications"
+				}
+			]
+		},
+		"SEB/25": {
+			"title": "Operator Exam - Failed",
+			"topicTitle": "Operator Exam Result",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose",
+			"category": "Operator exams",
+			"fields": [
+				{
+					"name": "date"
+				},
+				{
+					"name": "bureauPosition"
+				},
+				{
+					"name": "certifications"
+				},
+				{
+					"name": "reasons"
+				}
+			]
+		},
+		"SEB/26": {
+			"title": "Promotion Email",
+			"topicTitle": "SEB - Promotion Notice",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose",
+			"category": "Personnel",
+			"fields": [
+				{
+					"name": "date"
+				},
+				{
+					"name": "bureauPosition"
+				},
+				{
+					"name": "certifications"
+				}
+			]
+		},
+		"SEB/27": {
+			"title": "Training Session Scheduling",
+			"topicTitle": "{Training Title } - { Date } - {Time}",
+			"body": "[img]https://i.imgur.com/MWkrXmo.png[/img]\n[divbox=white]\n[center][size=150][b]{{trainingName}}[/b][/size][/center]\n[b]Date: [/b] [b]{{sessionDate}}, {{sessionTime}}[/b] \n[b]Operators Required:[/b] As many as possible\n[b]Location:[/b] {{location}}\n[b]Training Description/Guidelines:[/b] \n{{trainingDescription}}",
+			"govLink": "https://gov.eclipse-rp.net/posting.php?mode=post&f=4069",
+			"category": "Training",
+			"fields": [
+				{
+					"name": "trainingName"
+				},
+				{
+					"name": "sessionDate"
+				},
+				{
+					"name": "sessionTime"
+				},
+				{
+					"name": "location"
+				},
+				{
+					"name": "instructor"
+				},
+				{
+					"name": "trainingDescription"
+				}
+			]
+		},
+		"SEB/28": {
+			"title": "Inactivity Notice",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose",
+			"category": "Personnel",
+			"fields": [
+				{
+					"name": "date"
+				},
+				{
+					"name": "bureauPosition"
+				},
+				{
+					"name": "operatorLastName"
+				}
+			]
+		},
+		"SEB/29": {
+			"title": "Email",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose",
+			"category": "Correspondence",
+			"fields": [
+				{
+					"name": "date"
+				},
+				{
+					"name": "body"
+				},
+				{
+					"name": "bureauPosition"
+				},
+				{
+					"name": "certifications"
+				}
+			]
+		},
+		"SEB/35": {
+			"title": "TD Instructor Acceptance",
+			"topicTitle": "TD instructor Application Result",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose",
+			"category": "Correspondence",
+			"fields": [
+				{
+					"name": "date"
+				},
+				{
+					"name": "recipientName"
+				},
+				{
+					"name": "bureauPosition"
+				},
+				{
+					"name": "certifications"
+				}
+			]
+		},
+		"SEB/36": {
+			"title": "TD Instructor Denial",
+			"topicTitle": "TD instructor Application Result",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose",
+			"category": "Correspondence",
+			"fields": [
+				{
+					"name": "date"
+				},
+				{
+					"name": "recipientName"
+				},
+				{
+					"name": "bureauPosition"
+				},
+				{
+					"name": "certifications"
+				},
+				{
+					"name": "reasons"
+				}
+			]
+		},
+		"Supervisory/1": {
+			"title": "Promotion Notice",
+			"topicTitle": " [Promotion] {Deputy Name}",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/posting.php?mode=post&f=937",
+			"category": "Personnel changes",
+			"fields": [
+				{
+					"name": "recipientName"
+				},
+				{
+					"name": "previousRank"
+				},
+				{
+					"name": "newRank"
+				},
+				{
+					"name": "date"
+				}
+			]
+		},
+		"Supervisory/3": {
+			"title": "Demotion Notice",
+			"topicTitle": " [Demotion] {Deputy Name}",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/posting.php?mode=post&f=937",
+			"category": "Personnel changes",
+			"fields": [
+				{
+					"name": "recipientName"
+				},
+				{
+					"name": "previousRank"
+				},
+				{
+					"name": "newRank"
+				},
+				{
+					"name": "date"
+				}
+			]
+		},
+		"Supervisory/2": {
+			"title": "Academy Notice",
+			"topicTitle": "[Academy Graduation] {Deputy Name}  ",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/posting.php?mode=post&f=937",
+			"category": "Personnel changes",
+			"fields": [
+				{
+					"name": "recipientName"
+				},
+				{
+					"name": "date"
+				}
+			]
+		},
+		"Supervisory/4": {
+			"title": "Discharge Notice",
+			"topicTitle": "[Honorable/Dishonorable Discharge] {Deputy Name}",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/posting.php?mode=post&f=937",
+			"category": "Discharges",
+			"fields": [
+				{
+					"name": "recipientName"
+				},
+				{
+					"name": "date"
+				},
+				{
+					"name": "authorizingDeputy"
+				},
+				{
+					"name": "dischargeType"
+				},
+				{
+					"name": "summary"
+				}
+			]
+		},
+		"Supervisory/5": {
+			"title": "Suspension Notice (Form)",
+			"topicTitle": "[Suspension] {Deputy Name}",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/posting.php?mode=post&f=937",
+			"category": "Suspensions",
+			"fields": [
+				{
+					"name": "recipientName"
+				},
+				{
+					"name": "date"
+				},
+				{
+					"name": "authorizingDeputy"
+				},
+				{
+					"name": "summary"
+				},
+				{
+					"name": "suspensionStart"
+				},
+				{
+					"name": "suspensionEnd"
+				}
+			]
+		},
+		"Supervisory/6": {
+			"title": "Reinstatement Notice",
+			"topicTitle": "[Reinstatement] {Deputy Name}",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/posting.php?mode=post&f=937",
+			"category": "Personnel changes",
+			"fields": [
+				{
+					"name": "recipientName"
+				},
+				{
+					"name": "previousRank"
+				},
+				{
+					"name": "newRank"
+				},
+				{
+					"name": "date"
+				}
+			]
+		},
+		"Supervisory/7": {
+			"title": "Reassignment Notice",
+			"topicTitle": "[Reassignment] {Deputy Name}",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/posting.php?mode=post&f=937",
+			"category": "Personnel changes",
+			"fields": [
+				{
+					"name": "previousRank"
+				},
+				{
+					"name": "reassignmentAssignment"
+				},
+				{
+					"name": "date"
+				}
+			]
+		},
+		"Supervisory/8": {
+			"title": "Transfer Notice",
+			"topicTitle": "[Transfer] {Deputy Name}",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/posting.php?mode=post&f=937",
+			"category": "Personnel changes",
+			"fields": [
+				{
+					"name": "recipientName"
+				},
+				{
+					"name": "previousRank"
+				},
+				{
+					"name": "newRank"
+				},
+				{
+					"name": "date"
+				}
+			]
+		},
+		"Supervisory/9": {
+			"title": "Master Deputy/Detective Information Email",
+			"topicTitle": "Master Deputy/Detective Information",
+			"body": "[LSSDfooter][/LSSDfooter][divbox=white]\n[img]https://i.ibb.co/PZWH0Rx9/FAyEyJd.png[/img][aligntable=right,0,0,0,0,0,0][right][font=Arial][b]\n[size=150]Los Santos County Sheriff's Department[/size][/b]\n[size=115]Master Deputy Information.[/size]\n[size=95]\"A TRADITION OF SERVICE\"[/size][/font][/right][/aligntable]\n[hr]\n[list=none]\n[b]Re:[/b] Master Deputy/Detective Information.\n\nMaster Deputy/Detective [b]undefined,[/b]\n\nFirst and foremost, I would like to congratulate you on your promotion to Master Deputy. You have worked hard to achieve the rank of Master Deputy (MFTD) and you should be nothing but proud of yourself. You should make yourself acquainted with your new rank authority by reading [url=https://gov.eclipse-rp.net/viewtopic.php?t=194190]2.2 - Rank Authority[/url] of the Los Santos County Sheriff's Department Employee Manual.\n\nBeing a Master Deputy means that you're at the last field staff position that the Los Santos County Sheriff's Department offers. We understand that some Master Deputies wish to further progress and become supervisors of the Los Santos County Sheriff's Department, and that is great. You can read about what it takes to become a Sergeant-in-Training in [url=https://gov.eclipse-rp.net/viewtopic.php?t=194196]2.5 Promotion Guidelines[/url] of the Los Santos County Sheriff's Department Employee Manual and about the Sergeant Training Program in the [url=https://gov.eclipse-rp.net/viewforum.php?f=998]Position Opportunities[/url] board.\n\nAs a Master Deputy, you will be expected to handle [b]Ride-Along requests[/b]. You can find all information (including response formats) in the Los Santos County Sheriff's Department Employee Manual, [url=https://gov.eclipse-rp.net/viewtopic.php?t=205777]3.14 - Ride Along Program[/url], it is recommended that you keep a copy with you [ooc]bookmark it[/ooc].\n\nIf you have any questions about being a Master Deputy or your responsibilities, then don't hesitate to reach out - we would love to assist you.\n\nBest of luck with your new position,\n[/list]\n\n[hr][/hr][list=none]\n\nFrom\n[img][/img]\n \nLos Santos County Sheriff's Department\n[/list][/divbox][LSSDfooter][/LSSDfooter]",
+			"govLink": "https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose",
+			"category": "Notices",
+			"fields": [
+				{
+					"name": "recipientName"
+				}
+			]
+		},
+		"Supervisory/10": {
+			"title": "Resignation Email",
+			"topicTitle": "Resignation Notice",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose",
+			"category": "Personnel changes",
+			"fields": [
+				{
+					"name": "recipientName"
+				}
+			]
+		},
+		"Supervisory/11": {
+			"title": "Dishonourable Discharge (AWOL)",
+			"topicTitle": "Dishonourable Discharge (AWOL)",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose",
+			"category": "Discharges",
+			"fields": [
+				{
+					"name": "recipientName"
+				},
+				{
+					"name": "salutation"
+				}
+			]
+		},
+		"Supervisory/12": {
+			"title": "Dishonourable Discharge ((OOC Reason))",
+			"topicTitle": "Dishonourable Discharge ((OOC Reason))",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose",
+			"category": "Discharges",
+			"fields": [
+				{
+					"name": "recipientName"
+				},
+				{
+					"name": "reasons"
+				}
+			]
+		},
+		"Supervisory/13": {
+			"title": "Dishonourable Discharge (Input Reason)",
+			"topicTitle": "Dishonourable Discharge ",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose",
+			"category": "Discharges",
+			"fields": [
+				{
+					"name": "recipientName"
+				},
+				{
+					"name": "reasons"
+				}
+			]
+		},
+		"Supervisory/14": {
+			"title": "Inactivity Notice",
+			"topicTitle": "Inactivity Notice - {DD/MM} - Action Required",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose",
+			"category": "Notices",
+			"fields": [
+				{
+					"name": "recipientName"
+				}
+			]
+		},
+		"Supervisory/15": {
+			"title": "((Ratio Notice))",
+			"topicTitle": "((Ratio Notice))",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose",
+			"category": "Notices",
+			"fields": [
+				{
+					"name": "recipientName"
+				}
+			]
+		},
+		"Supervisory/16": {
+			"title": "Disciplinary Driving Assessment Notice",
+			"topicTitle": "Disciplinary Driving Assessment Notice",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose",
+			"category": "Notices",
+			"fields": [
+				{
+					"name": "recipientName"
+				}
+			]
+		},
+		"Supervisory/17": {
+			"title": "Suspension Notice (Email)",
+			"topicTitle": "Suspension Notice ",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose",
+			"category": "Suspensions",
+			"fields": [
+				{
+					"name": "recipientName"
+				},
+				{
+					"name": "summary"
+				},
+				{
+					"name": "suspensionStart"
+				},
+				{
+					"name": "suspensionEnd"
+				},
+				{
+					"name": "suspensionDuration"
+				}
+			]
+		},
+		"Supervisory/18": {
+			"title": "LOA/ROH Response",
+			"body": "",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=1000",
+			"category": "Responses",
+			"fields": [
+				{
+					"name": "recipientName"
+				},
+				{
+					"name": "response"
+				}
+			]
+		},
+		"Supervisory/19": {
+			"title": "Commendation Response",
+			"body": "",
+			"govLink": "",
+			"category": "Responses",
+			"fields": [
+				{
+					"name": "civilianName"
 				}
 			]
 		}
@@ -1675,6 +4211,11 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 				"Escape",
 				"Death"
 			]
+		},
+		{
+			"name": "trainingDescription",
+			"type": "textarea",
+			"label": "Training Description"
 		}
 	]
 } /* /ADMIN_DATA */;
