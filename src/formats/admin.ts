@@ -3314,6 +3314,72 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=1621",
 			"category": "Other reports",
 			"fields": []
+		},
+		{
+			"id": "20",
+			"division": "Supervisory",
+			"title": "Disciplinary Actions",
+			"topicTitle": "",
+			"body": "[img]https://i.imgur.com/inc1KaJ.png[/img]\n[lssdsubtitle]SUPERVISOR DETAILS[/lssdsubtitle]\n[divbox=white]\n[b]Supervisor Rank & Full Name:[/b] {{rankName}}\n[b]Date of Action:[/b] {{dateOfAction}}\n[/divbox]\n\n[lssdsubtitle]DISCIPLINARY ACTIONS[/lssdsubtitle]\n[divbox=white]\n[b]Disciplinary Action Given:[/b]\n[list=none]\n{{disciplinaryActionGiven}}\n[/list]\n\n[b]Disciplinary Action Amount/Length:[/b]\n{{disciplinaryActionAmountLength}}\n[b]Recommended Further-Severe Action:[/b]\n[list=none]\n{{recommendedFurtherSevereAction}}\n[/list]\n\n[b]Detailed Account of What Happened:[/b]\n[list]\n[*]{{detailedAccountOfWhatHappened}}\n[/list]\n[/divbox]\n\n[lssdsubtitle]SUPERVISOR IN TRAINING ONLY[/lssdsubtitle]\n[divbox=white]\n[b]Disciplinary Action Reviewed/Witnessed by:[/b] {{disciplinaryActionReviewedWitnessedBy}}\n[/divbox]\n[LSSDfooter][/LSSDfooter]",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=1023",
+			"category": "Personnel Files",
+			"fields": [
+				{
+					"name": "dateOfAction"
+				},
+				{
+					"name": "disciplinaryActionGiven"
+				},
+				{
+					"name": "disciplinaryActionAmountLength"
+				},
+				{
+					"name": "recommendedFurtherSevereAction"
+				},
+				{
+					"name": "detailedAccountOfWhatHappened"
+				},
+				{
+					"name": "disciplinaryActionReviewedWitnessedBy"
+				}
+			]
+		},
+		{
+			"id": "21",
+			"division": "Supervisory",
+			"title": "Rank Adjustment",
+			"topicTitle": "",
+			"body": "[img]https://i.gyazo.com/22da4c9bac8d6fef9bbdf3c2828dd5f5.png[/img]\n[lssdsubtitle]RANK DETAILS[/lssdsubtitle]\n[divbox=white]\n[b]Old Rank:[/b] {{oldRank}}\n[b]New Rank:[/b] {{newRank}}\n[/divbox]\n[LSSDfooter][/LSSDfooter]",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=1023",
+			"category": "Personnel Files",
+			"fields": [
+				{
+					"name": "oldRank"
+				},
+				{
+					"name": "newRank"
+				}
+			]
+		},
+		{
+			"id": "22",
+			"division": "Supervisory",
+			"title": "Name Change",
+			"topicTitle": "",
+			"body": "[img]https://i.imgur.com/UeAYGwn.png[/img]\n[lssdsubtitle]DEPUTY AND NAME DETAILS[/lssdsubtitle]\n[divbox=white]\n[b]Old Name:[/b] {{oldName}}\n[b]New Name:[/b] {{newName}}\n[b][ooc]Is this a new character?[/ooc]:[/b] {{isThisANewCharacter}}\n[/divbox]\n[LSSDfooter][/LSSDfooter]",
+			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=1023",
+			"category": "Personnel Files",
+			"fields": [
+				{
+					"name": "oldName"
+				},
+				{
+					"name": "newName"
+				},
+				{
+					"name": "isThisANewCharacter"
+				}
+			]
 		}
 	],
 	"inputs": [
@@ -4216,6 +4282,70 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 			"name": "trainingDescription",
 			"type": "textarea",
 			"label": "Training Description"
+		},
+		{
+			"name": "dateOfAction",
+			"type": "date",
+			"label": "Date Of Action"
+		},
+		{
+			"name": "disciplinaryActionGiven",
+			"type": "checkbox",
+			"label": "Disciplinary Action Given",
+			"items": [
+				"Verbal Warning",
+				"Written Warning",
+				"Disciplinary Driving Assessment",
+				"Disciplinary Task",
+				"Citation",
+				"Suspension",
+				"Demotion",
+				"Dishonourable Discharge"
+			]
+		},
+		{
+			"name": "disciplinaryActionAmountLength",
+			"type": "text",
+			"label": "Disciplinary Action Amount/Length"
+		},
+		{
+			"name": "recommendedFurtherSevereAction",
+			"type": "checkbox",
+			"label": "Recommended Further-Severe Action",
+			"items": [
+				"True",
+				"False"
+			]
+		},
+		{
+			"name": "detailedAccountOfWhatHappened",
+			"type": "textarea",
+			"label": "Detailed Account of What Happened"
+		},
+		{
+			"name": "disciplinaryActionReviewedWitnessedBy",
+			"type": "text",
+			"label": "Disciplinary Action Reviewed/Witnessed by"
+		},
+		{
+			"name": "oldRank",
+			"type": "text",
+			"label": "Old Rank"
+		},
+		{
+			"name": "oldName",
+			"type": "text",
+			"label": "Old Name"
+		},
+		{
+			"name": "newName",
+			"type": "text",
+			"label": "New Name"
+		},
+		{
+			"name": "isThisANewCharacter",
+			"type": "text",
+			"label": "(( Is This a New Character? ))"
 		}
 	]
 } /* /ADMIN_DATA */;
