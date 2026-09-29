@@ -2684,9 +2684,6 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 			"category": "Responses",
 			"fields": [
 				{
-					"name": "recipientName"
-				},
-				{
 					"name": "response"
 				}
 			]
