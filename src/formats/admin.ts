@@ -10,9 +10,18 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 	"overrides": {
 		"General/1": {
 			"title": "Personal Email",
+			"topicTitle": "{Email title}",
 			"body": "",
 			"govLink": "https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose",
-			"category": "Correspondence"
+			"category": "Correspondence",
+			"fields": [
+				{
+					"name": "date"
+				},
+				{
+					"name": "recipientName"
+				}
+			]
 		},
 		"SEB/30": {
 			"title": "Probationary Operator Profile",
