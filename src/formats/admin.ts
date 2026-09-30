@@ -1765,454 +1765,147 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 		},
 		"SEB/4": {
 			"title": "Dive Team Certification - Passed (Written Exam)",
-			"body": "",
+			"body": "\n[lssdfooter][/lssdfooter]\n[divbox=white]\n[float=left][/float]\n[aligntable=left,0,0,0,0,0,0][fimg=100,100]https://i.imgur.com/uXQ1hoT.png[/fimg][/aligntable]\n[aligntable=right,0,0,0,0,0,0][right][font=Arial][b][size=125]Los Santos County Sheriff's Department[/size][/b]\n[size=110]Special Enforcement Bureau — [color=#00FF00]Application Response[/color][/size]\n[size=100]\"Priority One Is Saving Lives\"[/size][/font][/right][/aligntable]\n\n[hr][/hr]\n\nOperator,\n\nAs of this email, you have successfully [color=#00FF00]PASSED[/color] the written examination portion of your Dive Team Application.\n\nYou are invited to take the next step and move on to the practical Training & Assessment for the Dive Team Certification. Please reach out to a member of the Instructor team in order to schedule a training time that works for you!\n\nCongratulations, and good luck!\n\n\n[hr][/hr]\n[list=none]\n\n\nInstructor, Training Division\nSpecial Enforcement Bureau\n[/divbox]\n[lssdfooter][/lssdfooter]\n",
 			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4145",
 			"category": "Written exams",
-			"fields": [
-				{
-					"name": "operatorLastName"
-				},
-				{
-					"name": "applicationDate"
-				},
-				{
-					"name": "senderPosition"
-				}
-			]
+			"fields": []
 		},
 		"SEB/5": {
 			"title": "Dive Team Certification - Failed (Written Exam)",
-			"body": "",
+			"body": "\n[lssdfooter][/lssdfooter]\n[divbox=white]\n[float=left][/float]\n[aligntable=left,0,0,0,0,0,0][fimg=100,100]https://i.imgur.com/uXQ1hoT.png[/fimg][/aligntable]\n[aligntable=right,0,0,0,0,0,0][right][font=Arial][b][size=125]Los Santos County Sheriff's Department[/size][/b]\n[size=110]Special Enforcement Bureau — [color=#FF0000]Application Response[/color][/size]\n[size=100]\"Priority One Is Saving Lives\"[/size][/font][/right][/aligntable]\n\n[hr][/hr]\n\nOperator,\n\nAs of this email, you have unfortunately [color=#FF0000]Not Passed[/color] the written examination portion of your Dive Team Application. Your performance on the written examination was not sufficient to consider you for continued progress in the Dive Team Certification Program.\n\nThe reason for your denial from this Certification Program is as follows:\n\n{{reasonSForDenial}}\n\nWe thank you for your interest in this Certification Program, and wish you luck on your future attempts, should you decide to try again.\n\n\n[hr][/hr]\n[list=none]\n\n\n\nInstructor, Training Division\nSpecial Enforcement Bureau\n[/divbox]\n[lssdfooter][/lssdfooter]\n",
 			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4145",
 			"category": "Written exams",
 			"fields": [
 				{
-					"name": "senderPosition"
-				},
-				{
-					"name": "reasons"
+					"name": "reasonSForDenial"
 				}
 			]
 		},
 		"SEB/6": {
 			"title": "Advanced Aerial Unit Certification - Passed (Written Exam)",
-			"body": "",
+			"body": "\n[lssdfooter][/lssdfooter]\n[divbox=white]\n[float=left][/float]\n[aligntable=left,0,0,0,0,0,0][fimg=100,100]https://i.imgur.com/uXQ1hoT.png[/fimg][/aligntable]\n[aligntable=right,0,0,0,0,0,0][right][font=Arial][b][size=125]Los Santos County Sheriff's Department[/size][/b]\n[size=110]Special Enforcement Bureau — [color=#00FF00]Application Response[/color][/size]\n[size=100]\"Priority One Is Saving Lives\"[/size][/font][/right][/aligntable]\n\n[hr][/hr]\n\nOperator,\n\nAs of this email, you have successfully [color=#00FF00]PASSED[/color] the written examination portion of your Advanced Aerial Unit Application.\n\nYou are invited to take the next step and move on to the practical Training & Assessment for the Advanced Aerial Unit Certification. Please reach out to a member of the Instructor team in order to schedule a training time that works for you!\n\nCongratulations, and good luck!\n\n\n[hr][/hr]\n[list=none]\n\n\n\nInstructor, Training Division\nSpecial Enforcement Bureau\n[/divbox]\n[lssdfooter][/lssdfooter]\n",
 			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4145",
 			"category": "Written exams",
-			"fields": [
-				{
-					"name": "operatorLastName"
-				},
-				{
-					"name": "applicationDate"
-				},
-				{
-					"name": "senderPosition"
-				},
-				{
-					"name": "date"
-				}
-			]
+			"fields": []
 		},
 		"SEB/7": {
 			"title": "Advanced Aerial Unit Certification - Failed (Written Exam)",
-			"body": "",
+			"body": "\n[lssdfooter][/lssdfooter]\n[divbox=white]\n[float=left][/float]\n[aligntable=left,0,0,0,0,0,0][fimg=100,100]https://i.imgur.com/uXQ1hoT.png[/fimg][/aligntable]\n[aligntable=right,0,0,0,0,0,0][right][font=Arial][b][size=125]Los Santos County Sheriff's Department[/size][/b]\n[size=110]Special Enforcement Bureau — [color=#FF0000]Application Response[/color][/size]\n[size=100]\"Priority One Is Saving Lives\"[/size][/font][/right][/aligntable]\n\n[hr][/hr]\n\nOperator,\n\nAs of this email, you have unfortunately [color=#FF0000]Not Passed[/color] the written examination portion of your Advanced Aerial Unit Application. Your performance on the written examination was not sufficient to consider you for continued progress in the Advanced Aerial Unit Certification Program.\n\nThe reason for your denial from this Certification Program is as follows:\n\n{{reasonSForDenial}}\n\nWe thank you for your interest in this Certification Program, and wish you luck on your future attempts, should you decide to try again.\n\n\n[hr][/hr]\n[list=none]\n\n\n\nInstructor, Training Division\nSpecial Enforcement Bureau\n[/divbox]\n[lssdfooter][/lssdfooter]\n",
 			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4145",
 			"category": "Written exams",
-			"fields": [
-				{
-					"name": "operatorLastName"
-				},
-				{
-					"name": "applicationDate"
-				},
-				{
-					"name": "senderPosition"
-				},
-				{
-					"name": "date"
-				},
-				{
-					"name": "reasons"
-				}
-			]
+			"fields": []
 		},
 		"SEB/8": {
 			"title": "Long Range Rifle Certification - Passed (Written Exam)",
-			"body": "",
+			"body": "\n[lssdfooter][/lssdfooter]\n[divbox=white]\n[float=left][/float]\n[aligntable=left,0,0,0,0,0,0][fimg=100,100]https://i.imgur.com/uXQ1hoT.png[/fimg][/aligntable]\n[aligntable=right,0,0,0,0,0,0][right][font=Arial][b][size=125]Los Santos County Sheriff's Department[/size][/b]\n[size=110]Special Enforcement Bureau — [color=#00FF00]Application Response[/color][/size]\n[size=100]\"Priority One Is Saving Lives\"[/size][/font][/right][/aligntable]\n\n[hr][/hr]\n\nOperator,\n\nAs of this email, you have successfully [color=#00FF00]PASSED[/color] the written examination portion of your Long Range Rifle Application.\n\nYou are invited to take the next step and move on to the practical Training & Assessment for the Long Range Rifle Certification. Please reach out to a member of the Instructor team in order to schedule a training time that works for you!\n\nCongratulations, and good luck!\n\n\n[hr][/hr]\n[list=none]\n\n\n\nInstructor, Training Division\nSpecial Enforcement Bureau\n[/divbox]\n[lssdfooter][/lssdfooter]\n",
 			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4145",
 			"category": "Written exams",
-			"fields": [
-				{
-					"name": "date"
-				}
-			]
+			"fields": []
 		},
 		"SEB/9": {
 			"title": "Long Range Rifle Certification - Failed (Written Exam)",
-			"body": "",
+			"body": "\n[lssdfooter][/lssdfooter]\n[divbox=white]\n[float=left][/float]\n[aligntable=left,0,0,0,0,0,0][fimg=100,100]https://i.imgur.com/uXQ1hoT.png[/fimg][/aligntable]\n[aligntable=right,0,0,0,0,0,0][right][font=Arial][b][size=125]Los Santos County Sheriff's Department[/size][/b]\n[size=110]Special Enforcement Bureau — [color=#FF0000]Application Response[/color][/size]\n[size=100]\"Priority One Is Saving Lives\"[/size][/font][/right][/aligntable]\n\n[hr][/hr]\n\nOperator,\n\nAs of this email, you have unfortunately [color=#FF0000]Not Passed[/color] the written examination portion of your Long Range Rifle Application. Your performance on the written examination was not sufficient to consider you for continued progress in the Long Range Rifle Certification Program.\n\nThe reason for your denial from this Certification Program is as follows:\n\n{{reasonSForDenial}}\n\nWe thank you for your interest in this Certification Program, and wish you luck on your future attempts, should you decide to try again.\n\n\n[hr][/hr]\n[list=none]\n\n\n\nInstructor, Training Division\nSpecial Enforcement Bureau\n[/divbox]\n[lssdfooter][/lssdfooter]\n",
 			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4145",
 			"category": "Written exams",
-			"fields": [
-				{
-					"name": "date"
-				},
-				{
-					"name": "reasons"
-				}
-			]
+			"fields": []
 		},
 		"SEB/10": {
 			"title": "EOD Technician Certification - Passed (Written Exam)",
-			"body": "",
+			"body": "\n[lssdfooter][/lssdfooter]\n[divbox=white]\n[float=left][/float]\n[aligntable=left,0,0,0,0,0,0][fimg=100,100]https://i.imgur.com/uXQ1hoT.png[/fimg][/aligntable]\n[aligntable=right,0,0,0,0,0,0][right][font=Arial][b][size=125]Los Santos County Sheriff's Department[/size][/b]\n[size=110]Special Enforcement Bureau — [color=#00FF00]Application Response[/color][/size]\n[size=100]\"Priority One Is Saving Lives\"[/size][/font][/right][/aligntable]\n\n[hr][/hr]\n\nOperator,\n\nAs of this email, you have successfully [color=#00FF00]PASSED[/color] the written examination portion of your EOD Technician Application.\n\nYou are invited to take the next step and move on to the practical Training & Assessment for the EOD Technician Certification. Please reach out to a member of the Instructor team in order to schedule a training time that works for you!\n\nCongratulations, and good luck!\n\n\n[hr][/hr]\n[list=none]\n\n\n\nInstructor, Training Division\nSpecial Enforcement Bureau\n[/divbox]\n[lssdfooter][/lssdfooter]\n",
 			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4145",
 			"category": "Written exams",
-			"fields": [
-				{
-					"name": "operatorLastName"
-				},
-				{
-					"name": "applicationDate"
-				},
-				{
-					"name": "senderPosition"
-				},
-				{
-					"name": "date"
-				}
-			]
+			"fields": []
 		},
 		"SEB/11": {
 			"title": "EOD Technician Certification - Failed (Written Exam)",
-			"body": "",
+			"body": "\n[lssdfooter][/lssdfooter]\n[divbox=white]\n[float=left][/float]\n[aligntable=left,0,0,0,0,0,0][fimg=100,100]https://i.imgur.com/uXQ1hoT.png[/fimg][/aligntable]\n[aligntable=right,0,0,0,0,0,0][right][font=Arial][b][size=125]Los Santos County Sheriff's Department[/size][/b]\n[size=110]Special Enforcement Bureau — [color=#FF0000]Application Response[/color][/size]\n[size=100]\"Priority One Is Saving Lives\"[/size][/font][/right][/aligntable]\n\n[hr][/hr]\n\nOperator,\n\nAs of this email, you have unfortunately [color=#FF0000]Not Passed[/color] the written examination portion of your EOD Technician Application. Your performance on the written examination was not sufficient to consider you for continued progress in the EOD Technician Certification Program.\n\nThe reason for your denial from this Certification Program is as follows:\n\n{{reasonSForDenial}}\n\nWe thank you for your interest in this Certification Program, and wish you luck on your future attempts, should you decide to try again.\n\n\n[hr][/hr]\n[list=none]\n\n\n\nInstructor, Training Division\nSpecial Enforcement Bureau\n[/divbox]\n[lssdfooter][/lssdfooter]\n",
 			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4145",
 			"category": "Written exams",
-			"fields": [
-				{
-					"name": "operatorLastName"
-				},
-				{
-					"name": "applicationDate"
-				},
-				{
-					"name": "senderPosition"
-				},
-				{
-					"name": "date"
-				},
-				{
-					"name": "reasons"
-				}
-			]
+			"fields": []
 		},
 		"SEB/12": {
 			"title": "Crisis Negotiator Certification - Passed (Written Exam)",
-			"body": "",
+			"body": "\n[lssdfooter][/lssdfooter]\n[divbox=white]\n[float=left][/float]\n[aligntable=left,0,0,0,0,0,0][fimg=100,100]https://i.imgur.com/uXQ1hoT.png[/fimg][/aligntable]\n[aligntable=right,0,0,0,0,0,0][right][font=Arial][b][size=125]Los Santos County Sheriff's Department[/size][/b]\n[size=110]Special Enforcement Bureau — [color=#00FF00]Application Response[/color][/size]\n[size=100]\"Priority One Is Saving Lives\"[/size][/font][/right][/aligntable]\n\n[hr][/hr]\n\nOperator,\n\nAs of this email, you have successfully [color=#00FF00]PASSED[/color] the written examination portion of your Crisis Negotiator Application.\n\nYou are invited to take the next step and move on to the practical Training & Assessment for the Crisis Negotiator Certification. Please reach out to a member of the Instructor team in order to schedule a training time that works for you!\n\nCongratulations, and good luck!\n\n\n[hr][/hr]\n[list=none]\n\n\n\nInstructor, Training Division\nSpecial Enforcement Bureau\n[/divbox]\n[lssdfooter][/lssdfooter]\n",
 			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4145",
 			"category": "Written exams",
-			"fields": [
-				{
-					"name": "operatorLastName"
-				},
-				{
-					"name": "applicationDate"
-				},
-				{
-					"name": "senderPosition"
-				},
-				{
-					"name": "date"
-				}
-			]
+			"fields": []
 		},
 		"SEB/13": {
 			"title": "Crisis Negotiator Certification - Failed (Written Exam)",
-			"body": "",
+			"body": "\n[lssdfooter][/lssdfooter]\n[divbox=white]\n[float=left][/float]\n[aligntable=left,0,0,0,0,0,0][fimg=100,100]https://i.imgur.com/uXQ1hoT.png[/fimg][/aligntable]\n[aligntable=right,0,0,0,0,0,0][right][font=Arial][b][size=125]Los Santos County Sheriff's Department[/size][/b]\n[size=110]Special Enforcement Bureau — [color=#FF0000]Application Response[/color][/size]\n[size=100]\"Priority One Is Saving Lives\"[/size][/font][/right][/aligntable]\n\n[hr][/hr]\n\nOperator,\n\nAs of this email, you have unfortunately [color=#FF0000]Not Passed[/color] the written examination portion of your Crisis Negotiator Application. Your performance on the written examination was not sufficient to consider you for continued progress in the Crisis Negotiator Certification Program.\n\nThe reason for your denial from this Certification Program is as follows:\n\n{{reasonSForDenial}}\n\nWe thank you for your interest in this Certification Program, and wish you luck on your future attempts, should you decide to try again.\n\n\n[hr][/hr]\n[list=none]\n\n\n\nInstructor, Training Division\nSpecial Enforcement Bureau\n[/divbox]\n[lssdfooter][/lssdfooter]\n\n",
 			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4145",
 			"category": "Written exams",
-			"fields": [
-				{
-					"name": "operatorLastName"
-				},
-				{
-					"name": "applicationDate"
-				},
-				{
-					"name": "senderPosition"
-				},
-				{
-					"name": "date"
-				},
-				{
-					"name": "reasons"
-				}
-			]
+			"fields": []
 		},
 		"SEB/14": {
 			"title": "Dive Team Certification - Passed (Practical Exam)",
-			"body": "",
+			"body": "\n[lssdfooter][/lssdfooter]\n[divbox=white]\n[float=left][/float]\n[aligntable=left,0,0,0,0,0,0][fimg=100,100]https://i.imgur.com/uXQ1hoT.png[/fimg][/aligntable]\n[aligntable=right,0,0,0,0,0,0][right][font=Arial][b][size=125]Los Santos County Sheriff's Department[/size][/b]\n[size=110]Special Enforcement Bureau — [color=#00FF00]Application Response[/color][/size]\n[size=100]\"Priority One Is Saving Lives\"[/size][/font][/right][/aligntable]\n\n[hr][/hr]\n\nOperator,\n\nAs of this email, you have successfully [color=#00FF00]PASSED[/color] the practical Training & Assessment portion of your Dive Team Certification Program and are now authorised to perform Dive Team operations in the field.\n\nCongratulations, and good luck!\n\n\n[hr][/hr]\n[list=none]\n\n\n\nInstructor, Training Division\nSpecial Enforcement Bureau\n[/divbox]\n[lssdfooter][/lssdfooter]\n",
 			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4145",
 			"category": "Practical exams",
-			"fields": [
-				{
-					"name": "operatorLastName"
-				},
-				{
-					"name": "practicalDate"
-				},
-				{
-					"name": "senderPosition"
-				}
-			]
+			"fields": []
 		},
 		"SEB/15": {
 			"title": "Dive Team Certification - Failed (Practical Exam)",
-			"body": "",
+			"body": "\n[lssdfooter][/lssdfooter]\n[divbox=white]\n[float=left][/float]\n[aligntable=left,0,0,0,0,0,0][fimg=100,100]https://i.imgur.com/uXQ1hoT.png[/fimg][/aligntable]\n[aligntable=right,0,0,0,0,0,0][right][font=Arial][b][size=125]Los Santos County Sheriff's Department[/size][/b]\n[size=110]Special Enforcement Bureau — [color=#FF0000]Application Response[/color][/size]\n[size=100]\"Priority One Is Saving Lives\"[/size][/font][/right][/aligntable]\n\n[hr][/hr]\n\nOperator,\n\nAs of this email, you have unfortunately [color=#FF0000]Not Passed[/color] the practical Training & Assessment portion of your Dive Team Certification Program.\n\nThe reason for your denial from this Certification Program is as follows:\n\n{{reasonSForDenial}}\n\nDo not let this impede your future; take the critique received and improve yourself using it as a baseline.\nYou are free to reapply for this Certification Program in 7 days unless other requirements have already been laid out.\n\n\n[hr][/hr]\n[list=none]\n\n\n\nInstructor, Training Division\nSpecial Enforcement Bureau\n[/divbox]\n[lssdfooter][/lssdfooter]\n",
 			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4145",
 			"category": "Practical exams",
-			"fields": [
-				{
-					"name": "operatorLastName"
-				},
-				{
-					"name": "practicalDate"
-				},
-				{
-					"name": "senderPosition"
-				},
-				{
-					"name": "reasons"
-				}
-			]
+			"fields": []
 		},
 		"SEB/16": {
 			"title": "Advanced Aerial Unit Certification - Passed (Practical Exam)",
-			"body": "",
+			"body": "\n[lssdfooter][/lssdfooter]\n[divbox=white]\n[float=left][/float]\n[aligntable=left,0,0,0,0,0,0][fimg=100,100]https://i.imgur.com/uXQ1hoT.png[/fimg][/aligntable]\n[aligntable=right,0,0,0,0,0,0][right][font=Arial][b][size=125]Los Santos County Sheriff's Department[/size][/b]\n[size=110]Special Enforcement Bureau — [color=#00FF00]Application Response[/color][/size]\n[size=100]\"Priority One Is Saving Lives\"[/size][/font][/right][/aligntable]\n\n[hr][/hr]\n\nOperator,\n\nAs of this email, you have successfully [color=#00FF00]PASSED[/color] the practical Training & Assessment portion of your Advanced Aerial Unit Certification Program and are now authorised to perform Advanced Aerial Unit operations in the field.\n\nCongratulations, and good luck!\n\n\n[hr][/hr]\n[list=none]\n\n\n\nInstructor, Training Division\nSpecial Enforcement Bureau\n[/divbox]\n[lssdfooter][/lssdfooter]\n",
 			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4145",
 			"category": "Practical exams",
-			"fields": [
-				{
-					"name": "operatorLastName"
-				},
-				{
-					"name": "practicalDate"
-				},
-				{
-					"name": "senderPosition"
-				},
-				{
-					"name": "date"
-				}
-			]
+			"fields": []
 		},
 		"SEB/17": {
 			"title": "Advanced Aerial Unit Certification - Failed (Practical Exam)",
-			"body": "",
+			"body": "\n[lssdfooter][/lssdfooter]\n[divbox=white]\n[float=left][/float]\n[aligntable=left,0,0,0,0,0,0][fimg=100,100]https://i.imgur.com/uXQ1hoT.png[/fimg][/aligntable]\n[aligntable=right,0,0,0,0,0,0][right][font=Arial][b][size=125]Los Santos County Sheriff's Department[/size][/b]\n[size=110]Special Enforcement Bureau — [color=#FF0000]Application Response[/color][/size]\n[size=100]\"Priority One Is Saving Lives\"[/size][/font][/right][/aligntable]\n\n[hr][/hr]\n\nOperator,\n\nAs of this email, you have unfortunately [color=#FF0000]Not Passed[/color] the practical Training & Assessment portion of your Advanced Aerial Unit Certification Program.\n\nThe reason for your denial from this Certification Program is as follows:\n\n{{reasonSForDenial}}\nDo not let this impede your future; take the critique received and improve yourself using it as a baseline.\nYou are free to reapply for this Certification Program in 7 days unless other requirements have already been laid out.\n\n\n[hr][/hr]\n[list=none]\n\n\n\nInstructor, Training Division\nSpecial Enforcement Bureau\n[/divbox]\n[lssdfooter][/lssdfooter]\n",
 			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4145",
 			"category": "Practical exams",
-			"fields": [
-				{
-					"name": "operatorLastName"
-				},
-				{
-					"name": "practicalDate"
-				},
-				{
-					"name": "senderPosition"
-				},
-				{
-					"name": "date"
-				},
-				{
-					"name": "reasons"
-				}
-			]
+			"fields": []
 		},
 		"SEB/18": {
 			"title": "Long Range Rifle Certification - Passed (Practical Exam)",
-			"body": "",
+			"body": "\n[lssdfooter][/lssdfooter]\n[divbox=white]\n[float=left][/float]\n[aligntable=left,0,0,0,0,0,0][fimg=100,100]https://i.imgur.com/uXQ1hoT.png[/fimg][/aligntable]\n[aligntable=right,0,0,0,0,0,0][right][font=Arial][b][size=125]Los Santos County Sheriff's Department[/size][/b]\n[size=110]Special Enforcement Bureau — [color=#00FF00]Application Response[/color][/size]\n[size=100]\"Priority One Is Saving Lives\"[/size][/font][/right][/aligntable]\n\n[hr][/hr]\n\nOperator,\n\nAs of this email, you have successfully [color=#00FF00]PASSED[/color] the practical Training & Assessment portion of your Long Range Rifle Certification Program and are now authorised to perform Long Range Rifle operations in the field.\n\nCongratulations, and good luck!\n\n\n[hr][/hr]\n[list=none]\n\n\n\nInstructor, Training Division\nSpecial Enforcement Bureau\n[/divbox]\n[lssdfooter][/lssdfooter]\n",
 			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4145",
 			"category": "Practical exams",
-			"fields": [
-				{
-					"name": "operatorLastName"
-				},
-				{
-					"name": "practicalDate"
-				},
-				{
-					"name": "senderPosition"
-				},
-				{
-					"name": "date"
-				}
-			]
+			"fields": []
 		},
 		"SEB/19": {
 			"title": "Long Range Rifle Certification - Failed (Practical Exam)",
-			"body": "",
+			"body": "\n[lssdfooter][/lssdfooter]\n[divbox=white]\n[float=left][/float]\n[aligntable=left,0,0,0,0,0,0][fimg=100,100]https://i.imgur.com/uXQ1hoT.png[/fimg][/aligntable]\n[aligntable=right,0,0,0,0,0,0][right][font=Arial][b][size=125]Los Santos County Sheriff's Department[/size][/b]\n[size=110]Special Enforcement Bureau — [color=#FF0000]Application Response[/color][/size]\n[size=100]\"Priority One Is Saving Lives\"[/size][/font][/right][/aligntable]\n\n[hr][/hr]\n\nOperator,\n\nAs of this email, you have unfortunately [color=#FF0000]Not Passed[/color] the practical Training & Assessment portion of your Long Range Rifle Certification Program.\n\nThe reason for your denial from this Certification Program is as follows:\n\n{{reasonSForDenial}}\n\nDo not let this impede your future; take the critique received and improve yourself using it as a baseline.\nYou are free to reapply for this Certification Program in 7 days unless other requirements have already been laid out.\n\n\n[hr][/hr]\n[list=none]\n\n\n\nInstructor, Training Division\nSpecial Enforcement Bureau\n[/divbox]\n[lssdfooter][/lssdfooter]\n",
 			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4145",
 			"category": "Practical exams",
-			"fields": [
-				{
-					"name": "operatorLastName"
-				},
-				{
-					"name": "practicalDate"
-				},
-				{
-					"name": "senderPosition"
-				},
-				{
-					"name": "date"
-				},
-				{
-					"name": "reasons"
-				}
-			]
+			"fields": []
 		},
 		"SEB/20": {
 			"title": "EOD Technician Certification - Passed (Practical Exam)",
-			"body": "",
+			"body": "\n[lssdfooter][/lssdfooter]\n[divbox=white]\n[float=left][/float]\n[aligntable=left,0,0,0,0,0,0][fimg=100,100]https://i.imgur.com/uXQ1hoT.png[/fimg][/aligntable]\n[aligntable=right,0,0,0,0,0,0][right][font=Arial][b][size=125]Los Santos County Sheriff's Department[/size][/b]\n[size=110]Special Enforcement Bureau — [color=#00FF00]Application Response[/color][/size]\n[size=100]\"Priority One Is Saving Lives\"[/size][/font][/right][/aligntable]\n\n[hr][/hr]\n\nOperator,\n\nAs of this email, you have successfully [color=#00FF00]PASSED[/color] the practical Training & Assessment portion of your EOD Technician Certification Program and are now authorised to perform EOD Technician operations in the field.\n\nCongratulations, and good luck!\n\n\n[hr][/hr]\n[list=none]\n\n\n\nInstructor, Training Division\nSpecial Enforcement Bureau\n[/divbox]\n[lssdfooter][/lssdfooter]\n",
 			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4145",
 			"category": "Practical exams",
-			"fields": [
-				{
-					"name": "operatorLastName"
-				},
-				{
-					"name": "practicalDate"
-				},
-				{
-					"name": "senderPosition"
-				},
-				{
-					"name": "date"
-				}
-			]
+			"fields": []
 		},
 		"SEB/21": {
 			"title": "EOD Technician Certification - Failed (Practical Exam)",
-			"body": "",
+			"body": "\n[lssdfooter][/lssdfooter]\n[divbox=white]\n[float=left][/float]\n[aligntable=left,0,0,0,0,0,0][fimg=100,100]https://i.imgur.com/uXQ1hoT.png[/fimg][/aligntable]\n[aligntable=right,0,0,0,0,0,0][right][font=Arial][b][size=125]Los Santos County Sheriff's Department[/size][/b]\n[size=110]Special Enforcement Bureau — [color=#FF0000]Application Response[/color][/size]\n[size=100]\"Priority One Is Saving Lives\"[/size][/font][/right][/aligntable]\n\n[hr][/hr]\n\nOperator,\n\nAs of this email, you have unfortunately [color=#FF0000]Not Passed[/color] the practical Training & Assessment portion of your EOD Technician Certification Program.\n\nThe reason for your denial from this Certification Program is as follows:\n\n{{reasonSForDenial}}\n\nDo not let this impede your future; take the critique received and improve yourself using it as a baseline.\nYou are free to reapply for this Certification Program in 7 days unless other requirements have already been laid out.\n\n\n[hr][/hr]\n[list=none]\n\n\n\nInstructor, Training Division\nSpecial Enforcement Bureau\n[/divbox]\n[lssdfooter][/lssdfooter]\n",
 			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4145",
 			"category": "Practical exams",
-			"fields": [
-				{
-					"name": "operatorLastName"
-				},
-				{
-					"name": "practicalDate"
-				},
-				{
-					"name": "senderPosition"
-				},
-				{
-					"name": "date"
-				},
-				{
-					"name": "reasons"
-				}
-			]
+			"fields": []
 		},
 		"SEB/22": {
 			"title": "Crisis Negotiator Certification - Passed (Practical Exam)",
-			"body": "",
+			"body": "\n[lssdfooter][/lssdfooter]\n[divbox=white]\n[float=left][/float]\n[aligntable=left,0,0,0,0,0,0][fimg=100,100]https://i.imgur.com/uXQ1hoT.png[/fimg][/aligntable]\n[aligntable=right,0,0,0,0,0,0][right][font=Arial][b][size=125]Los Santos County Sheriff's Department[/size][/b]\n[size=110]Special Enforcement Bureau — [color=#00FF00]Application Response[/color][/size]\n[size=100]\"Priority One Is Saving Lives\"[/size][/font][/right][/aligntable]\n\n[hr][/hr]\n\nOperator,\n\nAs of this email, you have successfully [color=#00FF00]PASSED[/color] the practical Training & Assessment portion of your Crisis Negotiator Certification Program and are now authorised to perform Crisis Negotiator operations in the field.\n\nCongratulations, and good luck!\n\n\n[hr][/hr]\n[list=none]\n\n\n\nInstructor, Training Division\nSpecial Enforcement Bureau\n[/divbox]\n[lssdfooter][/lssdfooter]\n",
 			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4145",
 			"category": "Practical exams",
-			"fields": [
-				{
-					"name": "operatorLastName"
-				},
-				{
-					"name": "senderPosition"
-				},
-				{
-					"name": "cnGrade0"
-				},
-				{
-					"name": "cnReason0"
-				},
-				{
-					"name": "cnGrade1"
-				},
-				{
-					"name": "cnReason1"
-				},
-				{
-					"name": "cnGrade2"
-				},
-				{
-					"name": "cnReason2"
-				},
-				{
-					"name": "cnGrade3"
-				},
-				{
-					"name": "cnReason3"
-				},
-				{
-					"name": "cnGrade4"
-				},
-				{
-					"name": "cnReason4"
-				},
-				{
-					"name": "cnGrade5"
-				},
-				{
-					"name": "cnReason5"
-				}
-			]
+			"fields": []
 		},
 		"SEB/23": {
 			"title": "Crisis Negotiator Certification - Failed (Practical Exam)",
-			"body": "",
+			"body": "\n[lssdfooter][/lssdfooter]\n[divbox=white]\n[float=left][/float]\n[aligntable=left,0,0,0,0,0,0][fimg=100,100]https://i.imgur.com/uXQ1hoT.png[/fimg][/aligntable]\n[aligntable=right,0,0,0,0,0,0][right][font=Arial][b][size=125]Los Santos County Sheriff's Department[/size][/b]\n[size=110]Special Enforcement Bureau — [color=#FF0000]Application Response[/color][/size]\n[size=100]\"Priority One Is Saving Lives\"[/size][/font][/right][/aligntable]\n\n[hr][/hr]\n\nOperator,\n\nAs of this email, you have unfortunately [color=#FF0000]Not Passed[/color] the practical Training & Assessment portion of your Crisis Negotiator Certification Program.\n\nThe reason for your denial from this Certification Program is as follows:\n\n{{reasonSForDenial}}\n\nDo not let this impede your future; take the critique received and improve yourself using it as a baseline.\nYou are free to reapply for this Certification Program in 7 days unless other requirements have already been laid out.\n\n\n[hr][/hr]\n[list=none]\n\n\n\nInstructor, Training Division\nSpecial Enforcement Bureau\n[/divbox]\n[lssdfooter][/lssdfooter]\n",
 			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=4145",
 			"category": "Practical exams",
-			"fields": [
-				{
-					"name": "operatorLastName"
-				},
-				{
-					"name": "senderPosition"
-				},
-				{
-					"name": "cnGrade0"
-				},
-				{
-					"name": "cnReason0"
-				},
-				{
-					"name": "cnGrade1"
-				},
-				{
-					"name": "cnReason1"
-				},
-				{
-					"name": "cnGrade2"
-				},
-				{
-					"name": "cnReason2"
-				},
-				{
-					"name": "cnGrade3"
-				},
-				{
-					"name": "cnReason3"
-				},
-				{
-					"name": "cnGrade4"
-				},
-				{
-					"name": "cnReason4"
-				},
-				{
-					"name": "cnGrade5"
-				},
-				{
-					"name": "cnReason5"
-				}
-			]
+			"fields": []
 		},
 		"SEB/24": {
 			"title": "Operator Exam - Passed",
@@ -4352,6 +4045,11 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 			"name": "isThisANewCharacter",
 			"type": "text",
 			"label": "(( Is This a New Character? ))"
+		},
+		{
+			"name": "reasonSForDenial",
+			"type": "list",
+			"label": "Reason(s) for denial"
 		}
 	]
 } /* /ADMIN_DATA */;
