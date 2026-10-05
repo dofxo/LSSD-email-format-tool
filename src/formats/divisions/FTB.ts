@@ -68,6 +68,35 @@ const boldGradeLine = (label: string, grade?: string, note?: string) =>
 const fteGradeLine = (label: string, grade?: string, note?: string, suffix = "") =>
 	`[list][b]${label}[${grade ?? "GRADE"}]${suffix}[/b]\n[list]\n[*]${note ?? ""}\n[/list]\n[/list]`;
 
+/**
+ * The Field Training Evaluation session checklist, verbatim from the original.
+ * Each action carries an `[x]`/`[]` box the deputy ticks from the `fteTasks`
+ * field, followed by its own grade of effectiveness.
+ */
+const FTE_TASK_LINES: { text: string; ooc?: boolean }[] = [
+	{ text: "The Trainee conducted an arrest" },
+	{ text: "The Trainee filed the arrest report in a timely manner" },
+	{ text: "The Trainee conducted a 10-66 or a 10-55" },
+	{ text: "The Trainee participated in a pursuit" },
+	{ text: "The Trainee served as the Primary Unit in a pursuit" },
+	{ text: "The Trainee served as the Primary Unit in a mock pursuit" },
+	{ text: "The Trainee demonstrated the ability to provide clear and concise communication through TAC or radio frequencies" },
+	{ text: "The Trainee demonstrated the ability to remain calm under stress or duress" },
+	{ text: "The Trainee demonstrated basic problem-solving skills and investigative ability" },
+	{ text: "The Trainee demonstrated the ability to render basic medical aid to an individual on the field" },
+	{ text: "The Trainee demonstrated the ability to distinguish between IC and OOC roleplay", ooc: true },
+];
+
+/** The FTE checklist lines: a ticked box for each action the deputy marked off. */
+const fteTaskLines = (f: FormatData) => {
+	const ticked = f.fteTasks ?? [];
+	return FTE_TASK_LINES.map((task, index) => {
+		const box = ticked.includes(`fteTasks:${index}`) ? "[x]" : "[]";
+		const grade = (f[`fteTask${index}` as keyof FormatData] as string | undefined) ?? "GRADE";
+		const line = `${box} ${task.text} [${grade}]`;
+		return `[list]${task.ooc ? `[ooc]${line}[/ooc]` : line}[/list]`;
+	}).join("\n");
+};
 
 /** The Trainee Performance write-ups shared by all reports of a family. */
 const performanceBlock = (
@@ -551,17 +580,7 @@ ${datedHeader(f.fteDate, f.ftePatrolStart, f.ftePatrolEnd)}
 [size=85][i]Ensure that the Trainee performs all tasks on this list, When they do, Check if off of the list and include a grade of effectiveness [ooc]you must be in the same Teamspeak Channel as your Trainee for the duration of the Evaluation[/ooc][/i][/size]
 ${GRADE_SYSTEM}
 
-[list][] The Trainee conducted an arrest [${f.fteTask0 ?? "GRADE"}][/list]
-[list][] The Trainee filed the arrest report in a timely manner [${f.fteTask1 ?? "GRADE"}][/list]
-[list][] The Trainee conducted a 10-66 or a 10-55 [${f.fteTask2 ?? "GRADE"}][/list]
-[list][] The Trainee participated in a pursuit [${f.fteTask3 ?? "GRADE"}][/list]
-[list][] The Trainee served as the Primary Unit in a pursuit [${f.fteTask4 ?? "GRADE"}][/list]
-[list][] The Trainee served as the Primary Unit in a mock pursuit [${f.fteTask5 ?? "GRADE"}][/list]
-[list][] The Trainee demonstrated the ability to provide clear and concise communication through TAC or radio frequencies [${f.fteTask6 ?? "GRADE"}][/list]
-[list][] The Trainee demonstrated the ability to remain calm under stress or duress [${f.fteTask7 ?? "GRADE"}][/list]
-[list][] The Trainee demonstrated basic problem-solving skills and investigative ability [${f.fteTask8 ?? "GRADE"}][/list]
-[list][] The Trainee demonstrated the ability to render basic medical aid to an individual on the field [${f.fteTask9 ?? "GRADE"}][/list]
-[list][ooc][] The Trainee demonstrated the ability to distinguish between IC and OOC roleplay [${f.fteTask10 ?? "GRADE"}][/ooc][/list]
+${fteTaskLines(f)}
 [/divbox]
 
 [lssdsubtitle]SESSION DETAILS[/lssdsubtitle]

@@ -213,6 +213,8 @@ export interface FormatData {
 	fts3AdditionalNotes?: string;
 
 	// Field Training Evaluation report
+	/** Tickable session checklist (`fteTasks:<index>` keys); each tick prints `[x]`. */
+	fteTasks?: string[];
 	fteTask0?: string;
 	fteTask1?: string;
 	fteTask2?: string;
