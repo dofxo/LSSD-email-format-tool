@@ -1289,6 +1289,9 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 					"name": "ftePatrolEnd"
 				},
 				{
+					"name": "fteTasks"
+				},
+				{
 					"name": "fteTask0"
 				},
 				{

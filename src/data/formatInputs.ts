@@ -662,6 +662,7 @@ export const inputsByDivision: Record<divisionsType, FormatInputField[]> = {
 		{ name: "fts3AdditionalNotes", label: "Additional Notes", type: "textarea", formats: ["3"] },
 
 		// 4 - Field Training Evaluation
+		{ name: "fteTasks", label: "Session checklist - tick each action the Trainee performed, leave empty if they did not", type: "check", formats: ["4"], items: FTE_TASKS },
 		...FTE_TASKS.map((task, index) => ({
 			name: `fteTask${index}`,
 			label: `${task} - grade of effectiveness`,
