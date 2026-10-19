@@ -42,7 +42,7 @@ const EMPTY_DEPUTY: DeputyData = {
 	badgeNumber: "",
 	signature: "",
 	dRank: "",
-	divisionRanks: { RED: "", TSD: "", ATD: "", General: "", Supervisory: "", FTB: "", SEB: "" },
+	divisionRanks: { RED: "", TSD: "", ATD: "", General: "", Supervisory: "", FTB: "", SEB: "", ASB: "" },
 };
 
 const loadUnlocked = () => {

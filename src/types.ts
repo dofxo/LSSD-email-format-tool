@@ -12,10 +12,11 @@ export interface DeputyData {
 		Supervisory: string;
 		FTB: string;
 		SEB: string;
+		ASB: string;
 	};
 }
 
-export type divisionsType = "RED" | "ATD" | "TSD" | "General" | "Supervisory" | "FTB" | "SEB";
+export type divisionsType = "RED" | "ATD" | "TSD" | "General" | "Supervisory" | "FTB" | "SEB" | "ASB";
 
 /**
  * How a date input prints its value: "December 2nd, 2025", "02/DEC/2025" or
@@ -62,11 +63,12 @@ export interface GroupSubField {
 export interface FormatInputField {
 	name: string;
 	label: string;
-	type:
+		type:
 		| "text"
 		| "number"
 		| "date"
 		| "time"
+		| "timerange"
 		| "select"
 		| "textarea"
 		| "check"

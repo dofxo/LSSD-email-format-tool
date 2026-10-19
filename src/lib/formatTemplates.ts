@@ -1,5 +1,6 @@
 import { checkboxRuns, runMatchesChoices, tickRun, tickedKeysFor } from "@/lib/checkboxLines";
 import { chargeLine } from "@/data/penalCode";
+import { timeRangeText } from "@/lib/timeRange";
 import type { DeputyData, FormatData, GroupSubField, divisionsType } from "@/types";
 
 /** Matches {{token}} placeholders; whitespace inside the braces is ignored. */
@@ -154,6 +155,12 @@ export interface TemplateContext {
 	 * behind to post.
 	 */
 	imageFields?: string[];
+	/**
+	 * The names of the format's time-range fields. Each value holds a start and
+	 * end time, printed as the range with the decimal hours it covers, so the
+	 * body only carries the token.
+	 */
+	timeRangeFields?: string[];
 }
 
 /**
@@ -250,6 +257,7 @@ export const renderFormatTemplate = (template: string, context: TemplateContext)
 		groupFields = [],
 		chargeFields = [],
 		imageFields = [],
+		timeRangeFields = [],
 	} = context;
 	if (!template || (!template.includes("{{") && !checkboxFields.length)) return template;
 	// Image fields print their own `[img]` tags, so a token the body already wraps
@@ -287,6 +295,10 @@ export const renderFormatTemplate = (template: string, context: TemplateContext)
 	}
 	for (const name of imageFields) {
 		values[name] = imageLinks(values[name]);
+	}
+	for (const name of timeRangeFields) {
+		const text = timeRangeText(values[name]);
+		if (text) values[name] = text;
 	}
 
 	// Lines the blank answers emptied come out before anything is filled, so an

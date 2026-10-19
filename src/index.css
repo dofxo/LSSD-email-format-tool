@@ -132,6 +132,9 @@
 .accent-rose {
 	--accent: #b0326e;
 }
+.accent-indigo {
+	--accent: #4a52b8;
+}
 .dark .accent-red {
 	--accent: #ff7080;
 }
@@ -152,6 +155,9 @@
 }
 .dark .accent-rose {
 	--accent: #ef7fb2;
+}
+.dark .accent-indigo {
+	--accent: #9aa3ff;
 }
 
 @theme inline {

@@ -3082,6 +3082,23 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 					"name": "isThisANewCharacter"
 				}
 			]
+		},
+		{
+			"id": "1",
+			"division": "ASB",
+			"title": "Deployment Template",
+			"topicTitle": "",
+			"body": "[img]https://i.imgur.com/BPt0WBK.png[/img]\n[lssdsubtitle]LOG DETAILS[/lssdsubtitle]\n[divbox=white]\n[center][size=100][url=https://docs.google.com/forms/d/e/1FAIpQLSeK16mx2O1XzLTrwU3Qi2JI4hOMK1XilzwGhi-QvAmrdO1KVg/viewform]Click here to Log Flight Hours into Official Tracker[/url][/size][/center]\n\n[b]Pilots:[/b]\n[list]\n[*] {{name}}\n[/list]\n\n[b]Date:[/b] {{date}}\n[b]Flight Hours:[/b] {{flightHours}}  \n\n[b]Flight Log:[/b]  \n{{flightLightDetails}}\n\n[hr]\n\n[b]Signature:[/b]  \n[img]{{signature}}[/img]  \n{{rankName}}\nAERO Bureau, Special Operations Division\n[/divbox]\n[lssdfooter][/lssdfooter]",
+			"govLink": "",
+			"category": "Logs",
+			"fields": [
+				{
+					"name": "flightLightDetails"
+				},
+				{
+					"name": "flightHours"
+				}
+			]
 		}
 	],
 	"inputs": [
@@ -4053,6 +4070,16 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 			"name": "reasonSForDenial",
 			"type": "list",
 			"label": "Reason(s) for denial"
+		},
+		{
+			"name": "flightLightDetails",
+			"type": "textarea",
+			"label": "Flight Light Details"
+		},
+		{
+			"name": "flightHours",
+			"type": "timerange",
+			"label": "Flight hours (start and end)"
 		}
 	]
 } /* /ADMIN_DATA */;

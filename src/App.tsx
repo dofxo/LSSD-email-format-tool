@@ -37,7 +37,7 @@ const emptyDetails: DeputyData = {
 	badgeNumber: "",
 	signature: "",
 	dRank: "",
-	divisionRanks: { RED: "", TSD: "", ATD: "", General: "", Supervisory: "", FTB: "", SEB: "" },
+	divisionRanks: { RED: "", TSD: "", ATD: "", General: "", Supervisory: "", FTB: "", SEB: "", ASB: "" },
 };
 
 /** Restores the saved profile, tolerating older shapes stored in localStorage. */
