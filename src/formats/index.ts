@@ -5,6 +5,7 @@ import { GeneralFormats } from "./divisions/General";
 import { SupervisoryFormats } from "./divisions/Supervisory";
 import { FTBFormats } from "./divisions/FTB";
 import { SEBFormats } from "./divisions/SEB";
+import { ASBFormats } from "./divisions/ASB";
 import { adminBodyFor } from "@/lib/adminFormats";
 import { formatFieldsFor } from "@/lib/formats";
 import { renderFormatTemplate, type CheckboxFieldSpec, type GroupFieldSpec } from "@/lib/formatTemplates";
@@ -18,6 +19,7 @@ export const registry = {
 	Supervisory: SupervisoryFormats,
 	FTB: FTBFormats,
 	SEB: SEBFormats,
+	ASB: ASBFormats,
 } as const;
 
 /**
@@ -60,6 +62,16 @@ const imageFieldsFor = (division: divisionsType, formatId: string): string[] =>
 		.filter((field) => field.type === "image" || field.type === "images")
 		.map((field) => field.name);
 
+/**
+ * The names of the format's time-range fields. Each one holds a start and end
+ * time and prints them with the decimal hours they cover, so a token alone
+ * totals the hours flown.
+ */
+const timeRangeFieldsFor = (division: divisionsType, formatId: string): string[] =>
+	formatFieldsFor(division, formatId)
+		.filter((field) => field.type === "timerange")
+		.map((field) => field.name);
+
 export const getFormat = ({
 	formatData,
 	deputyData,
@@ -84,6 +96,7 @@ export const getFormat = ({
 				groupFields: groupFieldsFor(division, formatId),
 				chargeFields: chargeFieldsFor(division, formatId),
 				imageFields: imageFieldsFor(division, formatId),
+				timeRangeFields: timeRangeFieldsFor(division, formatId),
 			}),
 			formats: {},
 		};

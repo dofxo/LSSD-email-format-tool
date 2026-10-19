@@ -24,7 +24,7 @@ const STORE_FILE = path.join("src", "formats", "admin.ts");
 const START = "/* ADMIN_DATA */";
 const END = "/* /ADMIN_DATA */";
 
-const DIVISIONS = ["RED", "TSD", "ATD", "General", "Supervisory", "FTB", "SEB"] as const;
+const DIVISIONS = ["RED", "TSD", "ATD", "General", "Supervisory", "FTB", "SEB", "ASB"] as const;
 type DivisionId = (typeof DIVISIONS)[number];
 
 const emptyStore = (): AdminFormatStore => ({ overrides: {}, custom: [], inputs: [] });

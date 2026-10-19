@@ -13,6 +13,7 @@ import { Segmented } from "@/components/ui/segmented";
 import { TimeInput } from "@/components/ui/timeInput";
 import { isFilled } from "@/lib/formats";
 import { plainLabel } from "@/lib/labelText";
+import { joinTimeRange, parseTimeRange, timeRangeHours } from "@/lib/timeRange";
 import type { DateStyle, FormatData, FormatInputField } from "@/types";
 
 const currentDateValue = (withTime: boolean) => moment().format(withTime ? "YYYY-MM-DDTHH:mm" : "YYYY-MM-DD");
@@ -454,6 +455,62 @@ export function FormatFields({ formatId, fields, formatData, setFormatData, rese
 									<Clock className="size-4" />
 									Now
 								</Button>
+							</div>
+						</Field>
+					);
+				}
+
+				// A range field asks for a start and end time and shows the hours they
+				// cover as they are picked; the report prints the same total.
+				if (field.type === "timerange") {
+					const { start, end } = parseTimeRange(stringValue);
+					const hours = timeRangeHours(start, end);
+					const update = (nextStart: string, nextEnd: string) =>
+						setFormatData((prev) => ({
+							...prev,
+							[field.name]: joinTimeRange(nextStart, nextEnd) || undefined,
+						}));
+
+					return (
+						<Field key={field.name} label={labelNode} hint={field.hint} wide meta={meta}>
+							<div className="flex flex-wrap items-center gap-2">
+								<span className="text-[12px] text-ink-faint">Start</span>
+								<TimeInput
+									id={`${field.name}-start`}
+									value={start}
+									ariaLabel={`${labelText} start time`}
+									onChange={(value) => update(value, end)}
+								/>
+								<Button
+									variant="ghost"
+									size="sm"
+									onClick={() => update(moment().utc().format("HH:mm"), end)}
+									className="shrink-0"
+								>
+									<Clock className="size-4" />
+									Now
+								</Button>
+								<span className="text-[12px] text-ink-faint">End</span>
+								<TimeInput
+									id={`${field.name}-end`}
+									value={end}
+									ariaLabel={`${labelText} end time`}
+									onChange={(value) => update(start, value)}
+								/>
+								<Button
+									variant="ghost"
+									size="sm"
+									onClick={() => update(start, moment().utc().format("HH:mm"))}
+									className="shrink-0"
+								>
+									<Clock className="size-4" />
+									Now
+								</Button>
+								{hours !== null ? (
+									<span className="flex h-11 items-center rounded-control border border-subtle bg-surface-2 px-3.5 text-[13px] text-ink-muted tabular-nums">
+										{hours.toFixed(2)} hours
+									</span>
+								) : null}
 							</div>
 						</Field>
 					);

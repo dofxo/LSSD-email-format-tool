@@ -1,4 +1,4 @@
-import { Car, ClipboardCheck, GraduationCap, Landmark, ScrollText, ShieldCheck, Users, type LucideIcon } from "lucide-react";
+import { Car, ClipboardCheck, GraduationCap, Landmark, PlaneTakeoff, ScrollText, ShieldCheck, Users, type LucideIcon } from "lucide-react";
 
 import type { divisionsType } from "@/types";
 
@@ -59,6 +59,14 @@ export const divisions: Division[] = [
 		blurb: "Bureau correspondence, operations and personnel notices.",
 		icon: Landmark,
 		accent: "accent-rose",
+	},
+	{
+		id: "ASB",
+		label: "ASB",
+		name: "Air Support Bureau",
+		blurb: "Aerial operations, flight certifications and pilot correspondence.",
+		icon: PlaneTakeoff,
+		accent: "accent-indigo",
 	},
 	{
 		id: "General",

@@ -907,4 +907,6 @@ export const inputsByDivision: Record<divisionsType, FormatInputField[]> = {
 			})),
 		]),
 	],
+	// ASB formats are added at /admin, so it starts with no built-in inputs.
+	ASB: [],
 };

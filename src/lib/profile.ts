@@ -46,6 +46,7 @@ export const divisionRanks: Record<divisionsType, { value: string; label: string
 	General: [],
 	Supervisory: [],
 	FTB: [],
+	ASB: [],
 };
 
 export const divisionRankOptionsFor = (division: divisionsType) => divisionRanks[division] ?? [];
