@@ -2077,7 +2077,7 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 			]
 		},
 		"Supervisory/1": {
-			"title": "Promotion Notice",
+			"title": "Promotion Notice (Public Notice)",
 			"topicTitle": " [Promotion] {Deputy Name}",
 			"body": "",
 			"govLink": "https://gov.eclipse-rp.net/posting.php?mode=post&f=937",
@@ -2098,7 +2098,7 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 			]
 		},
 		"Supervisory/3": {
-			"title": "Demotion Notice",
+			"title": "Demotion Notice (Public Notice)",
 			"topicTitle": " [Demotion] {Deputy Name}",
 			"body": "",
 			"govLink": "https://gov.eclipse-rp.net/posting.php?mode=post&f=937",
@@ -2134,7 +2134,7 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 			]
 		},
 		"Supervisory/4": {
-			"title": "Discharge Notice",
+			"title": "Discharge Notice (Public Notice)",
 			"topicTitle": "[Honorable/Dishonorable Discharge] {Deputy Name}",
 			"body": "",
 			"govLink": "https://gov.eclipse-rp.net/posting.php?mode=post&f=937",
@@ -2245,7 +2245,7 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 			]
 		},
 		"Supervisory/9": {
-			"title": "Master Deputy/Detective Information Email",
+			"title": "Master Deputy/Detective Information Email (Email)",
 			"topicTitle": "Master Deputy/Detective Information",
 			"body": "[LSSDfooter][/LSSDfooter][divbox=white]\n[img]https://i.ibb.co/PZWH0Rx9/FAyEyJd.png[/img][aligntable=right,0,0,0,0,0,0][right][font=Arial][b]\n[size=150]Los Santos County Sheriff's Department[/size][/b]\n[size=115]Master Deputy Information.[/size]\n[size=95]\"A TRADITION OF SERVICE\"[/size][/font][/right][/aligntable]\n[hr]\n[list=none]\n[b]Re:[/b] Master Deputy/Detective Information.\n\nMaster Deputy/Detective [b]undefined,[/b]\n\nFirst and foremost, I would like to congratulate you on your promotion to Master Deputy. You have worked hard to achieve the rank of Master Deputy (MFTD) and you should be nothing but proud of yourself. You should make yourself acquainted with your new rank authority by reading [url=https://gov.eclipse-rp.net/viewtopic.php?t=194190]2.2 - Rank Authority[/url] of the Los Santos County Sheriff's Department Employee Manual.\n\nBeing a Master Deputy means that you're at the last field staff position that the Los Santos County Sheriff's Department offers. We understand that some Master Deputies wish to further progress and become supervisors of the Los Santos County Sheriff's Department, and that is great. You can read about what it takes to become a Sergeant-in-Training in [url=https://gov.eclipse-rp.net/viewtopic.php?t=194196]2.5 Promotion Guidelines[/url] of the Los Santos County Sheriff's Department Employee Manual and about the Sergeant Training Program in the [url=https://gov.eclipse-rp.net/viewforum.php?f=998]Position Opportunities[/url] board.\n\nAs a Master Deputy, you will be expected to handle [b]Ride-Along requests[/b]. You can find all information (including response formats) in the Los Santos County Sheriff's Department Employee Manual, [url=https://gov.eclipse-rp.net/viewtopic.php?t=205777]3.14 - Ride Along Program[/url], it is recommended that you keep a copy with you [ooc]bookmark it[/ooc].\n\nIf you have any questions about being a Master Deputy or your responsibilities, then don't hesitate to reach out - we would love to assist you.\n\nBest of luck with your new position,\n[/list]\n\n[hr][/hr][list=none]\n\nFrom\n[img][/img]\n \nLos Santos County Sheriff's Department\n[/list][/divbox][LSSDfooter][/LSSDfooter]",
 			"govLink": "https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose",
@@ -2257,7 +2257,7 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 			]
 		},
 		"Supervisory/10": {
-			"title": "Resignation Email",
+			"title": "Resignation Email (Email)",
 			"topicTitle": "Resignation Notice",
 			"body": "",
 			"govLink": "https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose",
@@ -2269,8 +2269,8 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 			]
 		},
 		"Supervisory/11": {
-			"title": "Dishonourable Discharge (AWOL)",
-			"topicTitle": "Dishonourable Discharge (AWOL)",
+			"title": "Dishonourable Discharge (AWOL) (Email)",
+			"topicTitle": "Dishonourable Discharge (AWOL) ",
 			"body": "",
 			"govLink": "https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose",
 			"category": "Discharges",
@@ -2284,7 +2284,7 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 			]
 		},
 		"Supervisory/12": {
-			"title": "Dishonourable Discharge ((OOC Reason))",
+			"title": "Dishonourable Discharge ((OOC Reason)) (Email)",
 			"topicTitle": "Dishonourable Discharge ((OOC Reason))",
 			"body": "",
 			"govLink": "https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose",
@@ -2299,7 +2299,7 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 			]
 		},
 		"Supervisory/13": {
-			"title": "Dishonourable Discharge (Input Reason)",
+			"title": "Dishonourable Discharge (Input Reason) (email)",
 			"topicTitle": "Dishonourable Discharge ",
 			"body": "",
 			"govLink": "https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose",
@@ -2314,7 +2314,7 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 			]
 		},
 		"Supervisory/14": {
-			"title": "Inactivity Notice",
+			"title": "Inactivity Notice (Email)",
 			"topicTitle": "Inactivity Notice - {DD/MM} - Action Required",
 			"body": "",
 			"govLink": "https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose",
@@ -2326,7 +2326,7 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 			]
 		},
 		"Supervisory/15": {
-			"title": "((Ratio Notice))",
+			"title": "((Ratio Notice)) ",
 			"topicTitle": "((Ratio Notice))",
 			"body": "",
 			"govLink": "https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose",
@@ -3099,6 +3099,166 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 					"name": "flightHours"
 				}
 			]
+		},
+		{
+			"id": "1",
+			"division": "IA",
+			"title": "Case Acknowledgement Format",
+			"topicTitle": "",
+			"body": "[img]https://i.ibb.co/Ldrsdg80/St12z-H0.png[/img]\n[divbox=white][list=none]\n\n[b]CASE FILE:[/b]\n[list=none]\n[*] #{{caseNumber}}\n[/list]\n\n[b]INVESTIGATOR(S):[/b]\n[list]\n{{investigators}}\n[/list]\n\n[hr][/hr]\n\n[b]CASE ACKNOWLEDGEMENT:[/b]\n[size=85]\nThis case has been received by the Internal Affairs Bureau and assigned for investigation.\n\nIn accordance with Bureau policy, the assigned investigator(s) shall initiate the investigation within [b]seven (7) days[/b] of assignment. Investigations should be concluded within [b]seven (7) days[/b] whenever reasonably possible and shall not exceed [b]fourteen (14) days[/b] without an extension approved by IAB Command.\n\nAll investigative actions, documentation, communications, findings, and conclusions shall comply with the [url=https://gov.eclipse-rp.net/viewtopic.php?p=65805#p65805]IAB | Internal Affairs Report Guidelines[/url].\n\nUnjustified delays, failure to properly maintain the case file, or deviation from established Bureau procedures may result in disciplinary action. Any necessary extension must be requested from and approved by IAB Command before the applicable deadline.\n[/size]\n\nSigned,\n\n[img]{{signature}}[/img]\n[b]{{dRank}} {{name}}[/b]\n{{divisionRank}}, Internal Affairs Bureau\nLos Santos County Sheriff's Department\n\n[/list][/divbox]\n[lssdfooter][/lssdfooter]",
+			"govLink": "",
+			"category": "Initial Response and Followup Evidence",
+			"fields": [
+				{
+					"name": "caseNumber"
+				},
+				{
+					"name": "investigators",
+					"hint": "Rank Fname Lname"
+				}
+			]
+		},
+		{
+			"id": "2",
+			"division": "IA",
+			"title": "Case Response Format",
+			"topicTitle": "",
+			"body": "[img]https://i.ibb.co/Ldrsdg80/St12z-H0.png[/img]\n[divbox=white][list=none]\n\n[b]CASE FILE:[/b]\n[list=none]\n[*] #{{caseNumber}}\n[/list]\n\n[b]INVESTIGATOR(S):[/b]\n[list]\n{{investigators}}\n[/list]\n\n[b]NOTES:[/b]\n[list=none]\n[*] {{responseText}}\n[/list]\n\n[/list][/divbox]\n[LSSDfooter][/LSSDfooter]",
+			"govLink": "",
+			"category": "Initial Response and Followup Evidence",
+			"fields": [
+				{
+					"name": "caseNumber"
+				},
+				{
+					"name": "investigators"
+				},
+				{
+					"name": "responseText"
+				}
+			]
+		},
+		{
+			"id": "3",
+			"division": "IA",
+			"title": "File Response Format",
+			"topicTitle": "",
+			"body": "[img]https://i.imgur.com/a3aDjGi.png[/img][divbox=white]\n[fimg=120,120]https://i.imgur.com/B6wVZIV.png\n[/fimg][aligntable=right,0,0,0,0,0,0][right][font=Arial][b]\n[size=150]Los Santos County Sheriff's Department[/size][/b]\n[size=115]Internal Affairs Bureau[/size]\n[size=95]\"A TRADITION OF SERVICE\"[/size][/font][/right][/aligntable]\n[hr]\n[list=none]\n\n{{response}}\n[/list]\n\n\n[hr][/hr][list=none]\n\nSincerely,\n[img]{{signature}}[/img]\n[b]{{dRank}} {{name}}[/b] \n{{divisionRank}}, Internal Affairs Bureau\nLos Santos County Sheriff's Department\n\n\n\n[/list][/divbox]\n[img]https://i.imgur.com/a3aDjGi.png[/img]",
+			"govLink": "",
+			"category": "File Response Format",
+			"fields": []
+		},
+		{
+			"id": "4",
+			"division": "IA",
+			"title": "Statement Inquiry",
+			"topicTitle": "Internal Affairs Inquiry",
+			"body": "[lssdfooter][/lssdfooter][divbox=white]\n[img]https://i.ibb.co/fGPXMtFz/B6w-VZIV.png[/img][aligntable=right,0,0,0,0,0,0][right][font=Arial][b]\n[size=150]Los Santos County Sheriff's Department[/size][/b]\n[size=110][color=#FF0000]THIS EMAIL CONTAINS CONFIDENTIAL INFORMATION[/color][/size]\n[size=115]Internal Affairs Bureau[/size]\n[size=95]\"A TRADITION OF SERVICE\"[/size][/font][/right][/aligntable]\n[hr]\n\n[list=none]\n[b]{{rankFnameLname}}[/b],\n\nYou are being contacted by the Internal Affairs Bureau in relation to an administrative investigation in which you have been identified as [b]{{subjectInvolvmentLevel}}[/b].\n\n[b]INCIDENT INFORMATION:[/b]\n[list=none]\n[b]Date and Time:[/b] {{incidentDate}} — {{incidentTimeInquiry}}\n[b]Location:[/b] {{locationOfIncident}}\n[b]General Nature of the Incident:[/b] {{generalNatureOfTheIncident}}\n[/list]\n\nYou are directed to answer the questions below completely and truthfully based on your personal knowledge and recollection. If you do not know or cannot recall an answer, state that clearly rather than speculating.\n\n[b]QUESTIONS:[/b]\n[list=1]\n[*]Please describe your involvement in, and recollection of, the incident in chronological order.\n-\n[*]Were you operating a body-worn camera or any other recording equipment during the incident?\n-\n[*]Do you possess or have access to any body-worn camera, dashboard camera, CCTV, photographs, communications, reports, or other evidence relating to the incident?\n-\n[*]If so, provide the evidence or explain where it may be located. [color=#0000FF](([/color] When submitting recorded In Character evidence, include the required proof of recording-equipment roleplay where applicable. [color=#0000FF]))[/color]\n-\n{{incidentSpeceficQuestions}}\n\n[*]Were there any other employees or witnesses present who may possess relevant information?\n-\n[*]Is there any additional information, context, or evidence you believe the Internal Affairs Bureau should consider?\n-\n[/list]\n\n[b]RESPONSE REQUIREMENTS:[/b]\n\nPlease respond using the format provided below within forty-eight (48) hours. If you require clarification or additional time, contact the assigned investigator or Internal Affairs Command before the deadline. Failure to respond, deliberately withholding requested information, or refusing to cooperate without justification may result in administrative or disciplinary action in accordance with [url=https://gov.eclipse-rp.net/viewtopic.php?p=950628#p950628]section 2.6 of the Department Handbook[/url].\n\nDo not alter, conceal, destroy, or delete any information or evidence potentially relevant to this investigation. This inquiry and any related investigative information must be treated as confidential and should not be discussed with persons who do not have an official need to know.\n\n[spoiler=Response Format]\n[code]\n[lssdfooter][/lssdfooter]\n[divbox=white]\n[img]https://i.ibb.co/fGPXMtFz/B6w-VZIV.png[/img][aligntable=right,0,0,0,0,0,0][right][font=Arial]\n[b][size=150]Los Santos County Sheriff's Department[/size][/b]\n[size=110][color=#FF0000]THIS EMAIL CONTAINS CONFIDENTIAL INFORMATION[/color][/size]\n[size=115]Internal Affairs Bureau[/size]\n[size=95]\"A TRADITION OF SERVICE\"[/size][/font][/right][/aligntable]\n[hr]\n\n[list=none]\n[b]Rank Firstname Lastname[/b],\n\n[b]STATEMENT RESPONSE:[/b]\n\n[list=1]\n[*]Please describe your involvement in, and recollection of, the incident in chronological order.\n-\nANSWER\n-\n[*]Were you operating a body-worn camera or any other recording equipment during the incident?\n-\nANSWER\n-\n[*]Do you possess or have access to any body-worn camera, dashboard camera, CCTV, photographs, communications, reports, or other evidence relating to the incident?\n-\nANSWER\n-\n[*]If so, provide the evidence or explain where it may be located. (( When submitting recorded In Character evidence, include the required proof of recording-equipment roleplay where applicable. ))\n-\nANSWER\n-\n[*]INCIDENT-SPECIFIC QUESTION\n-\nANSWER\n-\n[*]INCIDENT-SPECIFIC QUESTION\n-\nANSWER\n-\n[*]INCIDENT-SPECIFIC QUESTION\n-\nANSWER\n-\n[*]Were there any other employees or witnesses present who may possess relevant information?\n-\nANSWER\n-\n[*]Is there any additional information, context, or evidence you believe the Internal Affairs Bureau should consider?\n-\nANSWER\n-\n[/list]\n\n[b]TRUTHFULNESS AND PRESERVATION DECLARATION:[/b]\n[size=85][color=#FF0000]I declare that the information provided in this response is truthful and complete to the best of my knowledge and recollection. I understand that an honest mistake, an inability to recall, or a difference in recollection does not by itself constitute misconduct or a criminal offence.\n\nI understand that knowingly providing false information to a peace officer, deliberately lying to or concealing material information from a government official conducting a lawful investigation, or altering, concealing, falsifying, or destroying evidence with intent to interfere with an investigation may be referred for consideration under GM12 — Giving False Information to a Police Officer, GM14 — Obstruction of Justice, or GF16 — Tampering with Evidence, where the elements of the applicable offence are met.\n\nI further understand that failure to cooperate truthfully and completely with an authorized Internal Affairs investigation may result in administrative or disciplinary action under Department policy, independently of whether criminal charges are applicable.[/color][/size]\n\n[b]Date:[/b] DD/MMM/YYYY\n\nI, [i]Firstname Lastname[/i], confirm that I have read and understood this declaration and that the answers provided above are my own.\n\n[hr]\n\nSincerely,\n\n[img]SIGNATURE[/img]\n[b]Rank Firstname Lastname[/b]\nLos Santos County Sheriff's Department\n[/list]\n[/divbox]\n[lssdfooter][/lssdfooter]\n[/code]\n[/spoiler]\n\nIf you have questions concerning this inquiry, require clarification, or need additional time to respond, contact the assigned investigator or Internal Affairs Command before the stated deadline.\n\nAn employee who is the subject of the investigation will be notified of the conclusion or any resulting action as required by Department policy. Employees contacted solely as witnesses should not expect to receive the final case disposition.\n\n[hr]\n\nSincerely,\n\n[img]{{signature}}[/img]\n[b]{{dRank}} {{name}}[/b]\nInternal Affairs Bureau\nLos Santos County Sheriff's Department\n[/list]\n[/divbox]\n[lssdfooter][/lssdfooter]",
+			"govLink": "https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose",
+			"category": "Statement Inquiry (Email)",
+			"fields": [
+				{
+					"name": "rankFnameLname",
+					"label": "Subject of the Inquiry Rank Fname Lname"
+				},
+				{
+					"name": "subjectInvolvmentLevel"
+				},
+				{
+					"name": "incidentDate",
+					"hint": "DD/MMM/YYYY"
+				},
+				{
+					"name": "incidentTimeInquiry"
+				},
+				{
+					"name": "locationOfIncident"
+				},
+				{
+					"name": "generalNatureOfTheIncident",
+					"hint": "Provide a brief and neutral description of the reported incident and the recipient's apparent involvement. Include enough information for the recipient to understand and meaningfully respond without unnecessarily identifying the complainant or disclosing confidential evidence."
+				},
+				{
+					"name": "incidentSpeceficQuestions"
+				}
+			]
+		},
+		{
+			"id": "5",
+			"division": "IA",
+			"title": "Interview Format",
+			"topicTitle": "",
+			"body": "[img]https://i.ibb.co/jkJssdqr/F9N6Pdm.png[/img]\n[divbox=white]\n[b]Investigator(s):[/b]\n[list]\n{{investigators}}\n[/list]\n\n[b]Subject Interviewed:[/b] {{subjectInterviewed}}\n[b]Date:[/b]{{interviewDateIA}}\n[b]Time of Interview Start & End:[/b] {{startOfInterview}} > {{endOfInterview}}\n\n[b]GENERAL SUMMARY[/b]\n{{generalSummary}}\n\n\n[b]INTERVIEW TRANSCRIPT[/b]\n[url={{videoUrl}}]** Recording of Interview **[/url]\n[/divbox]\n[lssdfooter][/lssdfooter]",
+			"govLink": "",
+			"category": "Interview Format",
+			"fields": [
+				{
+					"name": "investigators"
+				},
+				{
+					"name": "subjectInterviewed"
+				},
+				{
+					"name": "interviewDateIA"
+				},
+				{
+					"name": "startOfInterview"
+				},
+				{
+					"name": "endOfInterview"
+				},
+				{
+					"name": "generalSummary"
+				},
+				{
+					"name": "videoUrl"
+				}
+			]
+		},
+		{
+			"id": "6",
+			"division": "IA",
+			"title": "Complainant",
+			"topicTitle": "",
+			"body": "[lssdfooter][/lssdfooter][divbox=white]\n[img]https://i.ibb.co/fGPXMtFz/B6w-VZIV.png[/img][aligntable=right,0,0,0,0,0,0][right][font=Arial][b]\n[size=150]Los Santos County Sheriff's Department[/size][/b]\n[size=115]Internal Affairs - Conclusion[/size]\n[size=95]\"A TRADITION OF SERVICE\"[/size][/font][/right][/aligntable]\n[list=none][right]{{Emaildate}}[/right][/list]\n[hr][/hr][list=none]\nCase #{{caseNumber}} | {{caseStatus}}\n[i]Investigators:[/i]\n[list]\n[*]{{internalAffairsCommandFnameLname}} - [i]Internal Affairs Command[/i]\n[*]{{internalAffairsInvestigatorFnameLname}} - [i]Internal Affairs Investigator[/i]\n[/list][/list][hr][/hr][list=none]\n[b]{{gender}} {{fnameLname}},[/b]\n\nI am contacting you about an Internal Affairs report submitted by you on the [b]Day of Month, Year[/b]. Firstly, thank you for taking the time to submit your report on this occasion. An investigator has reviewed your complaint and we can now confirm that the report is hereby concluded.\n\n{{summaryAndOutcome}}\n\n[i]If you're unhappy with our response you're entitled to appeal through the Office of the Sheriff.[/i]\n\n[/list][hr][/hr][list=none]\n \nSincerely,\n[img]{{signature}}[/img]\n[b]{{dRank}} {{name}}[/b] \n{{divisionRank}}, Internal Affairs Bureau\nLos Santos County Sheriff's Department\n[/list][/divbox][lssdfooter][/lssdfooter]",
+			"govLink": "https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose",
+			"category": "Conclusion / Response Format",
+			"fields": [
+				{
+					"name": "Emaildate"
+				},
+				{
+					"name": "caseNumber"
+				},
+				{
+					"name": "caseStatus"
+				},
+				{
+					"name": "internalAffairsCommandFnameLname"
+				},
+				{
+					"name": "internalAffairsInvestigatorFnameLname"
+				},
+				{
+					"name": "gender"
+				},
+				{
+					"name": "fnameLname"
+				},
+				{
+					"name": "summaryAndOutcome"
+				}
+			]
+		},
+		{
+			"id": "7",
+			"division": "IA",
+			"title": "Employee",
+			"topicTitle": "",
+			"body": "[lssdfooter][/lssdfooter][divbox=white]\n[img]https://i.ibb.co/fGPXMtFz/B6w-VZIV.png[/img][aligntable=right,0,0,0,0,0,0][right][font=Arial][b]\n[size=150]Los Santos County Sheriff's Department[/size][/b]\n[size=115]Internal Affairs - Conclusion[/size]\n[size=95]\"A TRADITION OF SERVICE\"[/size][/font][/right][/aligntable]\n[list=none][right]Month Day, Year[/right][/list]\n[hr][/hr][list=none]\nCase #{{caseNumber}} | {{caseStatus}}\n[i]Investigators:[/i]\n[list]\n[*]{{internalAffairsCommandFnameLname}} - [i]Internal Affairs Command[/i]\n[*]{{internalAffairsInvestigatorFnameLname}} - [i]Internal Affairs Investigator[/i]\n[/list][/list][hr][/hr][list=none]\n[b]{{gender}} {{fnameLname}},[/b]\n\nI am contacting you about an Internal Affairs report submitted on the [b]Day of Month, Year[/b], that was either directed against you or in which you are involved. An investigator has reviewed the complaint and we can now confirm that the report is hereby concluded.\n\n{{summaryAndOutcome}}\n\n[i]If you're unhappy with our response you're entitled to appeal through the Office of the Sheriff.[/i]\n\n[/list][hr][/hr][list=none]\n \nSincerely,\n[img]{{signature}}[/img]\n[b]{{dRank}} {{name}}[/b] \n{{divisionRank}}, Internal Affairs Bureau\nLos Santos County Sheriff's Department\n[/list][/divbox][lssdfooter][/lssdfooter]",
+			"govLink": "https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose",
+			"category": "Conclusion / Response Format",
+			"fields": []
 		}
 	],
 	"inputs": [
@@ -4080,6 +4240,141 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 			"name": "flightHours",
 			"type": "timerange",
 			"label": "Flight hours (start and end)"
+		},
+		{
+			"name": "caseNumber",
+			"type": "text",
+			"label": "Case Number"
+		},
+		{
+			"name": "investigators",
+			"type": "list",
+			"label": "Investigators"
+		},
+		{
+			"name": "responseText",
+			"type": "textarea",
+			"label": "Response"
+		},
+		{
+			"name": "videoUrl",
+			"type": "text",
+			"label": "Video URL"
+		},
+		{
+			"name": "generalSummary",
+			"type": "textarea",
+			"label": "General Summary"
+		},
+		{
+			"name": "interviewDateIA",
+			"type": "date",
+			"label": "Interview Date",
+			"hint": "Month Day, Year"
+		},
+		{
+			"name": "startOfInterview",
+			"type": "time",
+			"label": "Start of Interview"
+		},
+		{
+			"name": "endOfInterview",
+			"type": "time",
+			"label": "End Of interview"
+		},
+		{
+			"name": "subjectInterviewed",
+			"type": "text",
+			"label": "Subject Interviewed"
+		},
+		{
+			"name": "Emaildate",
+			"type": "date",
+			"label": "Date"
+		},
+		{
+			"name": "internalAffairsCommandFnameLname",
+			"type": "text",
+			"label": "Internal Affairs Command Fname Lname"
+		},
+		{
+			"name": "internalAffairsInvestigatorFnameLname",
+			"type": "text",
+			"label": "Internal Affairs Investigator Fname Lname"
+		},
+		{
+			"name": "gender",
+			"type": "select",
+			"label": "Gender",
+			"options": [
+				{
+					"value": "Mr. ",
+					"label": "Male"
+				},
+				{
+					"value": "Ms. ",
+					"label": "Female"
+				}
+			]
+		},
+		{
+			"name": "fnameLname",
+			"type": "text",
+			"label": "Fname Lname"
+		},
+		{
+			"name": "summaryAndOutcome",
+			"type": "textarea",
+			"label": "Summary And Outcome"
+		},
+		{
+			"name": "caseStatus",
+			"type": "text",
+			"label": "Case Status"
+		},
+		{
+			"name": "rankFnameLname",
+			"type": "text",
+			"label": "Rank Fname Lname"
+		},
+		{
+			"name": "incidentTimeInquiry",
+			"type": "time",
+			"label": "Incident Time"
+		},
+		{
+			"name": "locationOfIncident",
+			"type": "text",
+			"label": "Location of incident"
+		},
+		{
+			"name": "generalNatureOfTheIncident",
+			"type": "textarea",
+			"label": "General Nature of the Incident"
+		},
+		{
+			"name": "subjectInvolvmentLevel",
+			"type": "select",
+			"label": "Subject involvment level",
+			"options": [
+				{
+					"value": "involved employee",
+					"label": "involved employee"
+				},
+				{
+					"value": "the subject employee ",
+					"label": "the subject employee "
+				},
+				{
+					"value": "a potential witness",
+					"label": "a potential witness"
+				}
+			]
+		},
+		{
+			"name": "incidentSpeceficQuestions",
+			"type": "list",
+			"label": "Incident specefic questions"
 		}
 	]
 } /* /ADMIN_DATA */;

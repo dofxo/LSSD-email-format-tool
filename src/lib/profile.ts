@@ -47,9 +47,31 @@ export const divisionRanks: Record<divisionsType, { value: string; label: string
 	Supervisory: [],
 	FTB: [],
 	ASB: [],
+	IA: [
+		{ value: "Sheriff", label: "Sheriff" },
+		{ value: "Undersheriff", label: "Undersheriff" },
+		{ value: "Chief of Staff, Office of the Sheriff", label: "Chief of Staff, Office of the Sheriff" },
+		{ value: "Unit Commander, Internal Affairs Bureau", label: "Unit Commander, Internal Affairs Bureau" },
+		{ value: "Operations Lieutenant", label: "Operations Lieutenant" },
+		{ value: "Team Leader", label: "Team Leader" },
+		{ value: "Investigator", label: "Investigator" },
+		{ value: "Probationary Investigator", label: "Probationary Investigator" },
+	],
 };
 
 export const divisionRankOptionsFor = (division: divisionsType) => divisionRanks[division] ?? [];
+
+/** Wording for a division's rank field. */
+const divisionRankLabels: Partial<Record<divisionsType, string>> = {
+	IA: "Internal Affairs bureau rank",
+};
+
+export const divisionRankLabelFor = (division: divisionsType): string =>
+	divisionRankLabels[division] ?? `${division} rank`;
+
+/** Whether a division's rank belongs in the profile at all. */
+export const divisionRankRequired = (division: divisionsType): boolean =>
+	divisionRankOptionsFor(division).length > 0;
 
 /** Human-readable list of profile details that are still missing. */
 export const profileIssues = (details: DeputyData, division: divisionsType): string[] => {
@@ -59,8 +81,8 @@ export const profileIssues = (details: DeputyData, division: divisionsType): str
 	return [
 		!details.name.trim() ? "full name" : null,
 		!details.dRank ? "rank" : null,
-		divisionRankOptionsFor(division).length > 0 && !details.divisionRanks[division]
-			? `${division} rank`
+		divisionRankRequired(division) && !details.divisionRanks[division]
+			? divisionRankLabelFor(division)
 			: null,
 		!details.signature.trim() ? "signature" : null,
 	].filter((issue): issue is string => Boolean(issue));

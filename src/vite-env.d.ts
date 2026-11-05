@@ -3,6 +3,7 @@
 interface ImportMetaEnv {
 	readonly VITE_SUPERVISORY_PASSWORD: string;
 	readonly VITE_ADMIN_PASSWORD: string;
+	readonly VITE_IA_PASSWORD: string;
 }
 
 interface ImportMeta {

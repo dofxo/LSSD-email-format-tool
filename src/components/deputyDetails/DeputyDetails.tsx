@@ -9,7 +9,14 @@ import { Panel, PanelBody, PanelFooter, PanelHeader, PanelHeading } from "@/comp
 import { deputyRanks } from "@/data/deputyRanks";
 import { useCopy } from "@/hooks/useCopy";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
-import { divisionRankOptionsFor, listIssues, profileIssues, signatureBlockLines } from "@/lib/profile";
+import {
+	divisionRankLabelFor,
+	divisionRankOptionsFor,
+	divisionRankRequired,
+	listIssues,
+	profileIssues,
+	signatureBlockLines,
+} from "@/lib/profile";
 import { cn } from "@/lib/utils";
 import type { DeputyData, divisionsType } from "@/types";
 
@@ -32,7 +39,8 @@ export function DeputyDetails({ details, setDetails, division }: DeputyDetailsPr
 
 	const signature = details.signature.trim();
 	const divisionRankOptions = divisionRankOptionsFor(division);
-	const needsDivisionRank = divisionRankOptions.length > 0;
+	const divisionRankLabel = divisionRankLabelFor(division);
+	const needsDivisionRank = divisionRankRequired(division);
 
 	useEffect(() => {
 		setImageState(signature ? "loading" : "empty");
@@ -122,7 +130,7 @@ export function DeputyDetails({ details, setDetails, division }: DeputyDetailsPr
 					</Field>
 
 					{needsDivisionRank ? (
-						<Field label={`${division} rank`} htmlFor="deputy-division-rank" wide>
+						<Field label={divisionRankLabel} htmlFor="deputy-division-rank" wide>
 							<Combobox
 								id="deputy-division-rank"
 								value={details.divisionRanks[division]}
@@ -133,10 +141,10 @@ export function DeputyDetails({ details, setDetails, division }: DeputyDetailsPr
 									}))
 								}
 								options={divisionRankOptions}
-								placeholder={`Select ${division} rank…`}
+								placeholder={`Select ${divisionRankLabel.toLowerCase()}…`}
 								searchPlaceholder="Search ranks…"
 								emptyMessage="No ranks match."
-								ariaLabel={`${division} rank`}
+								ariaLabel={divisionRankLabel}
 							/>
 						</Field>
 					) : null}

@@ -1,6 +1,20 @@
-import { Car, ClipboardCheck, GraduationCap, Landmark, PlaneTakeoff, ScrollText, ShieldCheck, Users, type LucideIcon } from "lucide-react";
+import {
+	Car,
+	ClipboardCheck,
+	GraduationCap,
+	Landmark,
+	PlaneTakeoff,
+	ScrollText,
+	ShieldAlert,
+	ShieldCheck,
+	Users,
+	type LucideIcon,
+} from "lucide-react";
 
 import type { divisionsType } from "@/types";
+
+/** Key of a restricted division's password in the app's .env file. */
+export type DivisionPassword = "supervisory" | "ia";
 
 export interface Division {
 	id: divisionsType;
@@ -13,8 +27,11 @@ export interface Division {
 	icon: LucideIcon;
 	/** CSS class that sets the --accent custom property for this division. */
 	accent: string;
-	/** Restricted divisions require the supervisory password. */
-	restricted?: boolean;
+	/**
+	 * Divisions set here are password-protected; the value names which .env
+	 * password (`VITE_SUPERVISORY_PASSWORD` / `VITE_IA_PASSWORD`) opens it.
+	 */
+	password?: DivisionPassword;
 	/** Preview copy for the switcher. */
 	tagline?: string;
 }
@@ -83,7 +100,16 @@ export const divisions: Division[] = [
 		blurb: "Promotions, discharges, suspensions and restricted notices.",
 		icon: ShieldCheck,
 		accent: "accent-violet",
-		restricted: true,
+		password: "supervisory",
+	},
+	{
+		id: "IA",
+		label: "IA",
+		name: "Internal Affairs",
+		blurb: "Internal investigations, misconduct complaints and disciplinary records.",
+		icon: ShieldAlert,
+		accent: "accent-graphite",
+		password: "ia",
 	},
 ];
 

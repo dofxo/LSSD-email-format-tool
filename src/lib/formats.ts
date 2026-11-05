@@ -7,6 +7,7 @@ import { TSDLabels } from "@/formats/divisions/TSD";
 import { FTBLabels } from "@/formats/divisions/FTB";
 import { SEBLabels } from "@/formats/divisions/SEB";
 import { ASBLabels } from "@/formats/divisions/ASB";
+import { IALabels } from "@/formats/divisions/IA";
 import {
 	adminBodyFor,
 	adminLabelFor,
@@ -30,6 +31,7 @@ export const labelsByDivision: Record<divisionsType, Record<string, string>> = {
 	FTB: FTBLabels,
 	SEB: SEBLabels,
 	ASB: ASBLabels,
+	IA: IALabels,
 };
 
 export interface FormatOption {

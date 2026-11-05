@@ -40,8 +40,8 @@ export function AppHeader({
 							variant="ghost"
 							size="icon-sm"
 							onClick={onLock}
-							title="Lock supervisory formats"
-							aria-label="Lock supervisory formats"
+							title="Lock restricted formats"
+							aria-label="Lock restricted formats"
 						>
 							<Lock />
 						</Button>
@@ -74,7 +74,7 @@ export function AppHeader({
 						aria-hidden={!unlocked}
 					>
 						{unlocked ? <ShieldCheck className="size-3.5 text-accent" /> : null}
-						{unlocked ? "Supervisory unlocked" : null}
+						{unlocked ? "Restricted access unlocked" : null}
 					</span>
 				</div>
 			</div>

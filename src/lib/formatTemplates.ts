@@ -268,6 +268,7 @@ export const renderFormatTemplate = (template: string, context: TemplateContext)
 		signature: deputyData.signature,
 		dRank: deputyData.dRank,
 		badgeNumber: deputyData.badgeNumber,
+		divisionRank: deputyData.divisionRanks[division],
 		division,
 		rankName: [deputyData.dRank, deputyData.name].filter(Boolean).join(" "),
 	};
@@ -354,6 +355,7 @@ export const profileTokens: { token: string; label: string }[] = [
 	{ token: "name", label: "Deputy full name (profile)" },
 	{ token: "badgeNumber", label: "Deputy badge number (profile)" },
 	{ token: "dRank", label: "Deputy rank (profile)" },
+	{ token: "divisionRank", label: "Division rank (profile)" },
 	{ token: "rankName", label: "Rank and name together (profile)" },
 	{ token: "signature", label: "Signature image URL (profile)" },
 	{ token: "division", label: "Division the format belongs to" },

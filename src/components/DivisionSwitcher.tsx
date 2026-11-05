@@ -2,19 +2,19 @@ import { useEffect, useRef, useState } from "react";
 import { Lock } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import { divisions } from "@/lib/divisions";
+import { divisions, type DivisionPassword } from "@/lib/divisions";
 import { formatsForDivision } from "@/lib/formats";
 import type { divisionsType } from "@/types";
 
 interface DivisionSwitcherProps {
 	value: divisionsType;
 	onChange: (division: divisionsType) => void;
-	/** True when the supervisory password has not been entered. */
-	locked: boolean;
+	/** Passwords already entered on this device; a division with any other password stays locked. */
+	unlocked: DivisionPassword[];
 	className?: string;
 }
 
-export function DivisionSwitcher({ value, onChange, locked, className }: DivisionSwitcherProps) {
+export function DivisionSwitcher({ value, onChange, unlocked, className }: DivisionSwitcherProps) {
 	const [focusedIndex, setFocusedIndex] = useState(() => divisions.findIndex((d) => d.id === value));
 	const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
 	const stripRef = useRef<HTMLDivElement>(null);
@@ -56,7 +56,7 @@ export function DivisionSwitcher({ value, onChange, locked, className }: Divisio
 			{divisions.map((division, index) => {
 				const Icon = division.icon;
 				const isActive = division.id === value;
-				const isLocked = Boolean(division.restricted) && locked;
+				const isLocked = division.password !== undefined && !unlocked.includes(division.password);
 				const count = formatsForDivision(division.id).length;
 
 				return (
