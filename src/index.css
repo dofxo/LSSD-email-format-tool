@@ -135,6 +135,9 @@
 .accent-indigo {
 	--accent: #4a52b8;
 }
+.accent-graphite {
+	--accent: #4f5a6b;
+}
 .dark .accent-red {
 	--accent: #ff7080;
 }
@@ -158,6 +161,9 @@
 }
 .dark .accent-indigo {
 	--accent: #9aa3ff;
+}
+.dark .accent-graphite {
+	--accent: #9fadc4;
 }
 
 @theme inline {

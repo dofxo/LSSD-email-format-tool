@@ -20,7 +20,7 @@ import { useExtensionInstalled } from "@/hooks/useExtensionInstalled";
 import { useFormatData } from "@/hooks/useFormatData";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { useTheme } from "@/hooks/useTheme";
-import { getDivision } from "@/lib/divisions";
+import { getDivision, type DivisionPassword } from "@/lib/divisions";
 import { hasTitleFor, resolveTitle, suggestedTitleFor } from "@/lib/formatTitles";
 import { withGovPayload } from "@/lib/govPayload";
 import { govLinkFor } from "@/lib/govLinks";
@@ -30,14 +30,38 @@ import { cn } from "@/lib/utils";
 import { getFormat } from "@/formats";
 import type { DeputyData, FormatData, divisionsType } from "@/types";
 
-const SUPERVISORY_PASSWORD = import.meta.env.VITE_SUPERVISORY_PASSWORD as string | undefined;
+/** The .env password that opens each restricted division. */
+const PASSWORDS: Record<DivisionPassword, string | undefined> = {
+	supervisory: import.meta.env.VITE_SUPERVISORY_PASSWORD as string | undefined,
+	ia: import.meta.env.VITE_IA_PASSWORD as string | undefined,
+};
+
+/** Where each entered password is remembered on this device. */
+const UNLOCK_KEYS: Record<DivisionPassword, string> = {
+	supervisory: "supervisoryUnlocked",
+	ia: "internalAffairsUnlocked",
+};
+
+/** Copy for the password prompt, per restricted division. */
+const RESTRICTED_COPY: Record<DivisionPassword, { title: string; description: string }> = {
+	supervisory: {
+		title: "Supervisory access",
+		description:
+			"Promotions, discharges and disciplinary notices are restricted. Enter the supervisory password to unlock this division.",
+	},
+	ia: {
+		title: "Internal Affairs access",
+		description:
+			"Internal investigations and misconduct records are restricted. Enter the Internal Affairs password to unlock this division.",
+	},
+};
 
 const emptyDetails: DeputyData = {
 	name: "",
 	badgeNumber: "",
 	signature: "",
 	dRank: "",
-	divisionRanks: { RED: "", TSD: "", ATD: "", General: "", Supervisory: "", FTB: "", SEB: "", ASB: "" },
+	divisionRanks: { RED: "", TSD: "", ATD: "", General: "", Supervisory: "", FTB: "", SEB: "", ASB: "", IA: "" },
 };
 
 /** Restores the saved profile, tolerating older shapes stored in localStorage. */
@@ -56,11 +80,13 @@ const loadDetails = (): DeputyData => {
 	}
 };
 
-const loadUnlocked = () => {
+const loadUnlocked = (): DivisionPassword[] => {
 	try {
-		return localStorage.getItem("supervisoryUnlocked") === "true";
+		return (Object.keys(UNLOCK_KEYS) as DivisionPassword[]).filter(
+			(key) => localStorage.getItem(UNLOCK_KEYS[key]) === "true",
+		);
 	} catch {
-		return false;
+		return [];
 	}
 };
 
@@ -95,11 +121,15 @@ const App = () => {
 	const [extensionOpen, setExtensionOpen] = useState(false);
 	const [extensionHint, setExtensionHint] = useState(false);
 	const [extensionDismissed, setExtensionDismissed] = useState(loadExtensionDismissed);
-	const [unlocked, setUnlocked] = useState(loadUnlocked);
+	const [unlocked, setUnlocked] = useState<DivisionPassword[]>(loadUnlocked);
 	const [pendingDivision, setPendingDivision] = useState<divisionsType | null>(null);
 	const [unlockOpen, setUnlockOpen] = useState(false);
 
 	const divisionMeta = getDivision(division);
+	const divisionUnlocked = divisionMeta.password === undefined || unlocked.includes(divisionMeta.password);
+	const pendingPassword = pendingDivision ? getDivision(pendingDivision).password : undefined;
+	const pendingCopy = pendingPassword ? RESTRICTED_COPY[pendingPassword] : RESTRICTED_COPY.supervisory;
+	const anyUnlocked = unlocked.length > 0;
 	const formatOptions = useMemo(() => formatsForDivision(division), [division]);
 	const fields = useMemo(() => formatFieldsFor(division, formatId), [division, formatId]);
 	const generatedText = useMemo(
@@ -131,7 +161,8 @@ const App = () => {
 	}, [details]);
 
 	const handleDivisionChange = (next: divisionsType) => {
-		if (getDivision(next).restricted && !unlocked) {
+		const password = getDivision(next).password;
+		if (password && !unlocked.includes(password)) {
 			setPendingDivision(next);
 			setUnlockOpen(true);
 			return;
@@ -146,37 +177,42 @@ const App = () => {
 	};
 
 	const handleUnlock = (password: string) => {
-		if (!SUPERVISORY_PASSWORD || password !== SUPERVISORY_PASSWORD) return false;
+		const key = pendingPassword;
+		if (!key) return false;
 
-		setUnlocked(true);
+		const expected = PASSWORDS[key];
+		if (!expected || password !== expected) return false;
+
+		setUnlocked((prev) => (prev.includes(key) ? prev : [...prev, key]));
 		try {
-			localStorage.setItem("supervisoryUnlocked", "true");
+			localStorage.setItem(UNLOCK_KEYS[key], "true");
 		} catch {
 			/* not fatal: the session stays unlocked */
 		}
 
-		if (pendingDivision) {
-			setDivision(pendingDivision);
+		const target = pendingDivision;
+		if (target) {
+			setDivision(target);
 			setPendingDivision(null);
 			setFormatId("");
 		}
 
-		toast.success("Supervisory formats unlocked");
+		toast.success(`${target ? getDivision(target).label : "Restricted"} formats unlocked`);
 		return true;
 	};
 
 	const handleLock = () => {
-		setUnlocked(false);
+		setUnlocked([]);
 		try {
-			localStorage.removeItem("supervisoryUnlocked");
+			for (const key of Object.values(UNLOCK_KEYS)) localStorage.removeItem(key);
 		} catch {
 			/* ignore */
 		}
-		if (division === "Supervisory") {
+		if (divisionMeta.password !== undefined) {
 			setDivision("RED");
 			setFormatId("");
 		}
-		toast.info("Supervisory formats locked");
+		toast.info("Restricted formats locked");
 	};
 
 	// Opens the government section with the title and body travelling in the
@@ -242,14 +278,14 @@ const App = () => {
 			<AppHeader
 				theme={theme}
 				onToggleTheme={toggleTheme}
-				unlocked={unlocked}
+				unlocked={anyUnlocked}
 				onLock={handleLock}
 				onOpenExtension={extensionInstalled ? undefined : () => setExtensionOpen(true)}
 			/>
 
 			<main className="mx-auto flex w-full max-w-[1680px] flex-1 flex-col gap-6 px-4 pt-6 pb-14 sm:px-6 lg:px-8 2xl:px-12">
 				<div className="flex flex-col gap-3">
-					<DivisionSwitcher value={division} onChange={handleDivisionChange} locked={!unlocked} />
+					<DivisionSwitcher value={division} onChange={handleDivisionChange} unlocked={unlocked} />
 					<p className="text-[12.5px] text-ink-muted">
 						<span className="font-medium text-ink">{divisionMeta.name}</span>
 						<span className="mx-1.5 text-ink-faint/40">·</span>
@@ -276,7 +312,7 @@ const App = () => {
 									<Badge tone="neutral">
 										{formatOptions.length} {formatOptions.length === 1 ? "format" : "formats"}
 									</Badge>
-									{division === "Supervisory" && unlocked ? (
+									{Boolean(divisionMeta.password) && divisionUnlocked ? (
 										<Badge tone="success">
 											<ShieldCheck />
 											Unlocked
@@ -463,7 +499,9 @@ const App = () => {
 
 			<UnlockDialog
 				open={unlockOpen}
-				configured={Boolean(SUPERVISORY_PASSWORD)}
+				configured={Boolean(pendingPassword && PASSWORDS[pendingPassword])}
+				title={pendingCopy.title}
+				description={pendingCopy.description}
 				onUnlock={handleUnlock}
 				onOpenChange={(open) => {
 					setUnlockOpen(open);

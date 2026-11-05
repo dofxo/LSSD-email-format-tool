@@ -12,11 +12,15 @@ interface UnlockDialogProps {
 	onOpenChange: (open: boolean) => void;
 	/** Returns true when the password is correct. */
 	onUnlock: (password: string) => boolean;
-	/** False when no supervisory password is configured for this deployment. */
+	/** False when no password is configured for this deployment. */
 	configured: boolean;
+	/** Heading for the restricted section being opened. */
+	title: string;
+	/** What the password unlocks. */
+	description: string;
 }
 
-export function UnlockDialog({ open, onOpenChange, onUnlock, configured }: UnlockDialogProps) {
+export function UnlockDialog({ open, onOpenChange, onUnlock, configured, title, description }: UnlockDialogProps) {
 	const [password, setPassword] = useState("");
 	const [revealed, setRevealed] = useState(false);
 	const [error, setError] = useState<string | null>(null);
@@ -51,26 +55,23 @@ export function UnlockDialog({ open, onOpenChange, onUnlock, configured }: Unloc
 						<span className="flex size-10 items-center justify-center rounded-xl bg-accent/12 text-accent ring-1 ring-inset ring-accent/20">
 							<ShieldAlert className="size-5" />
 						</span>
-						<DialogTitle>Supervisory access</DialogTitle>
+						<DialogTitle>{title}</DialogTitle>
 					</div>
-					<DialogDescription>
-						Promotions, discharges and disciplinary notices are restricted. Enter the supervisory password to
-						unlock this division.
-					</DialogDescription>
+					<DialogDescription>{description}</DialogDescription>
 				</DialogHeader>
 
 				<form onSubmit={handleSubmit} className="flex flex-col gap-3">
 					<div className="flex flex-col gap-1.5" key={attempt}>
-						<Label htmlFor="supervisory-password">Password</Label>
+						<Label htmlFor="restricted-password">Password</Label>
 						<div className="relative">
 							<input
-								id="supervisory-password"
+								id="restricted-password"
 								type={revealed ? "text" : "password"}
 								autoFocus
 								autoComplete="current-password"
 								value={password}
 								aria-invalid={Boolean(error)}
-								aria-describedby={error ? "supervisory-password-error" : undefined}
+								aria-describedby={error ? "restricted-password-error" : undefined}
 								onChange={(event) => {
 									setPassword(event.target.value);
 									if (error) setError(null);
@@ -91,7 +92,7 @@ export function UnlockDialog({ open, onOpenChange, onUnlock, configured }: Unloc
 
 					{error ? (
 						<p
-							id="supervisory-password-error"
+							id="restricted-password-error"
 							role="alert"
 							className="flex items-start gap-2 rounded-xl border border-danger/25 bg-danger-soft px-3 py-2 text-[12.5px] text-danger"
 						>
@@ -103,8 +104,7 @@ export function UnlockDialog({ open, onOpenChange, onUnlock, configured }: Unloc
 					{!configured ? (
 						<p className="flex items-start gap-2 rounded-xl border border-warning/25 bg-warning-soft px-3 py-2 text-[12.5px] text-warning">
 							<ShieldAlert className="mt-px size-3.5 shrink-0" />
-							No supervisory password is configured for this deployment, so this section cannot be unlocked
-							right now.
+							No password is configured for this division, so it cannot be unlocked right now.
 						</p>
 					) : (
 						<p className="flex items-center gap-2 text-[12px] text-ink-faint">

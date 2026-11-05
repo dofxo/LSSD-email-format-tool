@@ -6,6 +6,7 @@ import { SupervisoryFormats } from "./divisions/Supervisory";
 import { FTBFormats } from "./divisions/FTB";
 import { SEBFormats } from "./divisions/SEB";
 import { ASBFormats } from "./divisions/ASB";
+import { IAFormats } from "./divisions/IA";
 import { adminBodyFor } from "@/lib/adminFormats";
 import { formatFieldsFor } from "@/lib/formats";
 import { renderFormatTemplate, type CheckboxFieldSpec, type GroupFieldSpec } from "@/lib/formatTemplates";
@@ -20,6 +21,7 @@ export const registry = {
 	FTB: FTBFormats,
 	SEB: SEBFormats,
 	ASB: ASBFormats,
+	IA: IAFormats,
 } as const;
 
 /**

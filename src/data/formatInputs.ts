@@ -750,6 +750,7 @@ export const inputsByDivision: Record<divisionsType, FormatInputField[]> = {
 		{ name: "rteRulesUnderstanding", label: "(( Did the Trainee demonstrate an understanding of the rules of the server throughout their patrol? ))", type: "textarea", formats: ["8"] },
 		{ name: "rteShouldPass", label: "Do you believe the Trainee should pass the Field Training Evaluation? Why or Why Not?", type: "textarea", formats: ["8"] },
 	],
+	IA: [],
 	SEB: [
 		// 1 - Confidential Email
 		{ name: "date", label: "Email Date", type: "date", formats: ["1", "24", "25", "26", "28", "29", "35", "36"] },

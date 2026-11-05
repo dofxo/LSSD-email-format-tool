@@ -13,10 +13,20 @@ export interface DeputyData {
 		FTB: string;
 		SEB: string;
 		ASB: string;
+		IA: string;
 	};
 }
 
-export type divisionsType = "RED" | "ATD" | "TSD" | "General" | "Supervisory" | "FTB" | "SEB" | "ASB";
+export type divisionsType =
+	| "RED"
+	| "ATD"
+	| "TSD"
+	| "General"
+	| "Supervisory"
+	| "FTB"
+	| "SEB"
+	| "ASB"
+	| "IA";
 
 /**
  * How a date input prints its value: "December 2nd, 2025", "02/DEC/2025" or
