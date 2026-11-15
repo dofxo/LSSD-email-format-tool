@@ -1969,8 +1969,8 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 		},
 		"SEB/27": {
 			"title": "Training Session Scheduling",
-			"topicTitle": "{Training Title } - { Date } - {Time}",
-			"body": "[img]https://i.imgur.com/MWkrXmo.png[/img]\n[divbox=white]\n[center][size=150][b]{{trainingName}}[/b][/size][/center]\n[b]Date: [/b] [b]{{sessionDate}}, {{sessionTime}}[/b] \n[b]Operators Required:[/b] As many as possible\n[b]Location:[/b] {{location}}\n[b]Training Description/Guidelines:[/b] \n{{trainingDescription}}",
+			"topicTitle": "[Training Notice] - {Name} - { Date } - {Time}",
+			"body": "[img]https://ik.imagekit.io/j1wbcmrj5/training_module-mwhnujw0_sM4nyDNNd.png[/img]\n[divbox=white]\n[center][size=150][b]{{trainingName}}[/b][/size][/center]\n[b]Date: [/b] [b]{{sessionDate}}, {{sessionTime}}[/b] \n[b]Operators Required:[/b] As many as possible\n[b]Location:[/b] {{location}}\n[b]Training Description/Guidelines:[/b] \n{{trainingDescription}}",
 			"govLink": "https://gov.eclipse-rp.net/posting.php?mode=post&f=4069",
 			"category": "Training Session",
 			"fields": [
@@ -1984,7 +1984,8 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 					"name": "sessionTime"
 				},
 				{
-					"name": "location"
+					"name": "location",
+					"hint": "eg: Fort Zancudo"
 				},
 				{
 					"name": "instructor"
@@ -4375,6 +4376,16 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 			"name": "incidentSpeceficQuestions",
 			"type": "list",
 			"label": "Incident specefic questions"
+		},
+		{
+			"name": "operatorNumbers",
+			"type": "text",
+			"label": "Operator Numbers"
+		},
+		{
+			"name": "locationOfTraining",
+			"type": "text",
+			"label": "Location Of Training"
 		}
 	]
 } /* /ADMIN_DATA */;
