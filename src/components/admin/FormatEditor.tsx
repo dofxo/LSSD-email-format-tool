@@ -10,7 +10,7 @@ import { catalogueInputFor } from "@/data/inputCatalogue";
 import { autoTokenizeBody } from "@/lib/autoTokenize";
 import { insertTokenAtCaret, removeTokenFromBody, renameTokenInBody } from "@/lib/bodyInsert";
 import { formatsForDivision } from "@/lib/formats";
-import { bodyTokens } from "@/lib/formatTemplates";
+import { bodyTokens, listReplyBase } from "@/lib/formatTemplates";
 import { cn } from "@/lib/utils";
 import type { AdminFormatDraft, AdminFormatFields } from "@/formats/adminTypes";
 import type { CatalogueInput, FieldType } from "@/lib/inputDefinitions";
@@ -205,6 +205,8 @@ export function FormatEditor({
 		const listed = picks.map((pick) => ({ name: pick.name, label: pick.label }));
 		const printed = bodyTokens(body)
 			.filter((token) => !picks.some((pick) => pick.name === token))
+			// A list field's reply token prints that same field, already chipped above.
+			.filter((token) => !listReplyBase(token))
 			.map((token) => ({ name: token }));
 		return [...listed, ...printed];
 	}, [picks, body]);

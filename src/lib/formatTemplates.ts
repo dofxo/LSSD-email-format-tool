@@ -161,6 +161,12 @@ export interface TemplateContext {
 	 * body only carries the token.
 	 */
 	timeRangeFields?: string[];
+	/**
+	 * The names of the format's list fields. Besides their own `{{token}}`, each
+	 * one also answers `{{token.response}}`, which prints its entries as questions
+	 * with a blank to answer under each.
+	 */
+	listFields?: string[];
 }
 
 /**
@@ -189,6 +195,27 @@ const imageLinks = (value: unknown): string =>
 		.filter(Boolean)
 		.map((url) => `[img]${url}[/img]`)
 		.join("\n");
+
+/**
+ * The suffix a body adds to a list field's token to print its entries as the
+ * questions of a reply template, each followed by a blank to answer under it.
+ */
+export const REPLY_LIST_SUFFIX = ".response";
+
+/**
+ * The list field a `{{token.response}}` body token prints, or null for any other
+ * token: `{{questions.response}}` is `questions` written out as questions with
+ * an answer blank under each, so a body can hand the recipient a reply to fill
+ * in and send back.
+ */
+export const listReplyBase = (token: string): string | null =>
+	token.endsWith(REPLY_LIST_SUFFIX) && token.length > REPLY_LIST_SUFFIX.length
+		? token.slice(0, -REPLY_LIST_SUFFIX.length)
+		: null;
+
+/** A list field's entries as a reply template: each question, then a blank to answer on. */
+const replyListBlock = (entries: string[]): string =>
+	entries.map((entry) => `[*]${entry}\n-\nANSWER\n-`).join("\n");
 
 /** Matches an image field's token already sitting inside `[img]` tags. */
 const WRAPPED_IMAGE_TOKEN = /\[img[^\]]*\]\s*\{\{\s*([\w.]+)\s*\}\}\s*\[\/img\]/gi;
@@ -258,6 +285,7 @@ export const renderFormatTemplate = (template: string, context: TemplateContext)
 		chargeFields = [],
 		imageFields = [],
 		timeRangeFields = [],
+		listFields = [],
 	} = context;
 	if (!template || (!template.includes("{{") && !checkboxFields.length)) return template;
 	// Image fields print their own `[img]` tags, so a token the body already wraps
@@ -300,6 +328,16 @@ export const renderFormatTemplate = (template: string, context: TemplateContext)
 	for (const name of timeRangeFields) {
 		const text = timeRangeText(values[name]);
 		if (text) values[name] = text;
+	}
+	// A list field's reply token prints the same entries as questions with an
+	// answer blank under each. With nothing typed the token stays unset, and the
+	// line carrying it is dropped below along with the blank answers it would
+	// have asked for.
+	for (const name of listFields) {
+		const entries = (Array.isArray(values[name]) ? values[name] : [])
+			.map((entry) => String(entry ?? "").trim())
+			.filter(Boolean);
+		if (entries.length) values[`${name}${REPLY_LIST_SUFFIX}`] = replyListBlock(entries);
 	}
 
 	// Lines the blank answers emptied come out before anything is filled, so an

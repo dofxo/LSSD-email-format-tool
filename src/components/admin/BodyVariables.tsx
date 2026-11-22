@@ -4,7 +4,7 @@ import { Check, Sparkles, TriangleAlert } from "lucide-react";
 import { FieldPicker } from "@/components/admin/FieldPicker";
 import { Button } from "@/components/ui/button";
 import { catalogueInputFor } from "@/data/inputCatalogue";
-import { bodyTokens, profileTokens } from "@/lib/formatTemplates";
+import { bodyTokens, listReplyBase, profileTokens } from "@/lib/formatTemplates";
 import type { CatalogueInput } from "@/lib/inputDefinitions";
 import { plainLabel } from "@/lib/labelText";
 import { cn } from "@/lib/utils";
@@ -127,8 +127,17 @@ export function BodyVariables({
 			};
 		});
 
+	// A list field's reply token is filled by that list field, so it is not a
+	// token nothing can fill.
+	const fillsReplyList = (token: string): boolean => {
+		const base = listReplyBase(token);
+		return !!base && catalogueInputFor(base)?.type === "list";
+	};
+
 	// A token nothing can fill: neither a catalogue field nor a profile value.
-	const unknown = used.filter((token) => !PROFILE_TOKEN_NAMES.has(token) && !catalogueInputFor(token));
+	const unknown = used.filter(
+		(token) => !PROFILE_TOKEN_NAMES.has(token) && !catalogueInputFor(token) && !fillsReplyList(token),
+	);
 
 	return (
 		<div className="flex flex-col gap-3.5 rounded-2xl border border-subtle bg-surface-2/40 p-3.5">
