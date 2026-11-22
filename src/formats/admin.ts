@@ -1969,8 +1969,8 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 		},
 		"SEB/27": {
 			"title": "Training Session Scheduling",
-			"topicTitle": "{Training Title } - { Date } - {Time}",
-			"body": "[img]https://i.imgur.com/MWkrXmo.png[/img]\n[divbox=white]\n[center][size=150][b]{{trainingName}}[/b][/size][/center]\n[b]Date: [/b] [b]{{sessionDate}}, {{sessionTime}}[/b] \n[b]Operators Required:[/b] As many as possible\n[b]Location:[/b] {{location}}\n[b]Training Description/Guidelines:[/b] \n{{trainingDescription}}",
+			"topicTitle": "[Training Notice] - {Name} - { Date } - {Time}",
+			"body": "[img]https://ik.imagekit.io/j1wbcmrj5/training_module-mwhnujw0_sM4nyDNNd.png[/img]\n[divbox=white]\n[center][size=150][b]{{trainingName}}[/b][/size][/center]\n[b]Date: [/b] [b]{{sessionDate}}, {{sessionTime}}[/b] \n[b]Operators Required:[/b] As many as possible\n[b]Location:[/b] {{location}}\n[b]Training Description/Guidelines:[/b] \n{{trainingDescription}}",
 			"govLink": "https://gov.eclipse-rp.net/posting.php?mode=post&f=4069",
 			"category": "Training Session",
 			"fields": [
@@ -1984,7 +1984,8 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 					"name": "sessionTime"
 				},
 				{
-					"name": "location"
+					"name": "location",
+					"hint": "eg: Fort Zancudo"
 				},
 				{
 					"name": "instructor"
@@ -2562,7 +2563,7 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 			"division": "General",
 			"title": "Accepted",
 			"topicTitle": "",
-			"body": "[img]https://i.ibb.co/35Dhzd5Z/s5FUN5w.png[/img]\n\n[lssdsubtitle]REQUEST ACCEPTED[/lssdsubtitle]\n[divbox=white]\n[list=none]\n[b]Dear {{FnameLname}},[/b]\n \nWe are glad to inform you that your ride-along request for the Los Santos County Sheriff's Department has been [b][i]accepted[/i][/b]. We request that you print this ride-along request out and keep it with you at all times throughout any ride-along that you may take. We would also like to thank you for showing interest in our ride-along program, we hope that you'll meet your desires and that you'll receive first-hand experience on what it's like being a Deputy Sheriff for the Los Santos County Sheriff's Department. \n \nThis ride-along request is valid for [b]7 days[/b], if you are still interested in partaking in the program after 7 days, you must send in a new request. \n \n[b]What should you do now?[/b]\n[list][*]Make sure that you come properly dressed for a Ride-Along, and with respect for our deputies, your personal hygiene should be prioritized. Refrain from using too much or very strong perfume as it may disorientate not only deputies but any civilians that you may come across during the ride-along. \n \n[*]If you are a licensed firearm holder, make sure that your firearm is kept safe, and locked away, in either your vehicle or at home. You may not bring your firearm with you during the ride-along.\n \n[*]Make sure that you carry not only a printed copy of this response but also some form of identification card. \n \n[*]If you are ready for a ride-along, proceed to visit Paleto or Sandy Station, you can consult with the deputy at the front desk or deputies leaving the station on whether they're available to take you on a ride-along. [/list]\n\n[hr][/hr]\n\nSincerely,\n\n[img]{{signature}}[/img]\n{{rankName}}\nLos Santos County Sheriff's Department\n \n[img]https://i.gyazo.com/72b2c28eca45c9928b9a7e1d289e3017.png[/img]\nSheriff Ian Walter\nLos Santos County Sheriff's Department\n[/list]\n[/divbox]\n[LSSDfooter][/LSSDfooter]",
+			"body": "[img]https://i.ibb.co/35Dhzd5Z/s5FUN5w.png[/img]\n\n[lssdsubtitle]REQUEST ACCEPTED[/lssdsubtitle]\n[divbox=white]\n[list=none]\n[b]Dear {{FnameLname}},[/b]\n \nWe are glad to inform you that your ride-along request for the Los Santos County Sheriff's Department has been [b][i]accepted[/i][/b]. We request that you print this ride-along request out and keep it with you at all times throughout any ride-along that you may take. We would also like to thank you for showing interest in our ride-along program, we hope that you'll meet your desires and that you'll receive first-hand experience on what it's like being a Deputy Sheriff for the Los Santos County Sheriff's Department. \n \nThis ride-along request is valid for [b]7 days[/b], if you are still interested in partaking in the program after 7 days, you must send in a new request. \n \n[b]What should you do now?[/b]\n[list][*]Make sure that you come properly dressed for a Ride-Along, and with respect for our deputies, your personal hygiene should be prioritized. Refrain from using too much or very strong perfume as it may disorientate not only deputies but any civilians that you may come across during the ride-along. \n \n[*]If you are a licensed firearm holder, make sure that your firearm is kept safe, and locked away, in either your vehicle or at home. You may not bring your firearm with you during the ride-along.\n \n[*]Make sure that you carry not only a printed copy of this response but also some form of identification card. \n \n[*]If you are ready for a ride-along, proceed to visit Paleto or Sandy Station, you can consult with the deputy at the front desk or deputies leaving the station on whether they're available to take you on a ride-along. [/list]\n\n[hr][/hr]\n\nSincerely,\n\n[img]{{signature}}[/img]\n{{rankName}}\nLos Santos County Sheriff's Department\n \n[img]https://i.ibb.co/RkspJz0X/72b2c28eca45c9928b9a7e1d289e3017.png[/img]\nSheriff Ian Walter\nLos Santos County Sheriff's Department\n[/list]\n[/divbox]\n[LSSDfooter][/LSSDfooter]",
 			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=995",
 			"category": "Ride-Along Program",
 			"fields": [
@@ -2576,7 +2577,7 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 			"division": "General",
 			"title": "Denied",
 			"topicTitle": "",
-			"body": "[img]https://i.ibb.co/35Dhzd5Z/s5FUN5w.png[/img]\n\n[lssdsubtitle]REQUEST DENIED[/lssdsubtitle]\n[divbox=white]\n[list=none]\n[b]Dear {{FnameLname}},[/b]\n \nYou are being contacted regarding your ride-along request that you sent to the Los Santos County Sheriff's Department. Your request has been [b][i]denied[/i][/b] due to the following reasons: \n[list]\n[*]\n[*]\n[*]\n[/list]\n \nYou are free to send in a new request if you are still interested in partaking in the program.\n\n[hr][/hr]\n\nSincerely,\n\n[img]{{signature}}[/img]\n{{rankName}}\nLos Santos County Sheriff's Department\n \n[img]https://i.gyazo.com/72b2c28eca45c9928b9a7e1d289e3017.png[/img]\nSheriff Ian Walter\nLos Santos County Sheriff's Department\n[/list]\n[/divbox]\n[LSSDfooter][/LSSDfooter]",
+			"body": "[img]https://i.ibb.co/35Dhzd5Z/s5FUN5w.png[/img]\n\n[lssdsubtitle]REQUEST DENIED[/lssdsubtitle]\n[divbox=white]\n[list=none]\n[b]Dear {{FnameLname}},[/b]\n \nYou are being contacted regarding your ride-along request that you sent to the Los Santos County Sheriff's Department. Your request has been [b][i]denied[/i][/b] due to the following reasons: \n[list]\n[*]\n[*]\n[*]\n[/list]\n \nYou are free to send in a new request if you are still interested in partaking in the program.\n\n[hr][/hr]\n\nSincerely,\n\n[img]{{signature}}[/img]\n{{rankName}}\nLos Santos County Sheriff's Department\n \n[img]https://i.ibb.co/RkspJz0X/72b2c28eca45c9928b9a7e1d289e3017.png[/img]\nSheriff Ian Walter\nLos Santos County Sheriff's Department\n[/list]\n[/divbox]\n[LSSDfooter][/LSSDfooter]",
 			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=995",
 			"category": "Ride-Along Program",
 			"fields": []
@@ -2586,7 +2587,7 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 			"division": "General",
 			"title": "Denied (Banned) -  Criminal Record",
 			"topicTitle": "",
-			"body": "[img]https://i.ibb.co/35Dhzd5Z/s5FUN5w.png[/img]\n\n[lssdsubtitle]REQUEST DENIED - BANNED[/lssdsubtitle] \n[divbox=white]\n[list=none]\n[b]Dear {{FnameLname}},[/b]\n \nYou are being contacted regarding your ride-along request that you sent to the Los Santos County Sheriff's Department. Your request has been [b][i]denied[/i][/b] and you are [b][i]banned[/i][/b] from re-applying to the program. The reason for this status is either due to your criminal record and/or for the reason(s) mentioned below. \n \n(( This ban is In Character only unless otherwise specified. You are free to reapply under a different character. ))\n\n[hr][/hr]\n\nSincerely,\n\n[img]{{signature}}[/img]\n{{rankName}}\nLos Santos County Sheriff's Department\n \n[img]https://i.gyazo.com/72b2c28eca45c9928b9a7e1d289e3017.png[/img]\nSheriff Ian Walter\nLos Santos County Sheriff's Department\n[/list]\n[/divbox]\n[LSSDfooter][/LSSDfooter]",
+			"body": "[img]https://i.ibb.co/35Dhzd5Z/s5FUN5w.png[/img]\n\n[lssdsubtitle]REQUEST DENIED - BANNED[/lssdsubtitle] \n[divbox=white]\n[list=none]\n[b]Dear {{FnameLname}},[/b]\n \nYou are being contacted regarding your ride-along request that you sent to the Los Santos County Sheriff's Department. Your request has been [b][i]denied[/i][/b] and you are [b][i]banned[/i][/b] from re-applying to the program. The reason for this status is either due to your criminal record and/or for the reason(s) mentioned below. \n \n(( This ban is In Character only unless otherwise specified. You are free to reapply under a different character. ))\n\n[hr][/hr]\n\nSincerely,\n\n[img]{{signature}}[/img]\n{{rankName}}\nLos Santos County Sheriff's Department\n \n[img]https://i.ibb.co/RkspJz0X/72b2c28eca45c9928b9a7e1d289e3017.png[/img]\nSheriff Ian Walter\nLos Santos County Sheriff's Department\n[/list]\n[/divbox]\n[LSSDfooter][/LSSDfooter]",
 			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=995",
 			"category": "Ride-Along Program",
 			"fields": []
@@ -2596,7 +2597,7 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 			"division": "General",
 			"title": "Request Expired",
 			"topicTitle": "",
-			"body": "[img]https://i.ibb.co/35Dhzd5Z/s5FUN5w.png[/img]\n\n[lssdsubtitle]REQUEST EXPIRED[/lssdsubtitle]\n[divbox=white]\n[list=none]\n[b]Dear {{FnameLname}},[/b]\n \nWe're sending you this notice to inform you that your ride-along request with the Los Santos County Sheriff's Department has expired and is no longer valid. If you wish to resume taking ride-alongs with deputies of the Sheriff's Department, you must resubmit another ride-along request on our website. \n\n\n[hr][/hr]\n\nSincerely,\n\n[img]{{signature}}[/img]\n{{rankName}}\nLos Santos County Sheriff's Department\n \n[img]https://i.gyazo.com/72b2c28eca45c9928b9a7e1d289e3017.png[/img]\nSheriff Ian Walter\nLos Santos County Sheriff's Department\n[/list]\n[/divbox]\n[LSSDfooter][/LSSDfooter]",
+			"body": "[img]https://i.ibb.co/35Dhzd5Z/s5FUN5w.png[/img]\n\n[lssdsubtitle]REQUEST EXPIRED[/lssdsubtitle]\n[divbox=white]\n[list=none]\n[b]Dear {{FnameLname}},[/b]\n \nWe're sending you this notice to inform you that your ride-along request with the Los Santos County Sheriff's Department has expired and is no longer valid. If you wish to resume taking ride-alongs with deputies of the Sheriff's Department, you must resubmit another ride-along request on our website. \n\n\n[hr][/hr]\n\nSincerely,\n\n[img]{{signature}}[/img]\n{{rankName}}\nLos Santos County Sheriff's Department\n \n[img]https://i.ibb.co/RkspJz0X/72b2c28eca45c9928b9a7e1d289e3017.png[/img]\nSheriff Ian Walter\nLos Santos County Sheriff's Department\n[/list]\n[/divbox]\n[LSSDfooter][/LSSDfooter]",
 			"govLink": "https://gov.eclipse-rp.net/viewforum.php?f=995",
 			"category": "Ride-Along Program",
 			"fields": []
@@ -4375,6 +4376,16 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 			"name": "incidentSpeceficQuestions",
 			"type": "list",
 			"label": "Incident specefic questions"
+		},
+		{
+			"name": "operatorNumbers",
+			"type": "text",
+			"label": "Operator Numbers"
+		},
+		{
+			"name": "locationOfTraining",
+			"type": "text",
+			"label": "Location Of Training"
 		}
 	]
 } /* /ADMIN_DATA */;

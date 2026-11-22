@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ChevronDown, Lock, Moon, Plus, Save, Sun } from "lucide-react";
+import { ChevronDown, Lock, Moon, Plus, Save, Search, Sun, X } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
 
 import { BodyVariables } from "@/components/admin/BodyVariables";
@@ -104,6 +104,36 @@ const builtInTitlePreview = (division: divisionsType, formatId: string): string 
 const defaultPicks = (division: divisionsType, formatId: string): FormatFieldPick[] =>
 	formatFieldsFor(division, formatId).map((field) => ({ name: field.name }));
 
+/**
+ * Whether one division card matches a division's search. Everything the card
+ * carries is searched — the picker title, the government website title, the
+ * category, the BBCode body and the gov link — so a format can be found by any
+ * part of it. The built-in title preview is searched too, since a built-in
+ * format's own body lives in the source tree rather than in the store.
+ */
+const formatMatches = (
+	format: {
+		id: string;
+		fields: AdminFormatFields;
+		defaultTopicTitle: string;
+	},
+	query: string,
+): boolean => {
+	if (!query) return true;
+	const haystack = [
+		format.id,
+		format.fields.title,
+		format.fields.topicTitle,
+		format.defaultTopicTitle,
+		format.fields.category,
+		format.fields.govLink,
+		format.fields.body,
+	]
+		.join("\n")
+		.toLowerCase();
+	return haystack.includes(query);
+};
+
 /** Next free numeric id in a division, so added formats never clash. */
 const nextCustomId = (division: divisionsType, store: AdminFormatStore): string => {
 	const used = new Set<string>([
@@ -127,6 +157,8 @@ const AdminPage = () => {
 	const [dirty, setDirty] = useState(false);
 	const [saving, setSaving] = useState(false);
 	const [openDivisions, setOpenDivisions] = useState<Record<string, boolean>>({});
+	/** Per-division search boxes, keyed by division id. */
+	const [divisionSearch, setDivisionSearch] = useState<Record<string, string>>({});
 
 	const [newDivision, setNewDivision] = useState<divisionsType>("RED");
 	const [newTitle, setNewTitle] = useState("");
@@ -209,6 +241,12 @@ const AdminPage = () => {
 
 	const toggleDivision = (division: divisionsType) =>
 		setOpenDivisions((prev) => ({ ...prev, [division]: !prev[division] }));
+
+	const setSearchFor = (division: divisionsType, value: string) =>
+		setDivisionSearch((prev) => ({ ...prev, [division]: value }));
+
+	const clearSearchFor = (division: divisionsType) =>
+		setDivisionSearch((prev) => ({ ...prev, [division]: "" }));
 
 	const unlock = (password: string) => {
 		if (!ADMIN_PASSWORD || password !== ADMIN_PASSWORD) return false;
@@ -770,7 +808,13 @@ const AdminPage = () => {
 
 						{groups.map(({ division, formats }) => {
 							const Icon = division.icon;
-							const open = Boolean(openDivisions[division.id]);
+							const query = (divisionSearch[division.id] ?? "").trim().toLowerCase();
+							// A search opens its division on its own, so matches are never hidden
+							// behind a collapsed header.
+							const open = Boolean(openDivisions[division.id]) || Boolean(query);
+							const visibleFormats = query
+								? formats.filter((format) => formatMatches(format, query))
+								: formats;
 
 							return (
 								<Panel key={division.id} className="overflow-hidden">
@@ -792,7 +836,7 @@ const AdminPage = () => {
 												<span className="block truncate text-[12.5px] text-ink-muted">{division.blurb}</span>
 											</span>
 										<span className="shrink-0 rounded-full border border-subtle bg-surface-2 px-2 py-0.5 text-[11.5px] text-ink-muted">
-											{formats.length}
+											{query ? `${visibleFormats.length} of ${formats.length}` : formats.length}
 										</span>
 											<ChevronDown
 												className={cn(
@@ -803,10 +847,42 @@ const AdminPage = () => {
 										</button>
 									</h2>
 
+									<div className="border-t border-subtle px-5 py-3 sm:px-6">
+										<div className="relative">
+											<Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-ink-faint" />
+											<Input
+												id={`division-search-${division.id}`}
+												type="search"
+												value={divisionSearch[division.id] ?? ""}
+												onChange={(event) => setSearchFor(division.id, event.target.value)}
+												placeholder={`Search ${division.label} formats by title, BBCode, category or link`}
+												aria-label={`Search ${division.name} formats`}
+												className="h-10 pr-9 pl-9 [&::-webkit-search-cancel-button]:appearance-none"
+											/>
+											{query ? (
+												<button
+													type="button"
+													onClick={() => clearSearchFor(division.id)}
+													aria-label={`Clear ${division.label} search`}
+													title="Clear search"
+													className="absolute top-1/2 right-2 flex size-6 -translate-y-1/2 items-center justify-center rounded-full text-ink-faint transition-colors hover:bg-surface-2 hover:text-ink"
+												>
+													<X className="size-3.5" />
+												</button>
+											) : null}
+										</div>
+									</div>
+
 									{open ? (
 										<div id={`division-${division.id}`}>
 											<PanelBody className="flex flex-col gap-3 border-t border-subtle">
-												{formats.map((format) => (									<FormatEditor
+												{query && !visibleFormats.length ? (
+													<p className="rounded-control border border-dashed border-subtle px-4 py-6 text-center text-[12.5px] text-ink-muted">
+														No {division.label} formats match “
+														{divisionSearch[division.id]?.trim()}”.
+													</p>
+												) : null}
+												{visibleFormats.map((format) => (									<FormatEditor
 										key={`${division.id}/${format.id}:${version}`}
 										division={division.id}
 										formatId={format.id}
