@@ -16,7 +16,7 @@ import {
 	TYPE_LABELS,
 	type FieldType,
 } from "@/lib/inputDefinitions";
-import { bodyTokens, profileTokens } from "@/lib/formatTemplates";
+import { bodyTokens, listReplyBase, profileTokens } from "@/lib/formatTemplates";
 import { orderTokensByFields } from "@/lib/formats";
 import { labelHasImage } from "@/lib/labelText";
 import type { CatalogueInput } from "@/lib/inputDefinitions";
@@ -125,8 +125,16 @@ onChangeTemplate, fieldGuard, onEditField }: FormatFieldsEditorProps) {
 	 * are held here, and only the ones with wording in them are written through.
 	 */
 	const [itemDrafts, setItemDrafts] = useState<Record<string, string[]>>({});
+	// A list field's reply token is filled by that list field, so it is not a
+	// token nothing can fill.
+	const fillsReplyList = (token: string): boolean => {
+		const base = listReplyBase(token);
+		return !!base && catalogueInputFor(base)?.type === "list";
+	};
 	const unknown = tokenDriven
-		? tokens.filter((token) => !PROFILE_TOKENS.has(token) && !isCatalogueField(token))
+		? tokens.filter(
+				(token) => !PROFILE_TOKENS.has(token) && !isCatalogueField(token) && !fillsReplyList(token),
+			)
 		: [];
 
 	// The rows to show: the body's tokens, or the picked fields, in the order the

@@ -74,6 +74,16 @@ const timeRangeFieldsFor = (division: divisionsType, formatId: string): string[]
 		.filter((field) => field.type === "timerange")
 		.map((field) => field.name);
 
+/**
+ * The names of the format's list fields. Besides their own `{{token}}`, each one
+ * answers a `{{token.response}}` token that prints its entries as questions with
+ * an answer blank under each, for a body handing out a reply template.
+ */
+const listFieldsFor = (division: divisionsType, formatId: string): string[] =>
+	formatFieldsFor(division, formatId)
+		.filter((field) => field.type === "list")
+		.map((field) => field.name);
+
 export const getFormat = ({
 	formatData,
 	deputyData,
@@ -99,6 +109,7 @@ export const getFormat = ({
 				chargeFields: chargeFieldsFor(division, formatId),
 				imageFields: imageFieldsFor(division, formatId),
 				timeRangeFields: timeRangeFieldsFor(division, formatId),
+				listFields: listFieldsFor(division, formatId),
 			}),
 			formats: {},
 		};

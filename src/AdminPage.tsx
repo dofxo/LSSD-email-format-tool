@@ -15,7 +15,7 @@ import type { AdminFormatDraft, AdminFormatFields, AdminFormatStore } from "@/fo
 import { formatCategories } from "@/formats/formatCategories";
 import { useTheme } from "@/hooks/useTheme";
 import { applyStoreInputs, fetchAdminFormats, overrideKey, saveAdminFormats } from "@/lib/adminFormats";
-import { bodyTokens, profileTokens } from "@/lib/formatTemplates";
+import { bodyTokens, listReplyBase, profileTokens } from "@/lib/formatTemplates";
 import { catalogueInputFor } from "@/data/inputCatalogue";
 import { insertTokenAtCaret } from "@/lib/bodyInsert";
 import { divisions } from "@/lib/divisions";
@@ -205,13 +205,13 @@ const AdminPage = () => {
 		for (const override of Object.values(current.overrides)) {
 			for (const pick of override.fields ?? []) note(pick.name, override.title || "a format");
 			for (const token of bodyTokens(override.body ?? "")) {
-				if (!profile.has(token)) note(token, override.title || "a format");
+				if (!profile.has(token)) note(listReplyBase(token) ?? token, override.title || "a format");
 			}
 		}
 		for (const custom of current.custom) {
 			for (const pick of custom.fields ?? []) note(pick.name, custom.title || "a format");
 			for (const token of bodyTokens(custom.body)) {
-				if (!profile.has(token)) note(token, custom.title || "a format");
+				if (!profile.has(token)) note(listReplyBase(token) ?? token, custom.title || "a format");
 			}
 		}
 		return used;
