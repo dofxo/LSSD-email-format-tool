@@ -3221,7 +3221,7 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 			"division": "IA",
 			"title": "Complainant",
 			"topicTitle": "",
-			"body": "[lssdfooter][/lssdfooter][divbox=white]\n[img]https://i.ibb.co/fGPXMtFz/B6w-VZIV.png[/img][aligntable=right,0,0,0,0,0,0][right][font=Arial][b]\n[size=150]Los Santos County Sheriff's Department[/size][/b]\n[size=115]Internal Affairs - Conclusion[/size]\n[size=95]\"A TRADITION OF SERVICE\"[/size][/font][/right][/aligntable]\n[list=none][right]{{Emaildate}}[/right][/list]\n[hr][/hr][list=none]\nCase #{{caseNumber}} | {{caseStatus}}\n[i]Investigators:[/i]\n[list]\n[*]{{internalAffairsCommandFnameLname}} - [i]Internal Affairs Command[/i]\n[*]{{internalAffairsInvestigatorFnameLname}} - [i]Internal Affairs Investigator[/i]\n[/list][/list][hr][/hr][list=none]\n[b]{{gender}} {{fnameLname}},[/b]\n\nI am contacting you about an Internal Affairs report submitted by you on the [b]Day of Month, Year[/b]. Firstly, thank you for taking the time to submit your report on this occasion. An investigator has reviewed your complaint and we can now confirm that the report is hereby concluded.\n\n{{summaryAndOutcome}}\n\n[i]If you're unhappy with our response you're entitled to appeal through the Office of the Sheriff.[/i]\n\n[/list][hr][/hr][list=none]\n \nSincerely,\n[img]{{signature}}[/img]\n[b]{{dRank}} {{name}}[/b] \n{{divisionRank}}, Internal Affairs Bureau\nLos Santos County Sheriff's Department\n[/list][/divbox][lssdfooter][/lssdfooter]",
+			"body": "[lssdfooter][/lssdfooter][divbox=white]\n[img]https://i.ibb.co/fGPXMtFz/B6w-VZIV.png[/img][aligntable=right,0,0,0,0,0,0][right][font=Arial][b]\n[size=150]Los Santos County Sheriff's Department[/size][/b]\n[size=115]Internal Affairs - Conclusion[/size]\n[size=95]\"A TRADITION OF SERVICE\"[/size][/font][/right][/aligntable]\n[list=none][right]{{Emaildate}}[/right][/list]\n[hr][/hr][list=none]\nCase #{{caseNumber}} | {{caseStatus}}\n[i]Investigators:[/i]\n[list]\n[*]{{internalAffairsCommandFnameLname}} - [i]Internal Affairs Command[/i]\n[*]{{internalAffairsInvestigatorFnameLname}} - [i]Internal Affairs Investigator[/i]\n[/list][/list][hr][/hr][list=none]\n[b]{{gender}} {{fnameLname}},[/b]\n\nI am contacting you about an Internal Affairs report submitted by you on the [b]{{reportSubmittedDate}}[/b]. Firstly, thank you for taking the time to submit your report on this occasion. An investigator has reviewed your complaint and we can now confirm that the report is hereby concluded.\n\n{{summaryAndOutcome}}\n\n[i]If you're unhappy with our response you're entitled to appeal through the Office of the Sheriff.[/i]\n\n[/list][hr][/hr][list=none]\n \nSincerely,\n[img]{{signature}}[/img]\n[b]{{dRank}} {{name}}[/b] \n{{divisionRank}}, Internal Affairs Bureau\nLos Santos County Sheriff's Department\n[/list][/divbox][lssdfooter][/lssdfooter]",
 			"govLink": "https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose",
 			"category": "Conclusion / Response Format",
 			"fields": [
@@ -3247,6 +3247,9 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 					"name": "fnameLname"
 				},
 				{
+					"name": "reportSubmittedDate"
+				},
+				{
 					"name": "summaryAndOutcome"
 				}
 			]
@@ -3256,10 +3259,35 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 			"division": "IA",
 			"title": "Employee",
 			"topicTitle": "",
-			"body": "[lssdfooter][/lssdfooter][divbox=white]\n[img]https://i.ibb.co/fGPXMtFz/B6w-VZIV.png[/img][aligntable=right,0,0,0,0,0,0][right][font=Arial][b]\n[size=150]Los Santos County Sheriff's Department[/size][/b]\n[size=115]Internal Affairs - Conclusion[/size]\n[size=95]\"A TRADITION OF SERVICE\"[/size][/font][/right][/aligntable]\n[list=none][right]Month Day, Year[/right][/list]\n[hr][/hr][list=none]\nCase #{{caseNumber}} | {{caseStatus}}\n[i]Investigators:[/i]\n[list]\n[*]{{internalAffairsCommandFnameLname}} - [i]Internal Affairs Command[/i]\n[*]{{internalAffairsInvestigatorFnameLname}} - [i]Internal Affairs Investigator[/i]\n[/list][/list][hr][/hr][list=none]\n[b]{{gender}} {{fnameLname}},[/b]\n\nI am contacting you about an Internal Affairs report submitted on the [b]Day of Month, Year[/b], that was either directed against you or in which you are involved. An investigator has reviewed the complaint and we can now confirm that the report is hereby concluded.\n\n{{summaryAndOutcome}}\n\n[i]If you're unhappy with our response you're entitled to appeal through the Office of the Sheriff.[/i]\n\n[/list][hr][/hr][list=none]\n \nSincerely,\n[img]{{signature}}[/img]\n[b]{{dRank}} {{name}}[/b] \n{{divisionRank}}, Internal Affairs Bureau\nLos Santos County Sheriff's Department\n[/list][/divbox][lssdfooter][/lssdfooter]",
+			"body": "[lssdfooter][/lssdfooter][divbox=white]\n[img]https://i.ibb.co/fGPXMtFz/B6w-VZIV.png[/img][aligntable=right,0,0,0,0,0,0][right][font=Arial][b]\n[size=150]Los Santos County Sheriff's Department[/size][/b]\n[size=115]Internal Affairs - Conclusion[/size]\n[size=95]\"A TRADITION OF SERVICE\"[/size][/font][/right][/aligntable]\n[list=none][right]Month Day, Year[/right][/list]\n[hr][/hr][list=none]\nCase #{{caseNumber}} | {{caseStatus}}\n[i]Investigators:[/i]\n[list]\n[*]{{internalAffairsCommandFnameLname}} - [i]Internal Affairs Command[/i]\n[*]{{internalAffairsInvestigatorFnameLname}} - [i]Internal Affairs Investigator[/i]\n[/list][/list][hr][/hr][list=none]\n[b]{{gender}} {{fnameLname}},[/b]\n\nI am contacting you about an Internal Affairs report submitted on the [b]{{reportSubmittedDate}}[/b], that was either directed against you or in which you are involved. An investigator has reviewed the complaint and we can now confirm that the report is hereby concluded.\n\n{{summaryAndOutcome}}\n\n[i]If you're unhappy with our response you're entitled to appeal through the Office of the Sheriff.[/i]\n\n[/list][hr][/hr][list=none]\n \nSincerely,\n[img]{{signature}}[/img]\n[b]{{dRank}} {{name}}[/b] \n{{divisionRank}}, Internal Affairs Bureau\nLos Santos County Sheriff's Department\n[/list][/divbox][lssdfooter][/lssdfooter]",
 			"govLink": "https://gov.eclipse-rp.net/ucp.php?i=pm&mode=compose",
 			"category": "Conclusion / Response Format",
-			"fields": []
+			"fields": [
+				{
+					"name": "caseNumber"
+				},
+				{
+					"name": "caseStatus"
+				},
+				{
+					"name": "internalAffairsCommandFnameLname"
+				},
+				{
+					"name": "internalAffairsInvestigatorFnameLname"
+				},
+				{
+					"name": "gender"
+				},
+				{
+					"name": "fnameLname"
+				},
+				{
+					"name": "reportSubmittedDate"
+				},
+				{
+					"name": "summaryAndOutcome"
+				}
+			]
 		}
 	],
 	"inputs": [
@@ -4386,6 +4414,11 @@ export const adminFormatStore: AdminFormatStore = /* ADMIN_DATA */ {
 			"name": "locationOfTraining",
 			"type": "text",
 			"label": "Location Of Training"
+		},
+		{
+			"name": "reportSubmittedDate",
+			"type": "date",
+			"label": "Submitted report Date"
 		}
 	]
 } /* /ADMIN_DATA */;
